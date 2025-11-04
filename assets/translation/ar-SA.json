@@ -1,0 +1,319 @@
+{
+  "reset_password": "إعادة تعيين كلمة المرور",
+  "Successfully! 🎉": "تم بنجاح! 🎉",
+  "your_password_has_been_replaced._try_to_login_to_explore_&_discover_the_application.": "تم استبدال كلمة المرور الخاصة بك. حاول تسجيل الدخول لاستكشاف التطبيق واكتشافه.",
+  "go_to_home": "اذهب إلى الصفحة الرئيسية",
+  "check_your_email": "تحقق من بريدك الإلكتروني",
+  "replace_the_password_with_a_new_and_strong_characters.": "استبدل كلمة المرور بكلمة جديدة وقوية.",
+  "password_hint": "أدخل كلمة المرور",
+  "new_password": "كلمة المرور الجديدة",
+  "confirm_password": "تأكيد كلمة المرور",
+  "change_password": "تغيير كلمة المرور",
+  "Remmember Password? ": "هل تذكرت كلمة المرور؟ ",
+  "Login": "تسجيل الدخول",
+  "email_required": "البريد الإلكتروني مطلوب",
+  "email_invalid": "البريد الإلكتروني غير صالح",
+  "password_required": "كلمة المرور مطلوبة",
+  "password_length": "يجب ألا تقل كلمة المرور عن 6 أحرف",
+  "create_new_account": "إنشاء حساب جديد",
+  "email_hint": "أدخل بريدك الإلكتروني",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "password_field": "كلمة المرور",
+  "enter_confirm_password": "أدخل تأكيد كلمة المرور",
+  "By creating an account, you agree to our ": "بإنشاء حساب، فإنك توافق على ",
+  "Privacy Policy": "سياسة الخصوصية",
+  "password_not_match": "كلمات المرور غير متطابقة",
+  "complete_your_account": "أكمل حسابك",
+  "already_have_an_account": "هل لديك حساب بالفعل؟",
+  "sign_in_now": "سجّل الدخول الآن",
+  "or": "أو",
+  "continue_with_google": "المتابعة باستخدام Google",
+  "continue_with_apple": "المتابعة باستخدام Apple",
+  "continue_as_guest": "المتابعة كضيف",
+  "complete_your_account_info": "أكمل معلومات حسابك",
+  "first_name": "الاسم الأول",
+  "last_name": "الاسم الأخير",
+  "nationality": "الجنسية",
+  "create_account": "إنشاء حساب",
+  "login": "تسجيل الدخول",
+  "OTP": "رمز التحقق",
+  "we’ve_send_the_code_to_your_email_address": "لقد أرسلنا الرمز إلى بريدك الإلكتروني",
+  "resend_code": "إعادة إرسال الرمز",
+  "send": "إرسال",
+  "sign_in_to_your_account": "سجّل الدخول إلى حسابك",
+  "forgot_password": "هل نسيت كلمة المرور؟",
+  "dont_have_account": "ليس لديك حساب؟",
+  "forgot_password_description": "لا تقلق، يحدث ذلك. يرجى إدخال البريد الإلكتروني المرتبط بحسابك.",
+  "continue": "استمرار",
+  "remember_password_question": "تتذكر كلمة المرور؟ ",
+  "enter_your_phone": "أدخل رقم هاتفك",
+  "phone_number": "رقم الهاتف",
+  "please_enter_phone_number": "يرجى إدخال رقم الهاتف",
+  "invalid_phone_number_length": "طول رقم الهاتف غير صالح",
+  "cart": "السلة",
+  "donor_name": "اسم المتبرع",
+  "select_donor": "اختر المتبرع",
+  "donor_name2": "اسم المتبرع 2",
+  "donor_name3": "اسم المتبرع 3",
+  "donations": "التبرعات",
+  "total_donations": "إجمالي التبرعات",
+  "jod": "د.أ",
+  "donate_securely": "تبرع بأمان",
+  "keep_giving": "استمر في العطاء",
+  "child_to_child": "طفل لطفل",
+  "one_time_payment": "دفع لمرة واحدة",
+  "create_campaign": "إنشاء حملة",
+  "title": "العنوان",
+  "description": "الوصف",
+  "donation": "تبرع",
+  "raised": "المبلغ المجموع",
+  "goal": "الهدف",
+  "JOD": "د.أ",
+  "feeding": "الإطعام",
+  "all": "الكل",
+  "incidents": "الفعاليات",
+  "volunteering": "التطوع",
+  "humanitarian_aid": "المساعدات الإنسانية",
+  "donation_details": "تفاصيل التبرع",
+  "Incidents": "الفعاليات",
+  "Child to child": "طفل إلى طفل",
+  "reports": "التقارير",
+  "tab 3": "علامة تبويب 3",
+  "Study report for this campaign": "تقرير الدراسة لهذه الحملة",
+  "download_report": "تحميل التقرير",
+  "I’d like to add 2.4% to help cover transaction fees for my donation.": "أرغب في إضافة 2.4٪ للمساعدة في تغطية رسوم المعاملة على تبرعي.",
+  "Donate as a gift and share the reward": "تبرع كهدية وشارك المكافأة",
+  "number_of_visits": "عدد الزيارات",
+  "number_of_beneficiaries": "عدد المستفيدين",
+  "number_of_donations": "عدد التبرعات",
+  "enter_amount": "أدخل المبلغ",
+  "donate": "تبرع",
+  "together_we_achieved_the_goal!": "لقد حققنا الهدف معًا!",
+  "This campaign successfully reached its target on 11/11/2024, thanks to your generous support and contributions!": "نجحت هذه الحملة في الوصول إلى هدفها في 11/11/2024، بفضل دعمكم السخي ومساهماتكم!",
+  "set_currency_frequency": "تعيين تكرار العملة",
+  "once": "مرة واحدة",
+  "monthly": "شهريًا",
+  "yearly": "سنويًا",
+  "live_tracker": "المتابع المباشر",
+  "waterproof_jacket": "سترة مقاومة للماء",
+  "school_backpack": "حقيبة مدرسية",
+  "food_pacel": "حزمة طعام",
+  "take_care_of_me": "تكفل بي",
+  "are_you_sure_you_want_to_log_out_of_your_account?": "هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟",
+  "cancel": "إلغاء",
+  "yes_logout": "نعم، تسجيل الخروج",
+  "Your approval taken for renewal (Annually).": "تم أخذ موافقتك على التجديد (سنوياً).",
+  "are_you_sure_you_want_to_delete_your_account?": "هل أنت متأكد أنك تريد حذف حسابك؟",
+  "move_back": "الرجوع",
+  "delete": "حذف",
+  "menu": "القائمة",
+  "volunteering_programs": "برامج التطوع",
+  "notifications": "الإشعارات",
+  "language": "اللغة",
+  "sponsership": "الرعاية",
+  "donation_history": "سجل التبرعات",
+  "my_contributions": "مساهماتي",
+  "secondary_user": "مستخدم ثانوي",
+  "about_the_application": "عن التطبيق",
+  "terms_and_conditions": "الشروط والأحكام",
+  "logout": "تسجيل الخروج",
+  "profile_details": "تفاصيل الملف الشخصي",
+  "please_note": "يرجى الملاحظة",
+  "Only the password can be modified. If this information is used to verify your identity, you will need to verify it again the next time you change your password. Tkiyet Um Ali does not publish any information about you.": "يمكن تعديل كلمة المرور فقط. إذا تم استخدام هذه المعلومات للتحقق من هويتك، فستحتاج إلى التحقق منها مرة أخرى في المرة التالية التي تقوم فيها بتغيير كلمة المرور. جمعية تكية أم علي لا تنشر أي معلومات عنك.",
+  "enter_your_name": "ادخل اسمك",
+  "enter_your_email": "ادخل بريدك الإلكتروني",
+  "mobile_number": "رقم الجوال",
+  "save_changes": "حفظ التغييرات",
+  "delete_account": "حذف الحساب",
+  "name_volunteering_program": "اسم برنامج التطوع",
+  "Packaging food parcels is a main volunteering program that offers  volunteers  the  opportunity  to participate  in  packaging  Tkiyet  Um  Ali’s  monthly  food  parcels  at  its  warehouses  in  AlQastal, allowing them to better understand the magnitude of operations inside the warehouses including packaging the food items inside the food parcels and their quantities, depending on the  category  of parcel.": "تعبئة طرود الطعام هو أحد برامج التطوع الرئيسية التي تتيح للمتطوعين فرصة المشاركة في تعبئة طرود جمعية تكية أم علي الشهرية في مستودعاتها في القسطل، مما يتيح لهم فهم حجم العمليات داخل المستودعات بشكل أفضل، بما في ذلك تعبئة المواد الغذائية داخل الطرود وكمياتها حسب فئة الطرد.",
+  "volunteering_conditions": "شروط التطوع",
+  "apply_now": "قدّم الآن",
+  "from": "من",
+  "to": "إلى",
+  "DD/MM/YYYY": "يوم/شهر/سنة",
+  "donation_date": "تاريخ التبرع",
+  "total": "الإجمالي",
+  "submit": "إرسال",
+  "download_as_pdf": "تحميل كملف PDF",
+  "view_details": "عرض التفاصيل",
+  "sponsorship": "الكفالة",
+  "request_visit": "طلب زيارة",
+  "The account administrator will contact the sponsored families to obtain their approval to contact first. If the response is positive for the call, this will be arranged &  the  donor  will be informed by responding to the request as soon as possible!": "سيتواصل مسؤول الحساب مع العائلات المكفولة للحصول على موافقتهم على الاتصال أولاً. إذا كانت الاستجابة إيجابية، سيتم ترتيب الزيارة وإبلاغ المتبرع بالرد على الطلب في أقرب وقت ممكن!",
+  "your_name": "اسمك",
+  "your_email": "بريدك الإلكتروني",
+  "set_the_date": "حدد التاريخ",
+  "enter_message": "أدخل الرسالة",
+  "message": "الرسالة",
+  "january": "يناير",
+  "february": "فبراير",
+  "march": "مارس",
+  "april": "أبريل",
+  "may": "مايو",
+  "june": "يونيو",
+  "july": "يوليو",
+  "august": "أغسطس",
+  "september": "سبتمبر",
+  "october": "أكتوبر",
+  "november": "نوفمبر",
+  "december": "ديسمبر",
+  "sun": "الأحد",
+  "mon": "الاثنين",
+  "tue": "الثلاثاء",
+  "wed": "الأربعاء",
+  "thu": "الخميس",
+  "fri": "الجمعة",
+  "sat": "السبت",
+  "age": "العمر",
+  "years_old": "سنة",
+  "donor_user": "المتبرع",
+  "donation_amount": "مبلغ التبرع",
+  "gender": "الجنس",
+  "female": "أنثى",
+  "request_call": "طلب مكالمة",
+  "select_time": "اختر الوقت",
+  "hour": "الساعة",
+  "minute": "الدقيقة",
+  "selected_time": "الوقت المحدد",
+  "application_form": "نموذج التقديم",
+  "To apply, please fill out the fields below!": "للتقديم، يرجى تعبئة الحقول أدناه!",
+  "National or International Number*": "رقم وطني أو دولي*",
+  "National or International Number": "رقم وطني أو دولي",
+  "National Phone Number": "رقم هاتف وطني",
+  "International Number": "رقم دولي",
+  "select_nationality": "اختر الجنسية",
+  "select_gender": "اختر الجنس",
+  "country": "الدولة",
+  "select_country": "اختر الدولة",
+  "city": "المدينة",
+  "occupation": "المهنة",
+  "Student - School": "طالب - مدرسة",
+  "Student - University": "طالب - جامعة",
+  "Individual": "فرد",
+  "other": "أخرى",
+  "Have you participated volunteered with Tkiyet Um Ali in the past 3 years?": "هل سبق لك أن تطوعت مع تكية أم علي خلال السنوات الثلاث الماضية؟",
+  "yes": "نعم",
+  "no": "لا",
+  "if_yes_specify?": "إذا نعم، يرجى التوضيح",
+  "How did you hear about Tkiyet Um Ali volunteering programs?": "كيف سمعت عن برامج التطوع لدى تكية أم علي؟",
+  "enter_reason": "أدخل السبب",
+  "contact_us": "اتصل بنا",
+  "contact_details": "معلومات الاتصال",
+  "How can we help you?": "كيف يمكننا مساعدتك؟",
+  "We’re here to help! If you have any questions, need assistance, or want more information, please feel free to reach out.": "نحن هنا للمساعدة! إذا كان لديك أي أسئلة، تحتاج إلى مساعدة، أو ترغب في الحصول على مزيد من المعلومات، لا تتردد في التواصل معنا.",
+  "call_now": "اتصل الآن",
+  "send_email": "أرسل بريد إلكتروني",
+  "location": "الموقع",
+  "phone": "الهاتف",
+  "current_password": "كلمة المرور الحالية",
+  "confirm_new_password": "تأكيد كلمة المرور الجديدة",
+  "Please make sure you remember and login with your new password you just created. Changes are reflected real-time after you changed your password.": "يرجى التأكد من تذكّر كلمة المرور الجديدة التي قمت بإنشائها وتسجيل الدخول بها. يتم تطبيق التغييرات فوراً بعد تغيير كلمة المرور.",
+  "enter_current_password": "ادخل كلمة المرور الحالية",
+  "enter_new_password": "ادخل كلمة المرور الجديدة",
+  "enter_confirm_new_password": "ادخل تاكيد كلمة المرور الجديدة",
+  "donation_progress": "تقدم التبرعات",
+  "view_all": "عرض الكل",
+  "hello,": "مرحبًا،",
+  "Guest": "زائر",
+  "our_programs": "برامجنا",
+  "Feeding": "الإطعام",
+  "Humanitarian aid": "المساعدات الإنسانية",
+  "Ramadan campaigns": "حملات رمضان",
+  "quick_donations": "تبرعات سريعة",
+  "quick_tools": "أدوات سريعة",
+  "zakat_calculator": "حاسبة الزكاة",
+  "check_your_udhyiah": "تحقق من أضحيّتك",
+  "quick_donation": "تبرع سريع",
+  "quick_calculator": "حاسبة سريعة",
+  "detailed_calculator": "حاسبة مفصلة",
+  "choose_year": "اختر السنة",
+  "selected_year": "السنة المختارة",
+  "islamic_year": "السنة الهجرية",
+  "gregorian_year": "السنة الميلادية",
+  "calculate": "احسب",
+  "donate_now": "تبرع الآن",
+  "amount_value": "قيمة المبلغ",
+  "for_money": "على المال",
+  "my_financial_accounts": "حساباتي المالية",
+  "value_of_the_bank_account": "قيمة الحساب البنكي",
+  "value_of_monetary_amount": "قيمة المبلغ النقدي",
+  "creditor": "الدائن",
+  "house_rent_value": "قيمة إيجار المنزل",
+  "debtor": "المدين",
+  "instalment_value": "قيمة القسط",
+  "value_of_the_car_installment": "قيمة قسط السيارة",
+  "current_nisab_value": "قيمة النصاب الحالية",
+  "select_an_e-card_design": "اختر تصميم بطاقة إلكترونية",
+  "optional": "اختياري",
+  "create_your_campaign": "أنشئ حملتك",
+  "start_your_campaign_message": "ابدأ حملتك الخاصة لجمع التبرعات واصنع الفرق! سواء كنت ترغب في دعم قضية تهتم بها، أو تحفيز مجتمعك، أو جمع الأموال للمحتاجين",
+  "enter_your_campaign_name": "أدخل اسم حملتك",
+  "campaign_name": "اسم الحملة",
+  "reason": "السبب",
+  "selected_reason": "اختر السبب",
+  "reason_1": "التعليم",
+  "reason_2": "مساعدة طبية",
+  "reason_3": "دعم الأيتام",
+  "reason_4": "توزيع الطعام",
+  "reason_5": "أخرى",
+  "donation_gaol": "هدف التبرع",
+  "start_date": "تاريخ البدء",
+  "end_date": "تاريخ الانتهاء",
+  "send_as_a_e_card": "إرسال ككارت إلكتروني",
+  "details": "التفاصيل",
+  "please_fill_out_the_fields_below": "يرجى ملء الحقول أدناه",
+  "enter_sender_name": "أدخل اسم المرسل",
+  "sender_name": "اسم المرسل",
+  "enter_recipient_name": "أدخل اسم المستلم",
+  "recipient_name": "اسم المستلم",
+  "enter_sender_email": "أدخل بريد المرسل الإلكتروني",
+  "sender_email": "البريد الإلكتروني للمرسل",
+  "enter_recipient_email": "أدخل بريد المستلم الإلكتروني",
+  "recipient_email": "البريد الإلكتروني للمستلم",
+  "recipient_number": "رقم المستلم",
+  "type_here": "اكتب هنا",
+  "preview_e_card": "معاينة البطاقة الإلكترونية",
+  "please_send_me_a_copy_of_the_e_card_when_it_is_sent": "يرجى إرسال نسخة لي من البطاقة الإلكترونية عند إرسالها",
+  "send_e_card": "إرسال البطاقة الإلكترونية",
+  "give_once": "مرة واحدة",
+  "choose_the_amount": "اختر المبلغ",
+  "send_as_an_e_card": "أرسل كبطاقة إلكترونية",
+  "this_donation_will_be_allocated_to_support_families_in_need": "سيتم تخصيص هذا التبرع لدعم العائلات المحتاجة.",
+  "check_your_udhiyah": "تحقق من أضحيتك",
+  "happy_eid!": "عيد سعيد!",
+  "your_udhiyah_was_performed_successfully!": "تم تنفيذ أضحيتك بنجاح!",
+  "receipt_number": "رقم الإيصال",
+  "status": "الحالة",
+  "performed": "تمت",
+  "back_to_home": "العودة إلى الصفحة الرئيسية",
+  "incidents_programs": "برامج الكوارث",
+  "ramadan_campaigns": "حملات رمضان",
+  "feeding_programs": "برامج الإطعام",
+  "select_currency": "اختر العملة",
+  "show_donation_amount": "اظهار مبلغ التبرع",
+  "show_your_name": "اظهار اسمك",
+  "preview_the_message": "معاينة الرسالة",
+  "add_person": "اضافة شخص",
+  "Language": "اللغة",
+  "basket": "السلة",
+  "home": "الرئيسية",
+  "name": "الاسم",
+  "my_total_donations": "اجمالي التبرعات الخاصة بي",
+  "related_story": "اهداف ذات صله",
+  "don’t_worry_it_occurs,_please_enter_the_email_address_linked_with_your_account.": "لا تقلق، يحدث ذلك، يرجى ادخال عنوان البريد الالكتروني المرتبط بحسابك",
+  "Selected Date": "التاريخ المحدد",
+  "select": "اختر",
+  "privacy_policy": "سياسة الخصوصية",
+  "add_new_user": "اضافة مستخدم جديد",
+  "user_name": "اسم المستخدم",
+  "class": "الفئه",
+  "add": "اضافة",
+  "password_changed_successfully": "تم تغيير كلمة المرور بنجاح!",
+  "your_password_has_been_changed_successfully": "تم تغيير كلمة المرور الخاصة بك بنجاح.",
+  "back_to_home_screen": "العودة إلى الشاشة الرئيسية",
+  "Search campaign, charity,etc": "بحث عن حملات، مؤسسات، وغيرها",
+  "back_to_main_screen": "العودة إلى الرئيسية",
+  "get_direction": "الحصول على التوجيه",
+  "": ""
+}

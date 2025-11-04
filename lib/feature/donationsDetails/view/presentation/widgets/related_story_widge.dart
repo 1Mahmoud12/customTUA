@@ -1,0 +1,160 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tua/core/component/buttons/custom_text_button.dart';
+import 'package:tua/core/component/cache_image.dart';
+import 'package:tua/core/component/custom_divider_widget.dart';
+import 'package:tua/core/component/custom_radio_button.dart';
+import 'package:tua/core/component/see_all_widget.dart';
+import 'package:tua/core/themes/colors.dart';
+import 'package:tua/core/utils/app_icons.dart';
+import 'package:tua/core/utils/extensions.dart';
+
+class RelatedStoryWidget extends StatelessWidget {
+  const RelatedStoryWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SeeAllWidget(title: 'related_story'),
+        const SizedBox(height: 16),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: [...List.generate(10, (index) => const ItemRelatedStoryWidget())]),
+        ),
+      ],
+    );
+  }
+}
+
+class ItemRelatedStoryWidget extends StatefulWidget {
+  const ItemRelatedStoryWidget({super.key});
+
+  @override
+  State<ItemRelatedStoryWidget> createState() => _ItemRelatedStoryWidgetState();
+}
+
+class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: context.screenWidth * .8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: AppColors.scaffoldBackGround,
+        border: Border.all(color: AppColors.cP50.withAlpha((0.3 * 255).toInt())),
+        boxShadow: [BoxShadow(color: AppColors.greyG700.withAlpha((0.2 * 255).toInt()), blurRadius: 30, offset: const Offset(0, 20))],
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                child: CacheImage(urlImage: '', width: context.screenWidth * .8, height: 160.h, fit: BoxFit.cover, borderRadius: 0),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                      decoration: BoxDecoration(color: AppColors.cRed900, borderRadius: BorderRadius.circular(8)),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(AppIcons.incidentsIc, colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn)),
+                          const SizedBox(width: 4),
+                          Text('Incidents'.tr(), style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.white)),
+                        ],
+                      ),
+                    ),
+                    SvgPicture.asset(AppIcons.shareIc),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${'name'.tr()}: ', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
+                    Text('ahmed', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${'age'.tr()}: ', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
+                    Text('20 ${'years_old'.tr()}', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${'gender'.tr()}: ', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
+                    Text('female'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
+                  ],
+                ),
+
+                const SizedBox(height: 14),
+                Text(
+                  'Our monthly food parcels offer a variety of fresh, high-quality ingredients to spark creativity in the kitchen and simplify meal planning.'
+                      .tr(),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.cP50.withAlpha((.5 * 255).toInt())),
+                ),
+              ],
+            ),
+          ),
+          const CustomDividerWidget(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                CustomRadioListButton(
+                  items: [
+                    RadioButtonModel(id: 1, name: '120 ${'jod'.tr()}', subtitle: 'Your approval taken for renewal (Annually).'),
+                    RadioButtonModel(id: 2, name: '60 ${'jod'.tr()}', subtitle: 'Your approval taken for renewal (Annually).'),
+                  ],
+                ),
+                // CustomRadioButton(nameRadioButton: '120 ${'jod'.tr()}', subTitle: 'Your approval taken for renewal (Annually).'),
+                // CustomRadioButton(nameRadioButton: '120 ${'jod'.tr()}', subTitle: 'Your approval taken for renewal (Annually).'),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: CustomTextButton(
+                        onPress: () {},
+                        borderColor: AppColors.cRed900,
+                        borderWidth: 2,
+                        colorText: AppColors.cRed900,
+                        childText: 'take_care_of_me'.tr(),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1.5, color: AppColors.cP50)),
+
+                      child: SvgPicture.asset(AppIcons.cartIc),
+                    ),
+                  ],
+                ),
+              ].paddingDirectional(bottom: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
