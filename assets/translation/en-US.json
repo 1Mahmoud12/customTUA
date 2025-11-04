@@ -313,5 +313,10 @@
   "Search campaign, charity,etc": "Search campaign, charity,etc",
   "back_to_main_screen": "Back to main screen",
   "get_direction": "Get Direction",
+  "enter_first_name": "Enter your first name",
+  "enter_last_name": "Enter your last name",
+  "profile_update_success": "Your profile has been updated successfully ",
+  "fill_all_fields": "Please fill in all fields before continuing.",
+  "passwords_not_match": "Passwords do not match. Please try again.",
   "": ""
 }

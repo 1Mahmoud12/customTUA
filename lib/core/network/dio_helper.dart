@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:tua/core/network/end_points.dart';
 import 'package:tua/core/utils/constants.dart';
 
@@ -24,7 +26,10 @@ class DioHelper {
 
     // Accept expired/self-signed certificates for known dev domains in debug only
     assert(() {
-      final Set<String> allowedHosts = {Uri.parse(EndPoints.domain).host, Uri.parse(EndPoints.baseUrl).host};
+      final Set<String> allowedHosts = {
+        Uri.parse(EndPoints.domain).host,
+        Uri.parse(EndPoints.baseUrl).host,
+      };
 
       dio!.httpClientAdapter = IOHttpClientAdapter(
         createHttpClient: () {
@@ -37,6 +42,9 @@ class DioHelper {
       );
       return true;
     }());
+    if (kDebugMode) {
+      dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, maxWidth: 120));
+    }
   }
 
   // get dataSource ====>>>
@@ -49,7 +57,11 @@ class DioHelper {
   }) async {
     final String token = isolateToken ?? Constants.token;
     debugPrint('token: $token');
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json'};
+    dio!.options.headers = {
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
     log('=======================================================');
     log('${dio?.options.baseUrl}$url');
     log('َQuery ====> $query');
@@ -78,7 +90,11 @@ class DioHelper {
   }) async {
     final String token = isolateToken! ? '' : Constants.token;
 
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json'};
+    dio!.options.headers = {
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
 
     log('=======================================================');
     log('the endpoint ${dio!.options.baseUrl}$url');
@@ -147,13 +163,15 @@ class DioHelper {
 
     query.addAll({'lang': arabicLanguage ? 'ar' : 'en'});
     data.addAll({'access_token': token});
-    return dio!.put(endPoint, queryParameters: query, data: (formDataIsEnabled ? FormData.fromMap(data) : data)).then((value) {
-      if (value.data['status'] == 0) {
-        throw value.data['detail'];
-      }
-      debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
-      return value;
-    });
+    return dio!
+        .put(endPoint, queryParameters: query, data: (formDataIsEnabled ? FormData.fromMap(data) : data))
+        .then((value) {
+          if (value.data['status'] == 0) {
+            throw value.data['detail'];
+          }
+          debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
+          return value;
+        });
   }
 
   // deleteData ====>>>
@@ -166,7 +184,11 @@ class DioHelper {
     final String token = Constants.token;
 
     // final String token = HiveReuse.mainBox.get(AppConst.tokenBox) ?? '';
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json'};
+    dio!.options.headers = {
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
     log('=======================================================');
     log('Headers in delete method ${dio!.options.baseUrl}/$endPoint');
     log('Headers in delete method ${dio!.options.headers}');
@@ -176,12 +198,18 @@ class DioHelper {
     data ??= {};
     query.addAll({'lang': arabicLanguage ? 'ar' : 'en'});
     data.addAll({'access_token': token});
-    return dio!.delete(endPoint, queryParameters: query, data: formDataIsEnabled ? FormData.fromMap(data) : data).then((value) {
-      if (value.data['status'] == 0) {
-        throw value.data['detail'];
-      }
-      debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
-      return value;
-    });
+    return dio!
+        .delete(
+          endPoint,
+          queryParameters: query,
+          data: formDataIsEnabled ? FormData.fromMap(data) : data,
+        )
+        .then((value) {
+          if (value.data['status'] == 0) {
+            throw value.data['detail'];
+          }
+          debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
+          return value;
+        });
   }
 }

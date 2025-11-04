@@ -61,7 +61,7 @@ class EndPoints {
 
   // EditProfile
   static const editProfile = 'Account/EditProfile';
-  static const changePassword = 'Account/ChangePassword';
+  // static const changePassword = 'Account/ChangePassword';
   static const editPhoneNmber = 'Account/EditPhoneNmber';
   static const validateOTPChangePhone = 'Account/ValidateOTPChangePhone';
 
@@ -138,4 +138,10 @@ class EndPoints {
 
   // Delivery BOy
   static const getDeliveryBoys = 'user/delivery-boy';
+
+  // update profile
+  static const  changePassword='user/change-password';
+  static const  updateProfile='user/update-profile';
+
+
 }

@@ -315,5 +315,10 @@
   "Search campaign, charity,etc": "بحث عن حملات، مؤسسات، وغيرها",
   "back_to_main_screen": "العودة إلى الرئيسية",
   "get_direction": "الحصول على التوجيه",
+  "enter_first_name": "أدخل اسمك الأول",
+  "enter_last_name": "أدخل اسم العائلة",
+  "profile_update_success": "تم تحديث ملفك الشخصي بنجاح ",
+  "fill_all_fields": "من فضلك املأ جميع الحقول قبل المتابعة.",
+  "passwords_not_match": "كلمتا المرور غير متطابقتين، حاول مرة أخرى.",
   "": ""
 }
