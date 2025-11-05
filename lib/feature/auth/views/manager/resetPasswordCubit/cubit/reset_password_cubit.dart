@@ -8,11 +8,11 @@ import '../../../../data/dataSource/reset_password_data_source.dart';
 part 'reset_password_state.dart';
 
 class ResetPasswordCubit extends Cubit<ResetPasswordState> {
-  ResetPasswordCubit() : super(ResetPasswordInitial());
-  static ResetPasswordCubit of(BuildContext context) => BlocProvider.of<ResetPasswordCubit>(context);
-
+  ResetPasswordCubit(this._dataSource) : super(ResetPasswordInitial());
+  final ResetPasswordDataSource _dataSource;
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
@@ -31,24 +31,19 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     return null;
   }
 
-  Future<void> resetPassword({required BuildContext context}) async {
+  Future<void> resetPassword({required String otp}) async {
     emit(ResetPasswordLoading());
-
-    await ResetPasswordDataSource.resetPassword(
-      data: {"new_password": newPasswordController.text, "password_confirmation": confirmPasswordController.text},
-    ).then((value) {
-      value.fold(
-        (l) {
-          emit(ResetPasswordError(l.errMessage));
-          customShowToast(context, l.errMessage, showToastStatus: ShowToastStatus.error);
-        },
-        (r) {
-          emit(ResetPasswordSuccess());
-          customShowToast(context, "password_changed");
-        },
-      );
-    });
+    final result = await _dataSource.resetPassword(
+      password: newPasswordController.text.trim(),
+      confirmPassword: confirmPasswordController.text.trim(),
+      otp: otp,
+    );
+    result.fold(
+      (failure) => emit(ResetPasswordError(failure.errMessage)),
+      (success) => emit(ResetPasswordSuccess()),
+    );
   }
+
 
   @override
   Future<void> close() {
