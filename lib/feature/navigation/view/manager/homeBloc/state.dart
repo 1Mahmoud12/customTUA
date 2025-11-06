@@ -41,3 +41,13 @@ class GetHomeNotificationErrorState extends MainState {
 class ReadHomeOneNotificationState extends MainState {}
 
 class ReadHomeAllNotificationState extends MainState {}
+class GetCurrencySuccessState extends MainState {}
+class GetCurrencyLoadingState extends MainState {}
+class GetCurrencyErrorState extends MainState {
+  String error;
+
+  GetCurrencyErrorState(this.error);
+}
+
+
+

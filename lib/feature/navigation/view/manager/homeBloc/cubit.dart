@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/network/local/cache.dart';
 import 'package:tua/core/utils/constants.dart';
+import 'package:tua/feature/navigation/data/homeDataSource/home_data_source.dart';
 import 'package:tua/feature/navigation/view/manager/homeBloc/state.dart';
 
 class MainCubit extends Cubit<MainState> {
   MainCubit() : super(MainInitial());
+  final HomeDataSource _homeDataSource = HomeDataSource();
 
   static MainCubit of(BuildContext context) => BlocProvider.of<MainCubit>(context);
 
@@ -31,6 +33,19 @@ class MainCubit extends Cubit<MainState> {
 
   void changeState() {
     emit(HomeChangeState());
+  }
+
+  Future<void> getCurrency() async {
+    emit(GetCurrencyLoadingState());
+    final response = await _homeDataSource.getCurrency();
+    response.fold(
+      (l) {
+        emit(GetCurrencyErrorState(l.errMessage));
+      },
+      (r) {
+        emit(GetCurrencySuccessState());
+      },
+    );
   }
 
   // final NotificationDataSource notificationDataSource = NotificationDataSourceImpl();

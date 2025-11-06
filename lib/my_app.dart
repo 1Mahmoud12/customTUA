@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
       builder:
           (_, child) => MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => MainCubit()),
+              BlocProvider(create: (context) => MainCubit()..getCurrency()),
               // BlocProvider(
               //   lazy: false,
               //   create: (context) => AuthCubit()..getCountryCode(),

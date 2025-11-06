@@ -77,6 +77,7 @@ class EndPoints {
   static const getAllSlider = 'getAllSlider';
   static const staticPage = 'StaticPage/StaticPage';
   static const getAdvertises = 'Advertise/GetAdvertises';
+  static const String getCurrency='user/get-currency';
 
   //  Service
   static const getCategories = 'Service/GetCategories';
