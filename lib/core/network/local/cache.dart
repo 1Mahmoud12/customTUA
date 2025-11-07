@@ -20,6 +20,7 @@ String lookupCacheKey = 'lookupCacheKey';
 int idUserValue = 0;
 String fcmTokenKey = 'fcmTokenKey';
 String deviceIdKey = 'deviceIdKey';
+String donationProgramsCacheKey = 'donationProgramsCacheKey';
 
 // value
 bool onBoardingValue = true;

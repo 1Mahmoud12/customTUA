@@ -16,7 +16,7 @@ class EndPoints {
   static const resetPassword = 'user/set-password';
   static const resendOtp = 'Account/ResendOtp';
   static const deleteUser = 'Account/DeleteUser';
-  static const requestResetPassword='user/request-reset-password';
+  static const requestResetPassword = 'user/request-reset-password';
 
   //home page
 
@@ -62,6 +62,7 @@ class EndPoints {
 
   // EditProfile
   static const editProfile = 'Account/EditProfile';
+
   // static const changePassword = 'Account/ChangePassword';
   static const editPhoneNmber = 'Account/EditPhoneNmber';
   static const validateOTPChangePhone = 'Account/ValidateOTPChangePhone';
@@ -77,7 +78,7 @@ class EndPoints {
   static const getAllSlider = 'getAllSlider';
   static const staticPage = 'StaticPage/StaticPage';
   static const getAdvertises = 'Advertise/GetAdvertises';
-  static const String getCurrency='user/get-currency';
+  static const String getCurrency = 'user/get-currency';
 
   //  Service
   static const getCategories = 'Service/GetCategories';
@@ -142,8 +143,10 @@ class EndPoints {
   static const getDeliveryBoys = 'user/delivery-boy';
 
   // update profile
-  static const  changePassword='user/change-password';
-  static const  updateProfile='user/update-profile';
+  static const changePassword = 'user/change-password';
+  static const updateProfile = 'user/update-profile';
 
-
+  //donations
+  static const getDonationPrograms = 'utilities/donation-programs';
+  static const getDonationProgramById='utilities/donation-program-by-id';
 }

@@ -40,7 +40,7 @@ class _ItemHumanitarianAidWidgetState extends State<ItemHumanitarianAidWidget> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.navigateToPage(const DonationDetailsView());
+        context.navigateToPage(const DonationDetailsView(id: 0,));
       },
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
