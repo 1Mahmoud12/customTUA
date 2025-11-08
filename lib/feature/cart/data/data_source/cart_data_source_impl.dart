@@ -71,7 +71,7 @@ class CartDataSourceImpl implements CartDataSource {
   Future<Either<Failure, Unit>> removeCartItem({required String uniqueKey}) async {
     try {
       final response = await DioHelper.postData(
-        url: EndPoints.addToCart,
+        url: EndPoints.deleteCartItem,
         // formDataIsEnabled: true,
         data: {'item_id': uniqueKey},
       );
