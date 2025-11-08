@@ -10,10 +10,12 @@ import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/extensions.dart';
 import 'package:tua/core/utils/navigate.dart';
+import 'package:tua/feature/cart/data/models/add_cart_item_parms.dart';
 import 'package:tua/feature/donations/data/models/donation_program_details_model.dart';
 import 'package:tua/feature/donations/view/presentation/add_person_view.dart';
 import 'package:tua/feature/donationsDetails/view/presentation/widgets/archive_goal_widget.dart';
 import 'package:tua/feature/donationsDetails/view/presentation/widgets/currency_widget.dart';
+import 'package:tua/feature/donationsDetails/view/presentation/widgets/donation_button.dart';
 import 'package:tua/feature/donationsDetails/view/presentation/widgets/image_donation_widget.dart';
 import 'package:tua/feature/donationsDetails/view/presentation/widgets/live_tracker_widget.dart';
 import 'package:tua/feature/donationsDetails/view/presentation/widgets/number_of_widget.dart'
@@ -273,45 +275,16 @@ class DonationDetailsViewBody extends StatelessWidget {
                   hintText: 'enter_amount'.tr(),
                   textInputType: TextInputType.number,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: CustomTextButton(
-                        onPress: () {},
-                        borderColor: AppColors.cRed900,
-                        borderWidth: 2,
-                        colorText: AppColors.white,
-                        backgroundColor: AppColors.cRed900,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.asset(
-                              AppIcons.unSelectedDonationIc,
-                              colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'donate'.tr(),
-                              style: Theme.of(
-                                context,
-                              ).textTheme.displayMedium?.copyWith(color: AppColors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(width: 1.5, color: AppColors.cP50),
-                      ),
-
-                      child: SvgPicture.asset(AppIcons.cartIc),
-                    ),
-                  ],
+                DonationButton(
+                  parms: AddCartItemParms(
+                    programId: detailsModel.id.toString(),
+                    id: detailsModel.items?.first.id.toString()??'0',
+                    donation: detailsModel.items?.first.donationTypeGuid??'',
+                    recurrence: 'monthly',
+                    type: '2',
+                    quantity: 1,
+                    amount: 1,
+                  ),
                 ),
               ].paddingDirectional(bottom: 12),
             ),

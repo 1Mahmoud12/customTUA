@@ -1,14 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tua/core/themes/colors.dart';
+import 'package:tua/feature/cart/data/models/cart_items_response_model.dart';
 
 class ItemCartWidget extends StatelessWidget {
-  final String nameCart;
-  final String numberOfPayment;
-  final int value;
-  final int count;
 
-  const ItemCartWidget({super.key, required this.nameCart, required this.numberOfPayment, required this.value, required this.count});
+  final CartItem cartItem;
+
+  const ItemCartWidget({
+    super.key,
+    required this.cartItem,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,24 +24,29 @@ class ItemCartWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  nameCart,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w500),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  numberOfPayment.tr(),
+                  cartItem.title ?? '',
                   style: Theme.of(
                     context,
-                  ).textTheme.titleLarge?.copyWith(color: AppColors.cP50.withAlpha((.5 * 255).toInt()), fontWeight: FontWeight.w500),
+                  ).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w500),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '$value ${'jod'.tr()}',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w500),
+                  cartItem.recurrence ?? '',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppColors.cP50.withAlpha((.5 * 255).toInt()),
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  cartItem.total ?? '',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -47,7 +54,10 @@ class ItemCartWidget extends StatelessWidget {
 
           Container(
             decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: AppColors.cBorderButtonColor), bottom: BorderSide(color: AppColors.cBorderButtonColor)),
+              border: Border(
+                top: BorderSide(color: AppColors.cBorderButtonColor),
+                bottom: BorderSide(color: AppColors.cBorderButtonColor),
+              ),
             ),
             child: Row(
               children: [
@@ -73,8 +83,11 @@ class ItemCartWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
 
                     child: Text(
-                      count.toString(),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w500),
+                      cartItem.quantity != null ? cartItem.quantity.toString() : '0',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: AppColors.cP50,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),

@@ -107,9 +107,9 @@ class EndPoints {
   static const getOrderHistory = 'Order/GetOrderHistory';
 
   // Cart
-  static const addToCart = 'Order/AddToUserCart';
-  static const getUserCart = 'Order/GetUserCart';
-  static const deleteFromUserCart = 'Order/DeleteFromUserCart';
+  static const addToCart = 'cart/add';
+  static const getCartItems = 'cart/list';
+  static const deleteCartItem = 'cart/delete';
   static const orderPaymentMethods = 'Order/OrderPaymentMethods';
   static const getOrderInvoice = 'Order/GetOrderInvoice';
   static const proceedOrder = 'Order/ProccedOrder';

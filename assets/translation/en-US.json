@@ -321,6 +321,10 @@
   "please_enter_valid_otp": "Please enter a valid OTP code",
   "passwords_do_not_match": "Passwords do not match",
   "password_changed": "Your password has been changed successfully! You can now log in with your new password.",
-
+  "item_added_success": "Item added to cart successfully!",
+  "retry": "Retry",
+  "reload_cart": "Reload Cart",
+  "cart_empty_message": "Your cart is empty. Start adding items to donate!",
+  "no_items_in_cart": "No items found in your cart",
   "": ""
 }
