@@ -11,7 +11,9 @@ import 'package:tua/feature/cart/data/data_source/cart_data_source_impl.dart';
 import 'package:tua/feature/cart/data/models/add_cart_item_parms.dart';
 import 'package:tua/feature/cart/view/managers/add_cart_item/add_cart_item_cubit.dart';
 
+import '../../../../../core/network/local/cache.dart';
 import '../../../../cart/view/managers/add_cart_item/add_cart_item_state.dart';
+import '../../../../navigation/view/presentation/widgets/login_required_dialog.dart';
 
 class DonationButton extends StatelessWidget {
   const DonationButton({super.key, required this.parms});
@@ -27,7 +29,7 @@ class DonationButton extends StatelessWidget {
           if (state is AddCartItemSuccess) {
             customShowToast(context, 'item_added_success'.tr());
           } else if (state is AddCartItemFailure) {
-            customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+              customShowToast(context, state.message.tr(), showToastStatus: ShowToastStatus.error);
           }
         },
         builder: (context, state) {
@@ -40,6 +42,10 @@ class DonationButton extends StatelessWidget {
                     flex: 3,
                     child: CustomTextButton(
                       onPress: () {
+                        if (userCacheValue==null ) {
+                          loginRequiredDialog(context);
+                          return;
+                        }
                         cubit.addCartItem(parms);
                       },
                       borderColor: AppColors.cRed900,

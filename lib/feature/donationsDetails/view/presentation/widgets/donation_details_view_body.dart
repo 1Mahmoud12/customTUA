@@ -28,15 +28,21 @@ import 'package:tua/feature/donationsDetails/view/presentation/widgets/select_cu
 
 import 'item_option_widget.dart';
 
-class DonationDetailsViewBody extends StatelessWidget {
+class DonationDetailsViewBody extends StatefulWidget {
   const DonationDetailsViewBody({super.key, required this.detailsModel});
 
   final DonationProgramDetailsModel detailsModel;
 
   @override
+  State<DonationDetailsViewBody> createState() => _DonationDetailsViewBodyState();
+}
+
+class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
+  int? selectedAmount;
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: detailsModel.tabs?.length ?? 0,
+      length: widget.detailsModel.tabs?.length ?? 0,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -50,14 +56,14 @@ class DonationDetailsViewBody extends StatelessWidget {
                   children: [
                     const SizedBox(height: 10),
                     ImageDonationWidget(
-                      nameTittle: detailsModel.tag ?? '',
-                      image: detailsModel.image,
+                      nameTittle: widget.detailsModel.tag ?? '',
+                      image: widget.detailsModel.image,
                       color: AppColors.cIncidentColor,
                       edgeInsetsGeometry: EdgeInsets.zero,
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      detailsModel.title,
+                      widget.detailsModel.title,
                       style: Theme.of(
                         context,
                       ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
@@ -75,13 +81,13 @@ class DonationDetailsViewBody extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AppColors.cP50.withAlpha((.5 * 255).toInt()),
                       ),
-                      tabs: detailsModel.tabs?.map((e) => Tab(text: e.title)).toList() ?? [],
+                      tabs: widget.detailsModel.tabs?.map((e) => Tab(text: e.title)).toList() ?? [],
                     ),
                     SizedBox(
                       height: 200,
                       child: TabBarView(
                         children:
-                            detailsModel.tabs?.map((tab) {
+                            widget.detailsModel.tabs?.map((tab) {
                               // If this tab has a report URL, show a download section
                               if (tab.labelUrl != null && tab.labelUrl!.isNotEmpty) {
                                 return Align(
@@ -142,7 +148,7 @@ class DonationDetailsViewBody extends StatelessWidget {
 
                     const CustomDividerWidget(height: 24),
                     CurrencyWidget(
-                      details: detailsModel,
+                      details: widget.detailsModel,
                       onChange: (selectedKey) {
                         print('Selected recurring type: $selectedKey');
                         // Example output: "once", "monthly", "yearly"
@@ -242,24 +248,28 @@ class DonationDetailsViewBody extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        alignment: WrapAlignment.spaceBetween,
-                        children: [
-                          ItemOptionsWidget(option: 50, onTap: (option) {}),
-                          ItemOptionsWidget(option: 100, onTap: (option) {}),
-                          ItemOptionsWidget(option: 200, onTap: (option) {}),
-                          ItemOptionsWidget(option: 500, onTap: (option) {}),
-                          ItemOptionsWidget(option: 1000, onTap: (option) {}),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+            Row(
+            children: [
+            Expanded(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.spaceBetween,
+              children: [50, 100, 200, 500, 1000].map((option) {
+                return ItemOptionsWidget(
+                  option: option,
+                  onTap: (selected) {
+                    setState(() {
+                      selectedAmount = selected;
+                    });
+                  },
+                  isSelected: selectedAmount == option, // highlight selected
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
                 CustomTextFormField(
                   controller: TextEditingController(),
                   suffixIcon: Padding(
@@ -277,13 +287,13 @@ class DonationDetailsViewBody extends StatelessWidget {
                 ),
                 DonationButton(
                   parms: AddCartItemParms(
-                    programId: detailsModel.id.toString(),
-                    id: detailsModel.items?.first.id.toString()??'0',
-                    donation: detailsModel.items?.first.donationTypeGuid??'',
+                    programId: widget.detailsModel.id.toString(),
+                    id: widget.detailsModel.items?.first.id.toString()??'0',
+                    donation: widget.detailsModel.items?.first.donationTypeGuid??'',
                     recurrence: 'monthly',
                     type: '2',
                     quantity: 1,
-                    amount: 1,
+                    amount: selectedAmount??-1,
                   ),
                 ),
               ].paddingDirectional(bottom: 12),

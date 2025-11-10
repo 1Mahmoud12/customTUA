@@ -8,7 +8,10 @@ import 'package:tua/feature/donations/view/presentation/donations_view.dart';
 import 'package:tua/feature/home/view/presentation/home_view.dart';
 import 'package:tua/feature/menu/view/presentation/menu_view.dart' show MenuView;
 import 'package:tua/feature/navigation/view/presentation/widgets/custom_bottom_nav.dart';
+import 'package:tua/feature/navigation/view/presentation/widgets/login_required_dialog.dart';
 import 'package:tua/feature/quickDonation/view/presentation/quick_donation_view.dart';
+
+import '../../../../core/network/local/cache.dart';
 
 class NavigationView extends StatefulWidget {
   final int customIndex;
@@ -45,6 +48,12 @@ class _NavigationViewState extends State<NavigationView> with SingleTickerProvid
   final names = ['home', 'donation', 'basket', 'menu'];
 
   void _onItemTapped(int newIndex, BuildContext context) {
+    if (newIndex==2||newIndex==3) {
+      if (userCacheValue==null ) {
+        loginRequiredDialog(context);
+        return;
+      }
+    }
     setState(() {
       index = newIndex;
     });
@@ -69,7 +78,7 @@ class _NavigationViewState extends State<NavigationView> with SingleTickerProvid
       bottomSheet: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (index == 0)
+          if (index == 0 && userCacheValue!=null)
             InkWell(
               onTap: () {
                 context.navigateToPage(const QuickDonationView());

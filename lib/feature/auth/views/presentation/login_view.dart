@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/component/fields/custom_text_form_field.dart';
+import 'package:tua/core/component/loadsErros/loading_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/app_images.dart';
@@ -67,7 +68,11 @@ class _LoginViewState extends State<LoginView> {
                   return Column(
                     children: [
                       Center(child: SvgPicture.asset(AppIcons.logoAppIc)),
-                      Text('sign_in_to_your_account'.tr(), style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
+                      Text(
+                        'sign_in_to_your_account'.tr(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
                       CustomTextFormField(
                         enable: state is! LoginLoading,
                         controller: loginCubit.emailController,
@@ -94,31 +99,30 @@ class _LoginViewState extends State<LoginView> {
                                 onTap: () => context.navigateToPage(ForgotPasswordView()),
                                 child: Text(
                                   'forgot_password'.tr(),
-                                  style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.primaryColor),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.displayMedium?.copyWith(color: AppColors.primaryColor),
                                 ),
                               ),
                             ],
                           ),
                         ],
                       ),
-
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextButton(
-                              state: state is LoginLoading,
-                              onPress: () {
-                                if (_formKey.currentState!.validate()) {
-                                  loginCubit.login(context: context);
-                                }
-                              },
-                              childText: 'login'.tr(),
-
-                              showArrowButton: true,
-                            ),
-                          ),
-                        ],
-                      ),
+                      if (state is LoginLoading)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.0),
+                          child: LoadingWidget(),
+                        )
+                      else
+                        CustomTextButton(
+                          onPress: () {
+                            if (_formKey.currentState!.validate()) {
+                              loginCubit.login(context: context);
+                            }
+                          },
+                          childText: 'login'.tr(),
+                          showArrowButton: true,
+                        ),
                       Center(
                         child: LinkText(
                           mainText: 'dont_have_account'.tr(),
@@ -133,7 +137,12 @@ class _LoginViewState extends State<LoginView> {
                           const Expanded(child: Divider(color: AppColors.cBorderButtonColor)),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text('or'.tr(), style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.cBorderButtonColor)),
+                            child: Text(
+                              'or'.tr(),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.displayMedium?.copyWith(color: AppColors.cBorderButtonColor),
+                            ),
                           ),
                           const Expanded(child: Divider(color: AppColors.cBorderButtonColor)),
                         ],
@@ -148,7 +157,10 @@ class _LoginViewState extends State<LoginView> {
                             const SizedBox(width: 8),
                             Text(
                               'continue_with_google'.tr(),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.greyG600, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: AppColors.greyG600,
+                                fontWeight: FontWeight.w400,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -163,7 +175,10 @@ class _LoginViewState extends State<LoginView> {
                             const SizedBox(width: 8),
                             Text(
                               'continue_with_apple'.tr(),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.greyG600, fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: AppColors.greyG600,
+                                fontWeight: FontWeight.w400,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -177,7 +192,9 @@ class _LoginViewState extends State<LoginView> {
 
                         child: Text(
                           'continue_as_guest'.tr(),
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.center,
                         ),
                       ),

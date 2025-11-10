@@ -12,11 +12,18 @@ import 'package:tua/core/utils/extensions.dart';
 import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/quickDonation/view/presentation/card_view.dart';
 
-import '../../../donationsDetails/view/presentation/widgets/item_option_widget.dart' show ItemOptionsWidget;
+import '../../../donationsDetails/view/presentation/widgets/item_option_widget.dart'
+    show ItemOptionsWidget;
 
-class QuickDonationView extends StatelessWidget {
+class QuickDonationView extends StatefulWidget {
   const QuickDonationView({super.key});
 
+  @override
+  State<QuickDonationView> createState() => _QuickDonationViewState();
+}
+
+class _QuickDonationViewState extends State<QuickDonationView> {
+  int? selectedAmount;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +33,17 @@ class QuickDonationView extends StatelessWidget {
 
         children: [
           CustomSwitchButton(
-            items: [SwitchButtonModel(title: 'give_once', id: 1), SwitchButtonModel(title: 'monthly', id: 2)],
+            items: [
+              SwitchButtonModel(title: 'give_once', id: 1),
+              SwitchButtonModel(title: 'monthly', id: 2),
+            ],
             onChange: (value) {},
             initialIndex: 1,
           ),
-          Text('choose_the_amount'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400)),
+          Text(
+            'choose_the_amount'.tr(),
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
+          ),
           Row(
             children: [
               Expanded(
@@ -38,13 +51,18 @@ class QuickDonationView extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 8,
                   alignment: WrapAlignment.spaceBetween,
-                  children: [
-                    ItemOptionsWidget(option: 50, onTap: (option) {}, textColor: AppColors.greyG500),
-                    ItemOptionsWidget(option: 100, onTap: (option) {}, textColor: AppColors.greyG500),
-                    ItemOptionsWidget(option: 200, onTap: (option) {}, textColor: AppColors.greyG500),
-                    ItemOptionsWidget(option: 500, onTap: (option) {}, textColor: AppColors.greyG500),
-                    ItemOptionsWidget(option: 1000, onTap: (option) {}, textColor: AppColors.greyG500),
-                  ],
+                  children:
+                      [50, 100, 200, 500, 1000].map((option) {
+                        return ItemOptionsWidget(
+                          option: option,
+                          onTap: (selected) {
+                            setState(() {
+                              selectedAmount = selected;
+                            });
+                          },
+                          isSelected: selectedAmount == option, // highlight selected
+                        );
+                      }).toList(),
                 ),
               ),
             ],
@@ -54,16 +72,25 @@ class QuickDonationView extends StatelessWidget {
             hintText: '',
             nameField: 'amount_value',
             textInputType: TextInputType.number,
-            suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+            suffixIcon: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium),
+            ),
           ),
           InkWell(
             onTap: () {
-              context.navigateToPage(const CardView(), pageTransitionType: PageTransitionType.rightToLeft);
+              context.navigateToPage(
+                const CardView(),
+                pageTransitionType: PageTransitionType.rightToLeft,
+              );
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: const BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.black100), bottom: BorderSide(width: 1, color: AppColors.black100)),
+                border: Border(
+                  top: BorderSide(color: AppColors.black100),
+                  bottom: BorderSide(width: 1, color: AppColors.black100),
+                ),
               ),
               child: Row(
                 children: [
@@ -81,13 +108,18 @@ class QuickDonationView extends StatelessWidget {
               ),
             ),
           ),
-          Text('this_donation_will_be_allocated_to_support_families_in_need'.tr(), style: Theme.of(context).textTheme.displayMedium),
+          Text(
+            'this_donation_will_be_allocated_to_support_families_in_need'.tr(),
+            style: Theme.of(context).textTheme.displayMedium,
+          ),
         ].paddingDirectional(top: 16),
       ),
       persistentFooterButtons: [
         Container(
           padding: const EdgeInsets.only(top: 16),
-          decoration: const BoxDecoration(border: Border(top: BorderSide(width: 1, color: AppColors.black100))),
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(width: 1, color: AppColors.black100)),
+          ),
           child: Row(
             children: [
               Expanded(
@@ -101,9 +133,17 @@ class QuickDonationView extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset(AppIcons.unSelectedDonationIc, colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn)),
+                      SvgPicture.asset(
+                        AppIcons.unSelectedDonationIc,
+                        colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn),
+                      ),
                       const SizedBox(width: 8),
-                      Text('donate'.tr(), style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.white)),
+                      Text(
+                        'donate'.tr(),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.displayMedium?.copyWith(color: AppColors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -111,7 +151,10 @@ class QuickDonationView extends StatelessWidget {
               const SizedBox(width: 10),
               Container(
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1.5, color: AppColors.cP50)),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 1.5, color: AppColors.cP50),
+                ),
 
                 child: SvgPicture.asset(AppIcons.cartIc),
               ),

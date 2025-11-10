@@ -328,5 +328,8 @@
   "reload_cart": "تحديث السلة",
   "cart_empty_message": "سلتك فارغة، ابدأ بإضافة تبرعاتك!",
   "no_items_in_cart": "لا توجد عناصر في السلة",
+  "you_need_to_login_to_access_this_feature": "يجب تسجيل الدخول للوصول إلى هذه الميزة.",
+  "login_now": "تسجيل الدخول الآن",
+  "please_select_an_amount": "يرجى اختيار مبلغ للتبرع.",
   "": ""
 }

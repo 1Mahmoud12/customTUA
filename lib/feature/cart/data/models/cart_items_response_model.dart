@@ -44,7 +44,7 @@ class CartData {
     'sub_total': subTotal,
     'total': total,
     'users': users,
-    'items': {for (var e in items) e.uniqueKey ?? '': e.toJson()},
+    'items': {for (final e in items) e.uniqueKey ?? '': e.toJson()},
   };
 }
 

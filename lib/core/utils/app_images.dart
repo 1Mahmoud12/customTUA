@@ -77,4 +77,5 @@ class AppImages {
   static const changePasswordPn = '$baseUrl/changePasswordPn.png';
   static const checkUdhiyah = '$baseUrl/checkUdhiyah.png';
   static const backgroundDownloadAndApply = '$baseUrl/backgroundDownloadAndApply.png';
+  static const warning='$baseUrl/warning.png';
 }

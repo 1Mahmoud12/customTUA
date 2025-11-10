@@ -1,10 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-abstract class AddCartItemState extends Equatable {
+abstract class AddCartItemState  {
   const AddCartItemState();
 
-  @override
-  List<Object?> get props => [];
 }
 
 class AddCartItemInitial extends AddCartItemState {}
@@ -18,6 +16,4 @@ class AddCartItemFailure extends AddCartItemState {
 
   const AddCartItemFailure(this.message);
 
-  @override
-  List<Object?> get props => [message];
 }

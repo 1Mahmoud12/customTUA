@@ -9,6 +9,8 @@ import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/notifications/view/presentation/notifications_view.dart';
 import 'package:tua/feature/profileDetails/view/presentation/profile_details_view.dart';
 
+import '../../../../navigation/view/presentation/widgets/login_required_dialog.dart';
+
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({super.key});
 
@@ -20,6 +22,10 @@ class HeaderWidget extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
+          if (userCacheValue==null ) {
+            loginRequiredDialog(context);
+            return;
+          }
           context.navigateToPage(const ProfileDetailsView());
         },
         child: Row(

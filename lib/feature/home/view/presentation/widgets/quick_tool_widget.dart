@@ -10,6 +10,9 @@ import 'package:tua/feature/quickDonation/view/presentation/quick_donation_view.
 import 'package:tua/feature/udhiyah/view/presentatioin/udhiyah_view.dart';
 import 'package:tua/feature/zakatCalculator/view/presentation/zakat_calculator.dart';
 
+import '../../../../../core/network/local/cache.dart';
+import '../../../../navigation/view/presentation/widgets/login_required_dialog.dart';
+
 class QuickTools extends StatelessWidget {
   const QuickTools({super.key});
 
@@ -46,6 +49,10 @@ class QuickTools extends StatelessWidget {
               Expanded(
                 child: ItemQuickDonationWidget(
                   onTap: () {
+                    if (userCacheValue==null ) {
+                      loginRequiredDialog(context);
+                      return;
+                    }
                     context.navigateToPage(const CreateCampaignView());
                   },
                   nameImage: AppImages.createCampaign,

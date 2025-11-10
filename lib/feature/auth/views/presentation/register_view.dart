@@ -14,9 +14,10 @@ import 'package:tua/core/utils/extensions.dart';
 import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/auth/views/manager/registerCubit/cubit/register_cubit.dart';
 import 'package:tua/feature/auth/views/presentation/login_view.dart';
-import 'package:tua/feature/auth/views/presentation/register_two_view.dart' show RegisterTwoView;
+import 'package:tua/feature/auth/views/presentation/register_two_view.dart';
 import 'package:tua/feature/auth/views/presentation/widgets/link_text.dart';
 import 'package:tua/feature/staticPages/view/presentation/privacy_policy_view.dart';
+import '../../../../core/component/loadsErros/loading_widget.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -29,28 +30,18 @@ class _RegisterViewState extends State<RegisterView> {
   final RegisterCubit registerCubit = RegisterCubit();
   final _formKey = GlobalKey<FormState>();
 
-  // Email validation regex pattern
-  final RegExp _emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+  final RegExp _emailRegExp =
+  RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
 
-  // Email validator
   String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'email_required'.tr();
-    }
-    if (!_emailRegExp.hasMatch(value)) {
-      return 'email_invalid'.tr();
-    }
+    if (value == null || value.isEmpty) return 'email_required'.tr();
+    if (!_emailRegExp.hasMatch(value)) return 'email_invalid'.tr();
     return null;
   }
 
-  // Password validator
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'password_required'.tr();
-    }
-    if (value.length < 6) {
-      return 'password_length'.tr();
-    }
+    if (value == null || value.isEmpty) return 'password_required'.tr();
+    if (value.length < 6) return 'password_length'.tr();
     return null;
   }
 
@@ -67,136 +58,194 @@ class _RegisterViewState extends State<RegisterView> {
               value: registerCubit,
               child: BlocBuilder<RegisterCubit, RegisterState>(
                 builder: (context, state) {
-                  return Column(
-                    children: [
-                      Center(child: SvgPicture.asset(AppIcons.logoAppIc)),
-                      Text('create_new_account'.tr(), style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
-                      CustomTextFormField(
-                        enable: state is! RegisterLoading,
-                        controller: registerCubit.emailController,
-                        hintText: 'email_hint'.tr(),
-                        nameField: 'email'.tr(),
-                        textInputType: TextInputType.emailAddress,
-                        validator: _validateEmail,
-                      ),
-                      CustomTextFormField(
-                        enable: state is! RegisterLoading,
-                        controller: registerCubit.passwordController,
-                        hintText: 'password'.tr(),
-                        nameField: 'password_field'.tr(),
-                        password: true,
-                        validator: _validatePassword,
-                      ),
-                      CustomTextFormField(
-                        enable: state is! RegisterLoading,
-                        controller: registerCubit.confirmPasswordController,
-                        hintText: 'enter_confirm_password'.tr(),
-                        nameField: 'confirm_password'.tr(),
-                        password: true,
-                        validator: _validatePassword,
-                      ),
-                      CustomCheckBox(
-                        onTap: (value) {
-                          registerCubit.changeTermsConditions();
-                        },
-                        checkBox: registerCubit.isTermsConditions,
-                        borderColor: AppColors.cP50.withAlpha((.5 * 255).toInt()),
-                        child: Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Text.rich(
-                              TextSpan(
-                                text: 'By creating an account, you agree to our '.tr(),
-                                style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w500),
-                                children: [
-                                  TextSpan(
-                                    text: 'Privacy Policy'.tr(),
-                                    recognizer: TapGestureRecognizer()..onTap = () => context.navigateToPage(const PrivacyPolicyView()),
-
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w500, color: AppColors.primaryColor),
-                                  ),
-                                ],
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                            child: SvgPicture.asset(AppIcons.logoAppIc,
+                                width: 80, height: 80)),
+                        const SizedBox(height: 16),
+                        Text('create_new_account'.tr(),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            textAlign: TextAlign.center),
+                        const SizedBox(height: 24),
+                        CustomTextFormField(
+                          enable: state is! RegisterLoading,
+                          controller: registerCubit.emailController,
+                          hintText: 'email_hint'.tr(),
+                          nameField: 'email'.tr(),
+                          textInputType: TextInputType.emailAddress,
+                          validator: _validateEmail,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextFormField(
+                          enable: state is! RegisterLoading,
+                          controller: registerCubit.passwordController,
+                          hintText: 'password'.tr(),
+                          nameField: 'password_field'.tr(),
+                          password: true,
+                          validator: _validatePassword,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextFormField(
+                          enable: state is! RegisterLoading,
+                          controller: registerCubit.confirmPasswordController,
+                          hintText: 'enter_confirm_password'.tr(),
+                          nameField: 'confirm_password'.tr(),
+                          password: true,
+                          validator: _validatePassword,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomCheckBox(
+                          onTap: (value) {
+                            registerCubit.changeTermsConditions();
+                          },
+                          checkBox: registerCubit.isTermsConditions,
+                          borderColor:
+                          AppColors.cP50.withAlpha((.5 * 255).toInt()),
+                          child: Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text.rich(
+                                TextSpan(
+                                  text: 'By creating an account, you agree to our '.tr(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMedium
+                                      ?.copyWith(fontWeight: FontWeight.w500),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Privacy Policy'.tr(),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => context.navigateToPage(
+                                            const PrivacyPolicyView()),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayMedium
+                                          ?.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.primaryColor),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      CustomTextButton(
-                        state: state is RegisterLoading,
-                        onPress: () {
-                          if (_formKey.currentState!.validate()) {
-                            if (registerCubit.passwordController.text == registerCubit.confirmPasswordController.text) {
-                              context.navigateToPage(RegisterTwoView(registerCubit: registerCubit));
-                            } else {
-                              customShowToast(context, 'password_not_match'.tr());
-                            }
-                          }
-                        },
-                        childText: 'complete_your_account'.tr(),
-                      ),
-                      Center(
-                        child: LinkText(
-                          mainText: 'already_have_an_account'.tr(),
-                          linkText: 'sign_in_now'.tr(),
-                          onLinkTap: () {
-                            context.navigateToPage(const LoginView());
-                          },
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          const Expanded(child: Divider(color: AppColors.cBorderButtonColor)),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text('or'.tr(), style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.cBorderButtonColor)),
+                        const SizedBox(height: 16),
+                        if (state is RegisterLoading)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: LoadingWidget(),
+                          )
+                        else
+                          CustomTextButton(
+                            onPress: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (registerCubit.passwordController.text ==
+                                    registerCubit.confirmPasswordController.text) {
+                                  context.navigateToPage(
+                                      RegisterTwoView(registerCubit: registerCubit));
+                                } else {
+                                  customShowToast(
+                                      context, 'password_not_match'.tr());
+                                }
+                              }
+                            },
+                            childText: 'complete_your_account'.tr(),
                           ),
-                          const Expanded(child: Divider(color: AppColors.cBorderButtonColor)),
-                        ],
-                      ),
-                      CustomTextButton(
-                        onPress: () {},
-                        backgroundColor: AppColors.white,
-
-                        child: Row(
+                        const SizedBox(height: 16),
+                        Center(
+                          child: LinkText(
+                            mainText: 'already_have_an_account'.tr(),
+                            linkText: 'sign_in_now'.tr(),
+                            onLinkTap: () {
+                              context.navigateToPage(const LoginView());
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
                           children: [
-                            Image.asset(AppImages.google, width: 24, height: 24),
-                            const SizedBox(width: 8),
-                            Text(
-                              'continue_with_google'.tr(),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.greyG600, fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.center,
+                            const Expanded(
+                                child:
+                                Divider(color: AppColors.cBorderButtonColor)),
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text('or'.tr(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMedium
+                                      ?.copyWith(color: AppColors.cBorderButtonColor)),
                             ),
+                            const Expanded(
+                                child:
+                                Divider(color: AppColors.cBorderButtonColor)),
                           ],
                         ),
-                      ),
-                      CustomTextButton(
-                        onPress: () {},
-                        backgroundColor: AppColors.white,
-                        child: Row(
-                          children: [
-                            Image.asset(AppImages.apple, width: 24, height: 24),
-                            const SizedBox(width: 8),
-                            Text(
-                              'continue_with_apple'.tr(),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.greyG600, fontWeight: FontWeight.w400),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                        const SizedBox(height: 16),
+                        CustomTextButton(
+                          onPress: () {},
+                          backgroundColor: AppColors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(AppImages.google, width: 24, height: 24),
+                              const SizedBox(width: 8),
+                              Text(
+                                'continue_with_google'.tr(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                    color: AppColors.greyG600,
+                                    fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      CustomTextButton(
-                        onPress: () {},
-                        backgroundColor: AppColors.white,
-
-                        child: Text(
-                          'continue_as_guest'.tr(),
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.center,
+                        const SizedBox(height: 8),
+                        CustomTextButton(
+                          onPress: () {},
+                          backgroundColor: AppColors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(AppImages.apple, width: 24, height: 24),
+                              const SizedBox(width: 8),
+                              Text(
+                                'continue_with_apple'.tr(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                    color: AppColors.greyG600,
+                                    fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ].paddingDirectional(top: 24),
+                        const SizedBox(height: 8),
+                        CustomTextButton(
+                          onPress: () {},
+                          backgroundColor: AppColors.white,
+                          child: Text(
+                            'continue_as_guest'.tr(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
                   );
                 },
               ),

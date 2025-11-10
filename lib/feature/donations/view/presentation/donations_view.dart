@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/component/divider.dart';
 import 'package:tua/core/component/search_widget.dart';
 import 'package:tua/core/themes/colors.dart';
@@ -11,6 +12,11 @@ import 'package:tua/feature/donations/view/presentation/widget/filter_widget.dar
 import 'package:tua/feature/donations/view/presentation/widget/humanitarian_aid_widget.dart'
     show HumanitarianAidWidget;
 import 'package:tua/feature/home/view/presentation/widgets/donation_pregress_widget.dart';
+
+import '../../../../core/network/local/cache.dart';
+import '../../../navigation/view/presentation/widgets/login_required_dialog.dart';
+import '../../data/data_source/donation_programs_data_source.dart';
+import '../manager/donation_programs_cubit.dart';
 
 class DonationsView extends StatefulWidget {
   const DonationsView({super.key});
@@ -39,6 +45,10 @@ class _DonationsViewState extends State<DonationsView> {
               ),
               child: InkWell(
                 onTap: () {
+                  if (userCacheValue==null ) {
+                    loginRequiredDialog(context);
+                    return;
+                  }
                   context.navigateToPage(const CreateCampaignView());
                 },
                 child: Text(
@@ -54,59 +64,60 @@ class _DonationsViewState extends State<DonationsView> {
           style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
         ),
       ),
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const SizedBox(height: 16),
-          const Padding(padding: EdgeInsets.symmetric(horizontal: 16.0), child: SearchWidget()),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: FiltersWidget(
-              selectedFilter: _selectedFilter,
-              onTap: (p0) {
-                setState(() {
-                  _selectedFilter = p0;
-                });
-              },
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 16.0), child: SearchWidget()),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: FiltersWidget(
+                selectedFilter: _selectedFilter,
+                onTap: (p0) {
+                  setState(() {
+                    _selectedFilter = p0;
+                  });
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 26),
-          const DonationsProgressWidget(),
-          const SizedBox(height: 26),
-          const CustomDivider(),
-          const SizedBox(height: 26),
-          DonationsWidget(
-            donations: [
-              DonationModel(
-                title: 'title',
-                description: 'description',
-                imagePath: '',
-                raised: 0,
-                goal: 0,
-                nameDonation: 'donation',
-                colorDonation: AppColors.cRed900,
-              ),
-              DonationModel(
-                title: 'title',
-                description: 'description',
-                imagePath: '',
-                raised: 0,
-                goal: 0,
-                nameDonation: 'donation',
-                colorDonation: AppColors.cRed900,
-              ),
-            ],
-            nameTittle: 'donation',
-          ),
-          const SizedBox(height: 26),
-          const CustomDivider(),
-          const SizedBox(height: 26),
-          const FeedingWidget(),
-          const SizedBox(height: 26),
-          const HumanitarianAidWidget(),
-          const SizedBox(height: 90),
-        ],
+            const SizedBox(height: 26),
+            const DonationsProgressWidget(),
+            const SizedBox(height: 26),
+            const CustomDivider(),
+            const SizedBox(height: 26),
+            DonationsWidget(
+              donations: [
+                DonationModel(
+                  title: 'title',
+                  description: 'description',
+                  imagePath: '',
+                  raised: 0,
+                  goal: 0,
+                  nameDonation: 'donation',
+                  colorDonation: AppColors.cRed900,
+                ),
+                DonationModel(
+                  title: 'title',
+                  description: 'description',
+                  imagePath: '',
+                  raised: 0,
+                  goal: 0,
+                  nameDonation: 'donation',
+                  colorDonation: AppColors.cRed900,
+                ),
+              ],
+              nameTittle: 'donation',
+            ),
+            const SizedBox(height: 26),
+            const CustomDivider(),
+            const SizedBox(height: 26),
+            const FeedingWidget(),
+            const SizedBox(height: 26),
+            const HumanitarianAidWidget(),
+            const SizedBox(height: 90),
+          ],
+        ),
       ),
     );
   }

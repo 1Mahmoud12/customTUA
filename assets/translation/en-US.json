@@ -326,5 +326,9 @@
   "reload_cart": "Reload Cart",
   "cart_empty_message": "Your cart is empty. Start adding items to donate!",
   "no_items_in_cart": "No items found in your cart",
+  "you_need_to_login_to_access_this_feature": "You need to log in to access this feature.",
+  "login_now": "Login now",
+  "please_select_an_amount": "Please select an amount to donate.",
+
   "": ""
 }
