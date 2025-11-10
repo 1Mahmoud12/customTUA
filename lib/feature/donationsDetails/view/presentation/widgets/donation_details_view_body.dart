@@ -27,6 +27,7 @@ import 'package:tua/feature/donationsDetails/view/presentation/widgets/select_cu
     show SelectCurrencyWidget;
 
 import 'item_option_widget.dart';
+import 'package:html/parser.dart' as html_parser;
 
 class DonationDetailsViewBody extends StatefulWidget {
   const DonationDetailsViewBody({super.key, required this.detailsModel});
@@ -39,6 +40,14 @@ class DonationDetailsViewBody extends StatefulWidget {
 
 class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
   int? selectedAmount;
+  String? selectedCurrency;
+  TextEditingController amountController =TextEditingController();
+  String stripHtmlTags(String htmlString) {
+    final document = html_parser.parse(htmlString);
+    return document.body?.text ?? '';
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -70,7 +79,6 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
                     ),
                     const SizedBox(height: 10),
                     const RaisedAndGoalSliderWidget(goal: 10000, raised: 3400),
-
                     TabBar(
                       labelStyle: Theme.of(
                         context,
@@ -133,9 +141,7 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Text(
-                                  tab.brief?.isNotEmpty == true
-                                      ? tab.brief!
-                                      : 'no_description_available'.tr(),
+                                  stripHtmlTags(tab.brief ?? ''),
                                   style: Theme.of(
                                     context,
                                   ).textTheme.displayMedium?.copyWith(color: AppColors.cP50),
@@ -151,6 +157,9 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
                       details: widget.detailsModel,
                       onChange: (selectedKey) {
                         print('Selected recurring type: $selectedKey');
+                        selectedCurrency=selectedKey;
+                        setState(() {});
+
                         // Example output: "once", "monthly", "yearly"
                       },
                     ),
@@ -248,30 +257,38 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-            Row(
-            children: [
-            Expanded(
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              alignment: WrapAlignment.spaceBetween,
-              children: [50, 100, 200, 500, 1000].map((option) {
-                return ItemOptionsWidget(
-                  option: option,
-                  onTap: (selected) {
-                    setState(() {
-                      selectedAmount = selected;
-                    });
-                  },
-                  isSelected: selectedAmount == option, // highlight selected
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        alignment: WrapAlignment.spaceBetween,
+                        children:
+                            [50, 100, 200, 500, 1000].map((option) {
+                              return ItemOptionsWidget(
+                                option: option,
+                                onTap: (selected) {
+                                  setState(() {
+                                    selectedAmount = selected;
+                                    amountController.text=selected.toString();
+                                  });
+                                },
+                                isSelected: selectedAmount == option, // highlight selected
+                              );
+                            }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
                 CustomTextFormField(
-                  controller: TextEditingController(),
+                  controller: amountController,
+                  onChange: (value){
+                      setState(() {
+                        selectedAmount=null;
+                      });
+
+                  },
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
@@ -288,12 +305,12 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
                 DonationButton(
                   parms: AddCartItemParms(
                     programId: widget.detailsModel.id.toString(),
-                    id: widget.detailsModel.items?.first.id.toString()??'0',
-                    donation: widget.detailsModel.items?.first.donationTypeGuid??'',
-                    recurrence: 'monthly',
+                    id: widget.detailsModel.items?.first.id.toString() ?? '0',
+                    donation: widget.detailsModel.items?.first.donationTypeGuid ?? '',
+                    recurrence: selectedCurrency ?? '',
                     type: '2',
                     quantity: 1,
-                    amount: selectedAmount??-1,
+                    amount: int.tryParse(amountController.text) ?? -1,
                   ),
                 ),
               ].paddingDirectional(bottom: 12),

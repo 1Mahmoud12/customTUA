@@ -14,6 +14,9 @@ import 'package:tua/feature/zakatCalculator/view/presentation/widgets/detailed_c
 import 'package:tua/feature/zakatCalculator/view/presentation/widgets/form_money_widget.dart';
 import 'package:tua/feature/zakatCalculator/view/presentation/widgets/quick_calculate_widget.dart';
 
+import '../../../../core/network/local/cache.dart';
+import '../../../navigation/view/presentation/widgets/login_required_dialog.dart';
+
 class ZakatCalculatorView extends StatefulWidget {
   const ZakatCalculatorView({super.key});
 
@@ -84,7 +87,12 @@ class _ZakatCalculatorViewState extends State<ZakatCalculatorView> {
                 ),
                 const SizedBox(height: 24),
                 CustomTextButton(
-                  onPress: () {},
+                  onPress: () {
+                    if (userCacheValue==null ) {
+                      loginRequiredDialog(context);
+                      return;
+                    }
+                  },
                   backgroundColor: AppColors.cRed900,
                   borderColor: AppColors.transparent,
                   child: Row(

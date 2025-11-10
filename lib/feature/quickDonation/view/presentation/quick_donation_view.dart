@@ -12,8 +12,10 @@ import 'package:tua/core/utils/extensions.dart';
 import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/quickDonation/view/presentation/card_view.dart';
 
+import '../../../../core/network/local/cache.dart';
 import '../../../donationsDetails/view/presentation/widgets/item_option_widget.dart'
     show ItemOptionsWidget;
+import '../../../navigation/view/presentation/widgets/login_required_dialog.dart';
 
 class QuickDonationView extends StatefulWidget {
   const QuickDonationView({super.key});
@@ -79,6 +81,10 @@ class _QuickDonationViewState extends State<QuickDonationView> {
           ),
           InkWell(
             onTap: () {
+              if (userCacheValue==null ) {
+                loginRequiredDialog(context);
+                return;
+              }
               context.navigateToPage(
                 const CardView(),
                 pageTransitionType: PageTransitionType.rightToLeft,
@@ -125,7 +131,12 @@ class _QuickDonationViewState extends State<QuickDonationView> {
               Expanded(
                 flex: 3,
                 child: CustomTextButton(
-                  onPress: () {},
+                  onPress: () {
+                    if (userCacheValue==null ) {
+                      loginRequiredDialog(context);
+                      return;
+                    }
+                  },
                   borderColor: AppColors.cRed900,
                   borderWidth: 2,
                   colorText: AppColors.white,

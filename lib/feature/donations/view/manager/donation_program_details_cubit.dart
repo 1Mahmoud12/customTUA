@@ -12,6 +12,7 @@ class DonationProgramDetailsCubit extends Cubit<DonationProgramDetailsState> {
   DonationProgramDetailsCubit(this.dataSource)
       : super(DonationProgramDetailsInitial());
 
+
   Future<void> fetchDonationProgramById(int id) async {
     emit(DonationProgramDetailsLoading());
     final result = await dataSource.getDonationProgramById(id);

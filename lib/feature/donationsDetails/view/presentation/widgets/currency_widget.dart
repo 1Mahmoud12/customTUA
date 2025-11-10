@@ -37,8 +37,8 @@ class CurrencyWidget extends StatelessWidget {
               final index = switchItems.indexWhere((e) => e.id == selectedId);
 
               if (index != -1) {
-                final selectedKey = recurringTypes.keys.elementAt(index);
-                onChange?.call(selectedKey);
+                final selectedValue = recurringTypes.values.elementAt(index);
+                onChange?.call(selectedValue);
               }
             },
             initialIndex: 0,

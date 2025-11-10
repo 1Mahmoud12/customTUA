@@ -9,7 +9,7 @@ import 'package:tua/feature/donationsDetails/view/presentation/widgets/donation_
 import '../../../../core/utils/errorLoadingWidgets/empty_widget.dart';
 
 class DonationDetailsView extends StatelessWidget {
-  const DonationDetailsView({super.key, required this.id });
+  const DonationDetailsView({super.key, required this.id});
 
   final int id;
 
@@ -33,7 +33,7 @@ class DonationDetailsView extends StatelessWidget {
                       child: LoadingWidget(),
                     )
                     : state is DonationProgramDetailsLoaded
-                    ?  DonationDetailsViewBody( detailsModel:state.program ,)
+                    ? DonationDetailsViewBody(detailsModel: state.program)
                     : const EmptyWidget(),
           );
         },
