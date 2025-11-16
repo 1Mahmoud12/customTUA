@@ -1,10 +1,6 @@
 part of 'cart_cubit.dart';
 
-abstract class CartState extends Equatable {
-  const CartState();
-
-  @override
-  List<Object?> get props => [];
+abstract class CartState  {
 }
 
 class CartInitial extends CartState {}
@@ -15,17 +11,13 @@ class CartLoaded extends CartState {
   final CartItemsResponseModel cart;
   final bool fromCache;
 
-  const CartLoaded(this.cart, {required this.fromCache});
+   CartLoaded(this.cart, {required this.fromCache});
 
-  @override
-  List<Object?> get props => [cart, fromCache];
 }
 
 class CartError extends CartState {
   final String message;
 
-  const CartError(this.message);
+   CartError(this.message);
 
-  @override
-  List<Object?> get props => [message];
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/feature/cart/data/data_source/cart_data_source.dart';
 import 'package:tua/feature/cart/data/models/cart_items_response_model.dart';
@@ -25,6 +24,7 @@ class CartCubit extends Cubit<CartState> {
 
   /// Load cart from Hive cache first
   Future<void> _loadCachedCart() async {
+    emit(CartLoading());
     final box = await openHiveBox('cartBox');
     final cachedJson = box.get('cartCacheKey');
 

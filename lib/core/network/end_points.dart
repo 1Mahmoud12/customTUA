@@ -75,7 +75,7 @@ class EndPoints {
   static const setDefaultAddress = 'Address/SetDefaultAddresses';
 
   // Home
-  static const getAllSlider = 'getAllSlider';
+  static const getAllSlider = 'utilities/bms-by-category';
   static const staticPage = 'StaticPage/StaticPage';
   static const getAdvertises = 'Advertise/GetAdvertises';
   static const String getCurrency = 'user/get-currency';

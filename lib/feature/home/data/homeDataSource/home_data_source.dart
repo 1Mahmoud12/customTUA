@@ -6,14 +6,20 @@ import 'package:tua/core/network/errors/failures.dart';
 import 'package:tua/feature/home/data/model/slider_model.dart';
 
 abstract class HomeDataSource {
-  Future<Either<Failure, SliderModel>> getSlider();
+  Future<Either<Failure, SliderModel>> getSlider({required int limit, required String categorySlug});
 }
 
 class HomeDataSourceImpl implements HomeDataSource {
   @override
-  Future<Either<Failure, SliderModel>> getSlider() async {
+  Future<Either<Failure, SliderModel>> getSlider({
+    required int limit,
+    required String categorySlug,
+  }) async {
     try {
-      final response = await DioHelper.getData(url: EndPoints.getAllSlider);
+      final response = await DioHelper.getData(
+        url: EndPoints.getAllSlider,
+        query: {'limit': limit, 'category_slug': categorySlug},
+      );
       return Right(SliderModel.fromJson(response.data));
     } catch (error) {
       if (error is DioException) {

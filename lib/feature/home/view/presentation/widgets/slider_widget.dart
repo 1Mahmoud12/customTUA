@@ -131,8 +131,8 @@ class _SliderWidgetState extends State<SliderWidget> {
                                         borderRadius: BorderRadius.circular(12),
                                         child: CacheImage(
                                           urlImage: ConstantsModels.sliderModel!.data![index].image ?? '',
-                                          width: context.screenWidth * .7,
-                                          fit: BoxFit.fitHeight,
+                                          width: context.screenWidth *.7,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),

@@ -17,7 +17,9 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> getAllSlider({required BuildContext context}) async {
     emit(GetSlidersLoadingState());
-    await homeDataSource.getSlider().then((value) async {
+    await homeDataSource.getSlider(limit: 10, categorySlug: 'HomePage-Slider-MobileApp').then((
+      value,
+    ) async {
       value.fold(
         (l) {
           //  Utils.showToast(title: l.errMessage, state: UtilState.error);

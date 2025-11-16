@@ -34,7 +34,9 @@ class _SocialAppState extends State<SocialApp> {
             Constants.noInternet = true;
             log('We Are Here');
             // context.navigateToPage(const StopInternetWidget());
-            navigatorKey.currentState!.push(MaterialPageRoute(builder: (context) => const StopInternetWidget()));
+            navigatorKey.currentState!.push(
+              MaterialPageRoute(builder: (context) => const StopInternetWidget()),
+            );
           } else {
             if (Constants.noInternet) {
               navigatorKey.currentState!.pop();
@@ -47,12 +49,12 @@ class _SocialAppState extends State<SocialApp> {
       });
     });
     ConstantsModels.sliderModel = SliderModel(
-      data: [
-        Data(approved: false, createdAt: '', id: 0, image: '', product: Product(id: 0, name: '', price: '', coverImage: ''), type: '', updatedAt: ''),
-        Data(approved: false, createdAt: '', id: 0, image: '', product: Product(id: 0, name: '', price: '', coverImage: ''), type: '', updatedAt: ''),
-      ],
+      success: true,
       message: '',
-      status: true,
+      data: [
+        SliderData(id: 0, title: '', url: '', image: '', icon: null),
+        SliderData(id: 0, title: '', url: '', image: '', icon: null),
+      ],
     );
   }
 
@@ -89,7 +91,10 @@ class _SocialAppState extends State<SocialApp> {
         debugPrint('Global Message Enter${Constants.messageGlobal?.data}');
 
         Future.delayed(const Duration(milliseconds: 1000), () async {
-          NotificationUtility.onTapNotificationScreenNavigateCallback(Constants.messageGlobal!.data['type'] ?? '', Constants.messageGlobal!.data);
+          NotificationUtility.onTapNotificationScreenNavigateCallback(
+            Constants.messageGlobal!.data['type'] ?? '',
+            Constants.messageGlobal!.data,
+          );
           Constants.messageGlobal = null;
         });
       }
