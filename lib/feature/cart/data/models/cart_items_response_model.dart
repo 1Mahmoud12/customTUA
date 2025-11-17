@@ -27,9 +27,7 @@ class CartData {
 
   factory CartData.fromJson(Map<String, dynamic> json) {
     final itemsMap = json['items'] as Map<String, dynamic>? ?? {};
-    final itemsList =
-        itemsMap.entries.map((entry) => CartItem.fromJson(entry.value)..uniqueKey = entry.key).toList();
-
+    final itemsList = itemsMap.entries.map((entry) => CartItem.fromJson(entry.value)..uniqueKey = entry.key).toList();
     return CartData(
       itemsCount: json['items_count'],
       subTotal: json['sub_total'],

@@ -19,6 +19,7 @@ class LookupData {
     required this.residencies,
     required this.genders,
     required this.bmsCategories,
+    this.quickDonation,
   });
 
   final String? currentCurrency;
@@ -26,14 +27,24 @@ class LookupData {
   final List<LookupItem>? residencies;
   final List<GenderItem>? genders;
   final Map<String, String>? bmsCategories;
+  final QuickDonationLookup? quickDonation;
 
   factory LookupData.fromJson(Map<String, dynamic> json) {
+    final quickDonationRaw = json['quick_donation'];
+    QuickDonationLookup? quickDonation;
+    if (quickDonationRaw is Map<String, dynamic>) {
+      quickDonation = QuickDonationLookup.fromJson(quickDonationRaw);
+    } else if (quickDonationRaw != null) {
+      quickDonation = QuickDonationLookup(id: quickDonationRaw.toString());
+    }
+
     return LookupData(
       currentCurrency: json['current_currency'],
       nationalities: (json['nationalities'] as List?)?.map((e) => LookupItem.fromJson(e as Map<String, dynamic>)).toList(),
       residencies: (json['residencies'] as List?)?.map((e) => LookupItem.fromJson(e as Map<String, dynamic>)).toList(),
       genders: (json['genders'] as List?)?.map((e) => GenderItem.fromJson(e as Map<String, dynamic>)).toList(),
       bmsCategories: (json['bms_categories'] as Map?)?.map((key, value) => MapEntry(key.toString(), value.toString())),
+      quickDonation: quickDonation,
     );
   }
 
@@ -43,6 +54,7 @@ class LookupData {
     'residencies': residencies?.map((e) => e.toJson()).toList(),
     'genders': genders?.map((e) => e.toMap()).toList(),
     'bms_categories': bmsCategories,
+    'quick_donation': quickDonation?.toJson(),
   };
 }
 
@@ -72,4 +84,38 @@ class GenderItem {
   Map<String, String> toMap() {
     return {'id': id, 'name': name};
   }
+}
+
+class QuickDonationLookup {
+  final String? id;
+  final String? programId;
+  final String? itemId;
+  final String? donationGuid;
+  final String? campaignGuid;
+
+  const QuickDonationLookup({
+    this.id,
+    this.programId,
+    this.itemId,
+    this.donationGuid,
+    this.campaignGuid,
+  });
+
+  factory QuickDonationLookup.fromJson(Map<String, dynamic> json) {
+    return QuickDonationLookup(
+      id: json['id']?.toString(),
+      programId: json['program_id']?.toString(),
+      itemId: json['item_id']?.toString(),
+      donationGuid: json['donation']?.toString(),
+      campaignGuid: json['campaign']?.toString(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'program_id': programId,
+        'item_id': itemId,
+        'donation': donationGuid,
+        'campaign': campaignGuid,
+      };
 }

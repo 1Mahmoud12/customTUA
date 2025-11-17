@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tua/core/component/loadsErros/loading_widget.dart';
 import 'package:tua/core/utils/errorLoadingWidgets/empty_widget.dart';
-import 'package:tua/core/utils/custom_show_toast.dart';
 import 'package:tua/core/utils/cusotm_container.dart';
 import 'package:tua/core/themes/styles.dart';
 import 'package:tua/feature/cart/data/data_source/cart_data_source_impl.dart';
@@ -46,6 +45,8 @@ class CartView extends StatelessWidget {
               if (cart != null && cart.data != null && cart.data!.items.isNotEmpty) {
                 final items = cart.data!.items;
                 final total = cart.data!.total ?? '0';
+                final subTotal = cart.data!.subTotal ?? '';
+                final itemsCount = cart.data!.itemsCount ?? 0;
                 return Column(
                   children: [
                     Expanded(child: CartViewBody(cartItems: items)),
@@ -55,6 +56,37 @@ class CartView extends StatelessWidget {
                       padding: EdgeInsets.only(bottom: 30.h, top: 10.h),
                       child: Column(
                         children: [
+                          if (subTotal.isNotEmpty)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${'sub_total'.tr()}: ',
+                                  style: Styles.style14500.copyWith(fontWeight: FontWeight.w400),
+                                ),
+                                Text(
+                                  subTotal,
+                                  style: Styles.style14500.copyWith(fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                          if (itemsCount > 0) ...[
+                            SizedBox(height: 8.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${'items_count'.tr()}: ',
+                                  style: Styles.style14500.copyWith(fontWeight: FontWeight.w400),
+                                ),
+                                Text(
+                                  itemsCount.toString(),
+                                  style: Styles.style14500.copyWith(fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                          ],
+                          SizedBox(height: 8.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

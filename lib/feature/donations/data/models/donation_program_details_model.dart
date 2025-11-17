@@ -21,6 +21,7 @@ class DonationProgramDetailsModel {
   final List<DonationTabModel>? tabs;
   final List<DonationItemModel>? items;
   final Map<String, String>? recurringTypes;
+  final List<RelatedDonationProgramModel>? relatedDonationPrograms;
 
   DonationProgramDetailsModel({
     required this.id,
@@ -45,7 +46,20 @@ class DonationProgramDetailsModel {
     this.tabs,
     this.items,
     this.recurringTypes,
+    this.relatedDonationPrograms,
   });
+
+  /// Helper function to parse amount strings like "1,320 JOD" to double
+  static double? _parseAmountString(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.toDouble();
+    if (value is String) {
+      // Remove currency text and commas, then parse
+      final cleaned = value.replaceAll(RegExp(r'[^\d.]'), '');
+      return double.tryParse(cleaned);
+    }
+    return null;
+  }
 
   factory DonationProgramDetailsModel.fromJson(Map<String, dynamic> json) {
     return DonationProgramDetailsModel(
@@ -55,8 +69,8 @@ class DonationProgramDetailsModel {
       typeStr: json['type_str'],
       slug: json['slug'],
       brief: json['brief'],
-      raised: (json['raised'] as num?)?.toDouble(),
-      goal: (json['goal'] as num?)?.toDouble(),
+      raised: _parseAmountString(json['raised']),
+      goal: _parseAmountString(json['goal']),
       progress: (json['progress'] as num?)?.toDouble(),
       hasGoal: json['has_goal'],
       isRecurring: json['is_recurring'],
@@ -77,6 +91,9 @@ class DonationProgramDetailsModel {
       recurringTypes: (json['recurring_types'] as Map?)?.map(
             (key, value) => MapEntry(key.toString(), value.toString()),
       ),
+      relatedDonationPrograms: (json['related_donation_programs'] as List?)
+          ?.map((e) => RelatedDonationProgramModel.fromJson(e))
+          .toList(),
     );
   }
 }
@@ -112,6 +129,7 @@ class DonationItemModel {
   final String? donationTypeGuid;
   final int? donationTypeId;
   final String? donationType;
+  final String? donationTypeCms;
   final String? campaign;
   final int? campaignId;
   final String? campaignGuid;
@@ -125,6 +143,7 @@ class DonationItemModel {
     this.donationTypeGuid,
     this.donationTypeId,
     this.donationType,
+    this.donationTypeCms,
     this.campaign,
     this.campaignId,
     this.campaignGuid,
@@ -140,10 +159,39 @@ class DonationItemModel {
       donationTypeGuid: json['donation_type_guid'],
       donationTypeId: json['donation_type_id'],
       donationType: json['donation_type'],
+      donationTypeCms: json['donation_type_cms'],
       campaign: json['campaign'],
       campaignId: json['campaign_id'],
       campaignGuid: json['campaign_guid'],
       order: json['order'],
+    );
+  }
+}
+
+class RelatedDonationProgramModel {
+  final int id;
+  final String title;
+  final String? brief;
+  final String? image;
+  final List<DonationItemModel>? items;
+
+  RelatedDonationProgramModel({
+    required this.id,
+    required this.title,
+    this.brief,
+    this.image,
+    this.items,
+  });
+
+  factory RelatedDonationProgramModel.fromJson(Map<String, dynamic> json) {
+    return RelatedDonationProgramModel(
+      id: json['id'],
+      title: json['title'] ?? '',
+      brief: json['brief'],
+      image: json['image'],
+      items: (json['items'] as List?)
+          ?.map((e) => DonationItemModel.fromJson(e))
+          .toList(),
     );
   }
 }

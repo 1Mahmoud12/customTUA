@@ -10,19 +10,26 @@ import 'package:tua/core/component/see_all_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/extensions.dart';
+import 'package:tua/feature/donations/data/models/donation_program_details_model.dart';
 
 class RelatedStoryWidget extends StatelessWidget {
-  const RelatedStoryWidget({super.key});
+  final List<RelatedDonationProgramModel> relatedPrograms;
+  
+  const RelatedStoryWidget({super.key, required this.relatedPrograms});
 
   @override
   Widget build(BuildContext context) {
+    if (relatedPrograms.isEmpty) return const SizedBox.shrink();
+    
     return Column(
       children: [
         const SeeAllWidget(title: 'related_story'),
         const SizedBox(height: 16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(children: [...List.generate(10, (index) => const ItemRelatedStoryWidget())]),
+          child: Row(
+            children: relatedPrograms.map((program) => ItemRelatedStoryWidget(program: program)).toList(),
+          ),
         ),
       ],
     );
@@ -30,7 +37,9 @@ class RelatedStoryWidget extends StatelessWidget {
 }
 
 class ItemRelatedStoryWidget extends StatefulWidget {
-  const ItemRelatedStoryWidget({super.key});
+  final RelatedDonationProgramModel program;
+  
+  const ItemRelatedStoryWidget({super.key, required this.program});
 
   @override
   State<ItemRelatedStoryWidget> createState() => _ItemRelatedStoryWidgetState();
@@ -55,7 +64,13 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                child: CacheImage(urlImage: '', width: context.screenWidth * .8, height: 160.h, fit: BoxFit.cover, borderRadius: 0),
+                child: CacheImage(
+                  urlImage: widget.program.image ?? '', 
+                  width: context.screenWidth * .8, 
+                  height: 160.h, 
+                  fit: BoxFit.cover, 
+                  borderRadius: 0
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -85,34 +100,19 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('${'name'.tr()}: ', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
-                    Text('ahmed', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('${'age'.tr()}: ', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
-                    Text('20 ${'years_old'.tr()}', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('${'gender'.tr()}: ', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
-                    Text('female'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
-                  ],
-                ),
-
-                const SizedBox(height: 14),
                 Text(
-                  'Our monthly food parcels offer a variety of fresh, high-quality ingredients to spark creativity in the kitchen and simplify meal planning.'
-                      .tr(),
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.cP50.withAlpha((.5 * 255).toInt())),
+                  widget.program.title,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
                 ),
+                if (widget.program.brief != null && widget.program.brief!.isNotEmpty) ...[
+                  const SizedBox(height: 14),
+                  Text(
+                    widget.program.brief!,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.cP50.withAlpha((.5 * 255).toInt())),
+                  ),
+                ],
               ],
             ),
           ),
@@ -121,14 +121,17 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
-                CustomRadioListButton(
-                  items: [
-                    RadioButtonModel(id: 1, name: '120 ${'jod'.tr()}', subtitle: 'Your approval taken for renewal (Annually).'),
-                    RadioButtonModel(id: 2, name: '60 ${'jod'.tr()}', subtitle: 'Your approval taken for renewal (Annually).'),
-                  ],
-                ),
-                // CustomRadioButton(nameRadioButton: '120 ${'jod'.tr()}', subTitle: 'Your approval taken for renewal (Annually).'),
-                // CustomRadioButton(nameRadioButton: '120 ${'jod'.tr()}', subTitle: 'Your approval taken for renewal (Annually).'),
+                if (widget.program.items != null && widget.program.items!.isNotEmpty)
+                  CustomRadioListButton(
+                    items: widget.program.items!.take(2).map((item) {
+                      final amount = item.amountJod ?? item.amountUsd ?? 0.0;
+                      return RadioButtonModel(
+                        id: item.id,
+                        name: '${amount.toStringAsFixed(0)} ${'jod'.tr()}',
+                        subtitle: item.title,
+                      );
+                    }).toList(),
+                  ),
                 Row(
                   children: [
                     Expanded(
@@ -145,7 +148,6 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1.5, color: AppColors.cP50)),
-
                       child: SvgPicture.asset(AppIcons.cartIc),
                     ),
                   ],

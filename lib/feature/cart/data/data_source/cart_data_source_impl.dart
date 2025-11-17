@@ -14,11 +14,7 @@ class CartDataSourceImpl implements CartDataSource {
   @override
   Future<Either<Failure, Unit>> addCartItem({required AddCartItemParms params}) async {
     try {
-      final response = await DioHelper.postData(
-        url: EndPoints.addToCart,
-        formDataIsEnabled: true,
-        data: params.toJson(),
-      );
+      final response = await DioHelper.postData(url: EndPoints.addToCart, formDataIsEnabled: true, data: params.toJson());
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -44,7 +40,7 @@ class CartDataSourceImpl implements CartDataSource {
   @override
   Future<Either<Failure, CartItemsResponseModel>> getCartItems() async {
     try {
-      final response = await DioHelper.getData(url: EndPoints.getCartItems,);
+      final response = await DioHelper.getData(url: EndPoints.getCartItems);
 
       if (response.statusCode == 200) {
         final data = response.data;

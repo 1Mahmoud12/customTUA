@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/feature/cart/data/data_source/cart_data_source.dart';
 import 'package:tua/feature/cart/data/models/cart_items_response_model.dart';
@@ -44,16 +45,15 @@ class CartCubit extends Cubit<CartState> {
   /// Fetch fresh cart from API and cache it
   Future<void> _fetchCartFromApi() async {
     final result = await _dataSource.getCartItems();
-
     result.fold(
-          (failure) {
+      (failure) {
         if (_cachedCart != null) {
           emit(CartLoaded(_cachedCart!, fromCache: true));
         } else {
           emit(CartError(failure.errMessage));
         }
       },
-          (cart) async {
+      (cart) async {
         _cachedCart = cart;
 
         final box = await openHiveBox('cartBox');

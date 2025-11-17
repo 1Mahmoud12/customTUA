@@ -13,13 +13,7 @@ class PhoneFieldWidget extends StatefulWidget {
   final String? hintText;
   final String? initialValue; // ✅ Added to support prefilled phone
 
-  const PhoneFieldWidget({
-    super.key,
-    this.onChange,
-    this.nameField,
-    this.hintText,
-    this.initialValue,
-  });
+  const PhoneFieldWidget({super.key, this.onChange, this.nameField, this.hintText, this.initialValue});
 
   @override
   State<PhoneFieldWidget> createState() => _PhoneFieldWidgetState();
@@ -27,13 +21,14 @@ class PhoneFieldWidget extends StatefulWidget {
 
 class _PhoneFieldWidgetState extends State<PhoneFieldWidget> {
   final Map<int, CountryPhoneData> countryPhoneData = {
-    1: CountryPhoneData(code: '+20', length: 10, image: AppImages.eg), // Egypt
     2: CountryPhoneData(code: '+962', length: 9, image: AppImages.jo), // Jordan
+
+    1: CountryPhoneData(code: '+20', length: 10, image: AppImages.eg), // Egypt
   };
 
-  String selectedCountryCode = '+20';
-  int phoneMaxLength = 10;
-  int currentCountryId = 1;
+  String selectedCountryCode = '+962';
+  int phoneMaxLength = 9;
+  int currentCountryId = 2;
 
   late TextEditingController senderMobileController;
 
@@ -42,9 +37,7 @@ class _PhoneFieldWidgetState extends State<PhoneFieldWidget> {
     super.initState();
 
     // ✅ Initialize controller with provided initial value
-    senderMobileController = TextEditingController(
-      text: _extractPhoneWithoutCode(widget.initialValue),
-    );
+    senderMobileController = TextEditingController(text: _extractPhoneWithoutCode(widget.initialValue));
 
     // ✅ Detect and set initial country based on prefix
     _detectCountryFromInitialValue(widget.initialValue);
@@ -89,21 +82,13 @@ class _PhoneFieldWidgetState extends State<PhoneFieldWidget> {
       onChange: (value) {
         if (value.length > phoneMaxLength) {
           senderMobileController.text = value.substring(0, phoneMaxLength);
-          senderMobileController.selection = TextSelection.fromPosition(
-            TextPosition(offset: senderMobileController.text.length),
-          );
+          senderMobileController.selection = TextSelection.fromPosition(TextPosition(offset: senderMobileController.text.length));
         }
         widget.onChange?.call('$selectedCountryCode${senderMobileController.text}');
       },
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(phoneMaxLength),
-        FilteringTextInputFormatter.digitsOnly,
-      ],
+      inputFormatters: [LengthLimitingTextInputFormatter(phoneMaxLength), FilteringTextInputFormatter.digitsOnly],
       prefixIcon: Padding(
-        padding: EdgeInsets.only(
-          left: context.locale.languageCode == 'ar' ? 0 : 16,
-          right: context.locale.languageCode == 'ar' ? 16 : 0,
-        ),
+        padding: EdgeInsets.only(left: context.locale.languageCode == 'ar' ? 0 : 16, right: context.locale.languageCode == 'ar' ? 16 : 0),
         child: SizedBox(
           width: 100,
           child: CustomPopupMenu(
@@ -119,16 +104,12 @@ class _PhoneFieldWidgetState extends State<PhoneFieldWidget> {
               image: countryPhoneData[currentCountryId]!.image,
             ),
             addSpacer: false,
-            items: countryPhoneData.entries.map((entry) {
-              final int countryId = entry.key;
-              final CountryPhoneData data = entry.value;
-              return DropDownModel(
-                name: data.code,
-                value: countryId,
-                image: data.image,
-                showImage: true,
-              );
-            }).toList(),
+            items:
+                countryPhoneData.entries.map((entry) {
+                  final int countryId = entry.key;
+                  final CountryPhoneData data = entry.value;
+                  return DropDownModel(name: data.code, value: countryId, image: data.image, showImage: true);
+                }).toList(),
             onChanged: (value) {
               if (value != null && countryPhoneData.containsKey(value.value)) {
                 final int countryId = value.value;
@@ -153,9 +134,5 @@ class CountryPhoneData {
   final int length;
   final String image;
 
-  CountryPhoneData({
-    required this.code,
-    required this.length,
-    required this.image,
-  });
+  CountryPhoneData({required this.code, required this.length, required this.image});
 }

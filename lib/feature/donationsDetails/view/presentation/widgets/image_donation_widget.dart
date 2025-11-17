@@ -19,7 +19,7 @@ class ImageDonationWidget extends StatelessWidget {
       padding: edgeInsetsGeometry ?? const EdgeInsets.symmetric(horizontal: 16.0),
       child: Stack(
         children: [
-          CacheImage(urlImage: '', width: context.screenWidth, height: context.screenHeight * .25),
+          CacheImage(urlImage: image, width: context.screenWidth, height: context.screenHeight * .25),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Container(
