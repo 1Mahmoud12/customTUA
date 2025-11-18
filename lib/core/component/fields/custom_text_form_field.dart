@@ -38,6 +38,7 @@ class CustomTextFormField extends StatefulWidget {
   final void Function(String value)? onChange;
   final Function? validator;
   final FocusNode? focusNode;
+  final AutovalidateMode? autoValidateMode;
 
   const CustomTextFormField({
     super.key,
@@ -63,6 +64,7 @@ class CustomTextFormField extends StatefulWidget {
     this.onChange,
     this.outPadding,
     this.validateKey,
+    this.autoValidateMode,
     this.hintStyle,
     this.inputFormatters,
     this.validator,
@@ -134,6 +136,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   inputFormatters: widget.inputFormatters,
                   // Only set maxLines if we're not using fixed height mode
                   maxLines: useFixedHeight ? null : (widget.maxLines ?? 1),
+                  autovalidateMode: widget.autoValidateMode,
                   // Set expands only if we're using fixed height
                   expands: useFixedHeight,
                   cursorColor: AppColors.textColorTextFormField,

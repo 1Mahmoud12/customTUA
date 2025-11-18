@@ -332,5 +332,18 @@
   "you_need_to_login_to_access_this_feature": "يجب تسجيل الدخول للوصول إلى هذه الميزة.",
   "login_now": "تسجيل الدخول الآن",
   "please_select_an_amount": "يرجى اختيار مبلغ للتبرع.",
+  "to_apply_please_fill_fields": "للتقديم، يرجى ملء الحقول أدناه!",
+  "enter_campaign_name": "أدخل اسم الحملة",
+  "dd_mm_yyyy": "YYYY-MM-DD",
+  "please_enter_your_name": "يرجى إدخال اسمك",
+  "please_enter_mobile_number": "يرجى إدخال رقم الجوال",
+  "please_enter_email": "يرجى إدخال البريد الإلكتروني",
+  "please_enter_valid_email": "يرجى إدخال بريد إلكتروني صالح",
+  "please_enter_campaign_name": "يرجى إدخال اسم الحملة",
+  "please_select_start_date": "يرجى اختيار تاريخ البداية",
+  "please_select_end_date": "يرجى اختيار تاريخ الانتهاء",
+  "please_enter_message": "يرجى إدخال الرسالة",
+  "please_enter_e_card_id": "يرجى إدخال رقم بطاقة التهنئة (E-Card)",
+  "campaign_created_successfully": "تم إنشاء الحملة بنجاح",
   "": ""
 }

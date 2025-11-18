@@ -154,4 +154,9 @@ class EndPoints {
   //e-cards
   static const getECards = 'utilities/e-cards';
   static const sendECard = 'utilities/send-ecard';
+  
+  //volunteering
+  static const getVolunteeringPrograms = 'utilities/volunteering-programs';
+  static const getVolunteeringProgramById = 'utilities/volunteering-program-by-id';
+  static const createDonationCampaign = 'utilities/donation-campaign';
 }

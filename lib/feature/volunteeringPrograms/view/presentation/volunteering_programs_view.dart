@@ -2,15 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/component/cache_image.dart';
 import 'package:tua/core/component/custom_app_bar.dart';
+import 'package:tua/core/component/loadsErros/loading_widget.dart';
 import 'package:tua/core/component/see_all_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_images.dart';
 import 'package:tua/core/utils/navigate.dart';
+import 'package:tua/feature/volunteeringPrograms/data/data_source/volunteering_programs_data_source.dart';
+import 'package:tua/feature/volunteeringPrograms/data/models/volunteering_program_model.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/view_all_volunteering_programs_view.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/widgets/item_volunteeing_program_widget.dart';
 
-class VolunteeringProgramsView extends StatelessWidget {
+class VolunteeringProgramsView extends StatefulWidget {
   const VolunteeringProgramsView({super.key});
+
+  @override
+  State<VolunteeringProgramsView> createState() => _VolunteeringProgramsViewState();
+}
+
+class _VolunteeringProgramsViewState extends State<VolunteeringProgramsView> {
+  final VolunteeringProgramsDataSource _dataSource = VolunteeringProgramsDataSource();
+  List<VolunteeringProgramModel> _programs = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVolunteeringPrograms();
+  }
+
+  Future<void> _loadVolunteeringPrograms() async {
+    final result = await _dataSource.getVolunteeringPrograms();
+    result.fold(
+      (failure) {
+        setState(() {
+          _isLoading = false;
+        });
+      },
+      (response) {
+        setState(() {
+          _programs = response.data;
+          _isLoading = false;
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,21 +88,25 @@ class VolunteeringProgramsView extends StatelessWidget {
               ],
             ),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                ...List.generate(
-                  5,
-                  (index) => Container(
-                    padding: const EdgeInsets.all(8),
-                    // decoration: const BoxDecoration(color: AppColors.cBackGroundPayNow),
-                    child: const ItemVolunteeringProgramsWidget(widthImage: true),
+          if (_isLoading)
+            const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Center(child: LoadingWidget()))
+          else if (_programs.isEmpty)
+            const SizedBox.shrink()
+          else
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(width: 8),
+                  ..._programs.map(
+                    (program) =>
+                        Container(padding: const EdgeInsets.all(8), child: ItemVolunteeringProgramsWidget(widthImage: true, program: program)),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                ],
+              ),
             ),
-          ),
           const SizedBox(height: 16),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),

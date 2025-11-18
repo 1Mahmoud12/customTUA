@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tua/core/component/loadsErros/loading_widget.dart';
+import 'package:tua/core/component/see_all_widget.dart';
+import 'package:tua/core/utils/custom_show_toast.dart';
+import 'package:tua/feature/donations/data/models/donation_program_model.dart';
+import 'package:tua/feature/donations/view/manager/donation_programs_cubit.dart';
+import 'package:tua/feature/home/view/presentation/widgets/quick_donation_widget.dart';
+
+class TypedDonationProgramsWidget extends StatelessWidget {
+  final String type; // The tag/type to filter by (e.g., "Feeding", "Humanitarian Aid")
+  final String title; // The title to display (e.g., "feeding", "humanitarian_aid")
+
+  const TypedDonationProgramsWidget({super.key, required this.type, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<DonationProgramsCubit, DonationProgramsState>(
+      listener: (context, state) {
+        if (state is DonationProgramsError) {
+          customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+        }
+      },
+      builder: (context, state) {
+        List<DonationProgramModel> allPrograms = [];
+
+        if (state is DonationProgramsLoaded) {
+          allPrograms = state.programs;
+        }
+
+        // Filter programs by type/tag
+        final filteredPrograms = allPrograms.where((program) => program.tag.toLowerCase() == type.toLowerCase()).toList();
+
+        // Don't show widget if no programs match the type
+        if (filteredPrograms.isEmpty && state is! DonationProgramsLoading) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          children: [
+            SeeAllWidget(title: title),
+            const SizedBox(height: 16),
+            // ⏳ Loading
+            if (state is DonationProgramsLoading && allPrograms.isEmpty)
+              const Padding(padding: EdgeInsets.symmetric(vertical: 50), child: LoadingWidget())
+            // ✅ Loaded — show filtered donation programs
+            else if (filteredPrograms.isNotEmpty)
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.zero,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 16),
+                    ...filteredPrograms.map((program) => ItemDonationsWidget(donation: program)),
+                    const SizedBox(width: 16),
+                  ],
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}

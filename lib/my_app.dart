@@ -9,6 +9,8 @@ import 'package:tua/core/themes/light.dart';
 import 'package:tua/core/utils/constants.dart';
 import 'package:tua/feature/cart/data/data_source/cart_data_source_impl.dart';
 import 'package:tua/feature/cart/view/managers/add_cart_item/add_cart_item_cubit.dart';
+import 'package:tua/feature/donations/data/data_source/donation_programs_data_source.dart';
+import 'package:tua/feature/donations/view/manager/donation_programs_cubit.dart';
 import 'package:tua/feature/navigation/view/manager/homeBloc/cubit.dart';
 import 'package:tua/feature/navigation/view/manager/homeBloc/state.dart';
 import 'package:tua/main.dart';
@@ -39,9 +41,8 @@ class _MyAppState extends State<MyApp> {
           (_, child) => MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => MainCubit()..getCurrency()),
-              BlocProvider(
-                create: (context) => AddCartItemCubit(CartDataSourceImpl()),
-              ),
+              BlocProvider(create: (context) => AddCartItemCubit(CartDataSourceImpl())),
+              BlocProvider(create: (_) => DonationProgramsCubit(DonationProgramsDataSource())..fetchDonationPrograms()),
               // BlocProvider(
               //   lazy: false,
               //   create: (context) => AuthCubit()..getCountryCode(),
@@ -64,9 +65,7 @@ class _MyAppState extends State<MyApp> {
             ],
             child: BlocBuilder<MainCubit, MainState>(
               builder: (context, state) {
-                return Platform.isAndroid
-                    ? SafeArea(top: false, child: buildMaterialApp(context))
-                    : buildMaterialApp(context);
+                return Platform.isAndroid ? SafeArea(top: false, child: buildMaterialApp(context)) : buildMaterialApp(context);
               },
             ),
           ),

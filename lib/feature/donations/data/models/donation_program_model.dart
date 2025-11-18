@@ -3,6 +3,7 @@ class DonationProgramModel {
   final String title;
   final String color;
   final String tagIcon;
+  final String tag;
   final String? campaignReport;
   final String image;
   final String raised;
@@ -14,6 +15,7 @@ class DonationProgramModel {
     required this.title,
     required this.color,
     required this.tagIcon,
+    required this.tag,
     required this.image,
     this.campaignReport,
     required this.raised,
@@ -25,6 +27,7 @@ class DonationProgramModel {
     return DonationProgramModel(
       id: json['id'] ?? 0,
       title: json['title'] ?? '',
+      tag: json['tag'] ?? '',
       color: json['color'] ?? '',
       raised: json['raised'] ?? '',
       goal: json['goal'] ?? '',

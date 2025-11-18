@@ -79,6 +79,7 @@ class _PhoneFieldWidgetState extends State<PhoneFieldWidget> {
       hintText: widget.hintText ?? 'XX XXX XXX',
       nameField: widget.nameField,
       textInputType: TextInputType.phone,
+      autoValidateMode: AutovalidateMode.onUserInteraction,
       onChange: (value) {
         if (value.length > phoneMaxLength) {
           senderMobileController.text = value.substring(0, phoneMaxLength);

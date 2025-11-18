@@ -6,33 +6,44 @@ import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/extensions.dart';
 import 'package:tua/core/utils/navigate.dart';
+import 'package:tua/feature/volunteeringPrograms/data/models/volunteering_program_model.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/application_form_view.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/details_volunteering_view.dart';
 
 class ItemVolunteeringProgramsWidget extends StatelessWidget {
   final bool widthImage;
+  final VolunteeringProgramModel? program;
 
-  const ItemVolunteeringProgramsWidget({super.key, this.widthImage = false});
+  const ItemVolunteeringProgramsWidget({super.key, this.widthImage = false, this.program});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.navigateToPage(const DetailsVolunteeringView());
+        if (program != null) {
+          context.navigateToPage(DetailsVolunteeringView(programId: program!.id));
+        } else {
+          context.navigateToPage(const DetailsVolunteeringView());
+        }
       },
       child: Container(
         width: widthImage ? context.screenWidth * .8 : null,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(bottomRight: Radius.circular(14), bottomLeft: Radius.circular(14)),
-
           boxShadow: [BoxShadow(color: Color(0x33B6B6B6), blurRadius: 30, offset: Offset(0, 20), spreadRadius: 0)],
         ),
         child: Column(
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(14), topRight: Radius.circular(14)),
-              child: CacheImage(urlImage: '', width: double.infinity, height: context.screenHeight * .25, fit: BoxFit.cover, borderRadius: 0),
+              child: CacheImage(
+                urlImage: program?.image ?? '',
+                width: double.infinity,
+                height: context.screenHeight * .25,
+                fit: BoxFit.cover,
+                borderRadius: 0,
+              ),
             ),
             Container(
               margin: const EdgeInsets.all(16),
@@ -40,11 +51,17 @@ class ItemVolunteeringProgramsWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Food parcel packaging programs', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
+                  Text(
+                    program?.title ?? 'Food parcel packaging programs',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
+                  ),
                   const SizedBox(height: 8),
                   Text(
-                    'Our monthly food parcels offer a variety of fresh, high-quality ingredients to spark creativity in the kitchen and simplify meal planning.',
+                    program?.brief ??
+                        'Our monthly food parcels offer a variety of fresh, high-quality ingredients to spark creativity in the kitchen and simplify meal planning.',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w400),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -52,7 +69,7 @@ class ItemVolunteeringProgramsWidget extends StatelessWidget {
                       Expanded(
                         child: CustomTextButton(
                           onPress: () {
-                            context.navigateToPage(const ApplicationFormView());
+                            context.navigateToPage(ApplicationFormView(typeId: program!.id));
                           },
                           childText: 'apply_now',
                         ),
