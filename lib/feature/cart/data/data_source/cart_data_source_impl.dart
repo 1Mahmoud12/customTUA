@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:tua/core/network/errors/failures.dart';
+import 'package:tua/core/network/local/cache.dart';
 import 'package:tua/feature/cart/data/data_source/cart_data_source.dart';
 import 'package:tua/feature/cart/data/models/add_cart_item_parms.dart';
 import 'package:tua/feature/cart/data/models/cart_items_response_model.dart';
@@ -14,7 +15,11 @@ class CartDataSourceImpl implements CartDataSource {
   @override
   Future<Either<Failure, Unit>> addCartItem({required AddCartItemParms params}) async {
     try {
-      final response = await DioHelper.postData(url: EndPoints.addToCart, formDataIsEnabled: true, data: params.toJson());
+      final response = await DioHelper.postData(
+        url: EndPoints.addToCart,
+        formDataIsEnabled: true,
+        data: params.toJson(),
+      );
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -40,7 +45,11 @@ class CartDataSourceImpl implements CartDataSource {
   @override
   Future<Either<Failure, CartItemsResponseModel>> getCartItems() async {
     try {
-      final response = await DioHelper.getData(url: EndPoints.getCartItems);
+      final response = await DioHelper.postData(
+        url: EndPoints.getCartItems,
+        query: {'access_token': userCacheValue?.accessToken??''},
+        data: {'access_token': userCacheValue?.accessToken??''}
+      );
 
       if (response.statusCode == 200) {
         final data = response.data;

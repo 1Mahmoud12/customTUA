@@ -20,80 +20,56 @@ class ServerFailure extends Failure {
   factory ServerFailure.fromDioException(DioException dioError) {
     switch (dioError.type) {
       case DioExceptionType.connectionTimeout:
-        return ServerFailure('Connection timeout with ApiServer');
+        return ServerFailure('connection_timeout'.tr());
       case DioExceptionType.sendTimeout:
-        return ServerFailure('Send timeout with ApiServer');
+        return ServerFailure('send_timeout'.tr());
       case DioExceptionType.receiveTimeout:
-        return ServerFailure('Receive timeout with ApiServer');
+        return ServerFailure('receive_timeout'.tr());
       case DioExceptionType.badResponse:
-        log('badResponse on url ${dioError.response?.realUri}');
-        log('badResponse on statusCode ${dioError.response?.statusCode}');
-        log(
-          "badResponse on dataSource ${dioError.response?.data.runtimeType} ''${dioError.response?.data}'' ",
-        );
-
+        log('Bad response: ${dioError.response?.statusCode} ${dioError.response?.data}');
         return ServerFailure.fromResponse(
           dioError.response?.statusCode,
           dioError.response?.data,
         );
       case DioExceptionType.badCertificate:
-        return ServerFailure('Bad Certificate with ApiServer');
+        return ServerFailure('bad_certificate'.tr());
       case DioExceptionType.cancel:
-        return ServerFailure('Request to ApiServer was canceld');
+        return ServerFailure('request_cancelled'.tr());
       case DioExceptionType.connectionError:
-        // print('=======> ${Constants.noInternet} <=========');
-        //
-        // if (!Constants.noInternet) {
-        //   navigatorKey.currentState!.pushReplacement(
-        //     MaterialPageRoute(
-        //       builder: (context) => const StopInternetWidget(),
-        //       settings: const RouteSettings(name: 'StopInternetPage'),
-        //     ),
-        //   );
-        // }
-        return ServerFailure('No Internet Connection');
-
+        return ServerFailure('no_internet_connection'.tr());
       case DioExceptionType.unknown:
-        return ServerFailure('Unexpected Error, Please try again!');
+        return ServerFailure('unexpected_error'.tr());
     }
   }
 
   factory ServerFailure.fromResponse(int? statusCode, dynamic response) {
-    if (statusCode == 400 ||
-        statusCode == 401 ||
-        statusCode == 403 ||
-        statusCode == 422 ||
-        statusCode == 302) {
-      if (response != null &&
-          response['message'] != null &&
-          (response['message'].toString().toLowerCase().contains(
-                'token is expired',
-              ) ||
-              response['message'].toString().toLowerCase().contains(
-                'authorization token not found',
-              ))) {
-        try {
-          Future.delayed(Duration.zero, () {
-            navigatorKey.currentState!.pushReplacement(
-              MaterialPageRoute(builder: (context) => const LoginView()),
-            );
-          });
-          Constants.token = '';
-          userCache?.put(userCacheKey, '{}');
-        } catch (e) {
-          log('error in put value in hive $e');
+    if (statusCode == 400 || statusCode == 401 || statusCode == 403 || statusCode == 422 || statusCode == 302) {
+      if (response != null && response['message'] != null) {
+        final msg = response['message'].toString().toLowerCase();
+        if (msg.contains('token is expired') || msg.contains('authorization token not found')) {
+          try {
+            Future.delayed(Duration.zero, () {
+              navigatorKey.currentState!.pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginView()),
+              );
+            });
+            Constants.token = '';
+            userCache?.put(userCacheKey, '{}');
+          } catch (e) {
+            log('Error saving empty user cache: $e');
+          }
         }
+        return ServerFailure('server_error_message'.tr(args: [response['message'].toString()]));
       }
-      return ServerFailure(response['message'].toString());
-    } else if (statusCode == 404) {
-      return ServerFailure('your_request_not_found_please_try_later'.tr());
-    } else if (statusCode == 500) {
-      // log('object::>> ${response}');
-      return ServerFailure('internal_server_error_please_try_later'.tr());
-    } else {
-      log('what is wrong ==> $response');
+    }
 
-      return ServerFailure('opps_there_was_an_error,_please_try_again'.tr());
+    switch (statusCode) {
+      case 404:
+        return ServerFailure('request_not_found'.tr());
+      case 500:
+        return ServerFailure('internal_server_error'.tr());
+      default:
+        return ServerFailure('generic_error'.tr());
     }
   }
 }

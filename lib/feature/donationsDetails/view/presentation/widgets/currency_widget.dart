@@ -6,7 +6,7 @@ import '../../../../donations/data/models/donation_program_details_model.dart';
 
 class CurrencyWidget extends StatelessWidget {
   final DonationProgramDetailsModel details;
-  final Function(String key)? onChange; // optional callback
+  final Function(String key)? onChange;
 
   const CurrencyWidget({super.key, required this.details, this.onChange});
 
@@ -14,11 +14,20 @@ class CurrencyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final recurringTypes = details.recurringTypes ?? {};
 
-    // Convert map to list of SwitchButtonModel
+    // Convert map to list with index-based IDs
+    final entriesList = recurringTypes.entries.toList();
+
     final switchItems =
-        recurringTypes.entries.map((entry) {
-          return SwitchButtonModel(title: entry.value, id: entry.key.hashCode);
-        }).toList();
+        entriesList
+            .asMap()
+            .entries
+            .map(
+              (entry) => SwitchButtonModel(
+                title: entry.value.value, // value of the Map<String,String>
+                id: entry.key, // ID = index (0,1,2,…)
+              ),
+            )
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,20 +37,15 @@ class CurrencyWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 12),
+
         if (switchItems.isNotEmpty)
           CustomSwitchButton(
             items: switchItems,
-
-            onChange: (selectedId) {
-              // Find selected index by ID
-              final index = switchItems.indexWhere((e) => e.id == selectedId);
-
-              if (index != -1) {
-                final selectedValue = recurringTypes.values.elementAt(index);
-                onChange?.call(selectedValue);
-              }
+            initialIndex: 0, // FIRST ITEM SELECTED BY DEFAULT
+            onChange: (selectedIndex) {
+              final selectedValue = entriesList[selectedIndex].value;
+              onChange?.call(selectedValue);
             },
-            initialIndex: 0,
           )
         else
           Text('no_recurring_types_available'.tr(), style: Theme.of(context).textTheme.bodyMedium),

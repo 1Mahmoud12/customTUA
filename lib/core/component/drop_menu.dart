@@ -137,12 +137,14 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                                             ? SvgPicture.asset(item.image!, fit: BoxFit.cover, height: 20, width: 20)
                                             : Image.asset(item.image!, height: 20, width: 20, fit: BoxFit.cover),
                                   ),
-                                Text(
-                                  item.name,
-                                  style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.textColor),
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
-                                  maxLines: 1,
+                                Expanded(
+                                  child: Text(
+                                    item.name,
+                                    style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.textColor),
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: context.locale.languageCode == 'ar' ? TextAlign.right : TextAlign.left,
+                                    maxLines: 1,
+                                  ),
                                 ),
                               ],
                             ),

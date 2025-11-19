@@ -27,27 +27,27 @@ class _SocialAppState extends State<SocialApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Future.delayed(const Duration(seconds: 10), () {
-        subscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-          if (result[0] == ConnectivityResult.none) {
-            Constants.noInternet = true;
-            log('We Are Here');
-            // context.navigateToPage(const StopInternetWidget());
-            navigatorKey.currentState!.push(
-              MaterialPageRoute(builder: (context) => const StopInternetWidget()),
-            );
-          } else {
-            if (Constants.noInternet) {
-              navigatorKey.currentState!.pop();
-            }
-            Constants.noInternet = false;
-          }
-          if (mounted) setState(() {});
-          log('connectivity ${result[0]}==== ${Constants.noInternet}');
-        });
-      });
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   Future.delayed(const Duration(seconds: 10), () {
+    //     subscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+    //       if (result[0] == ConnectivityResult.none) {
+    //         Constants.noInternet = true;
+    //         log('We Are Here');
+    //         // context.navigateToPage(const StopInternetWidget());
+    //         navigatorKey.currentState!.push(
+    //           MaterialPageRoute(builder: (context) => const StopInternetWidget()),
+    //         );
+    //       } else {
+    //         if (Constants.noInternet) {
+    //           navigatorKey.currentState!.pop();
+    //         }
+    //         Constants.noInternet = false;
+    //       }
+    //       if (mounted) setState(() {});
+    //       log('connectivity ${result[0]}==== ${Constants.noInternet}');
+    //     });
+    //   });
+    // });
     ConstantsModels.sliderModel = SliderModel(
       success: true,
       message: '',

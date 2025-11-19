@@ -150,6 +150,7 @@ class EndPoints {
   static const getDonationPrograms = 'utilities/donation-programs';
   static const getDonationProgramById='utilities/donation-program-by-id';
   static const getProgramsTag = 'utilities/programs-tag';
+  static const getDonationsTypes = 'utilities/donation-types';
   
   //e-cards
   static const getECards = 'utilities/e-cards';

@@ -54,7 +54,8 @@ class DioHelper {
   }) async {
     final String token = isolateToken ?? Constants.token;
     debugPrint('token: $token');
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json'};
+    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': '$token', 'Content-Type': 'application/json', 'Accept': 'application/json',
+    'access_token':'$token'};
     log('=======================================================');
     log('${dio?.options.baseUrl}$url');
     log('َQuery ====> $query');
@@ -83,7 +84,8 @@ class DioHelper {
   }) async {
     final String token = isolateToken! ? '' : Constants.token;
 
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json'};
+    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json',
+      'access_token':'$token'};
 
     log('=======================================================');
     log('the endpoint ${dio!.options.baseUrl}$url');

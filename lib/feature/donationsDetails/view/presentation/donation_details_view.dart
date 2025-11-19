@@ -34,6 +34,8 @@ class DonationDetailsView extends StatelessWidget {
                     )
                     : state is DonationProgramDetailsLoaded
                     ? DonationDetailsViewBody(detailsModel: state.program)
+                    : state is DonationProgramDetailsError
+                    ? EmptyWidget(data: state.message)
                     : const EmptyWidget(),
           );
         },

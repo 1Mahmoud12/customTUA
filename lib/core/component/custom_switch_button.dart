@@ -15,7 +15,13 @@ class CustomSwitchButton extends StatefulWidget {
   final int initialIndex;
   final bool expandValue;
 
-  const CustomSwitchButton({super.key, required this.items, required this.onChange, required this.initialIndex, this.expandValue = true});
+  const CustomSwitchButton({
+    super.key,
+    required this.items,
+    required this.onChange,
+    required this.initialIndex,
+    this.expandValue = true,
+  });
 
   @override
   State<CustomSwitchButton> createState() => _CustomSwitchButtonState();
@@ -67,7 +73,7 @@ class _CustomSwitchButtonState extends State<CustomSwitchButton> {
                     fit: BoxFit.scaleDown,
                     alignment: AlignmentDirectional.center,
                     child: Text(
-                      item.title.tr(),
+                      item.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
