@@ -28,7 +28,8 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
 
   Future<void> _loadProgramTags() async {
     // Check cache first
-    if (ConstantsModels.programTagModel != null && ConstantsModels.programTagModel!.data.isNotEmpty) {
+    if (ConstantsModels.programTagModel != null &&
+        ConstantsModels.programTagModel!.data.isNotEmpty) {
       setState(() {
         _programTags = ConstantsModels.programTagModel!.data;
         _isLoading = false;
@@ -70,7 +71,10 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20), child: Center(child: CircularProgressIndicator()));
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Center(child: CircularProgressIndicator()),
+      );
     }
 
     if (_programTags.isEmpty) {
@@ -90,7 +94,12 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('our_programs'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+          Text(
+            'our_programs'.tr(),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 16),
           ...rows.map(
             (row) => Padding(
@@ -100,11 +109,15 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
                   ...row.map(
                     (tag) => Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(right: row.indexOf(tag) == 0 ? 8 : 0),
+                        padding: EdgeInsets.only(
+                          right: row.indexOf(tag) == 0 ? 8 : 0,
+                        ),
                         child: ItemProgramWidget(
                           nameItem: tag.title,
                           nameImage: tag.tagIcon,
-                          colorItem: _parseColor(tag.color).withAlpha((.1 * 255).toInt()),
+                          colorItem: _parseColor(
+                            tag.color,
+                          ).withAlpha((.1 * 255).toInt()),
                           isUrl: true,
                           onTap: () => _navigateToProgram(tag.title, tag.title),
                         ),
@@ -124,7 +137,14 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
 }
 
 class ItemProgramWidget extends StatelessWidget {
-  const ItemProgramWidget({super.key, required this.nameItem, required this.nameImage, required this.colorItem, this.onTap, this.isUrl = false});
+  const ItemProgramWidget({
+    super.key,
+    required this.nameItem,
+    required this.nameImage,
+    required this.colorItem,
+    this.onTap,
+    this.isUrl = false,
+  });
 
   final String nameItem;
   final String nameImage;
@@ -142,13 +162,26 @@ class ItemProgramWidget extends StatelessWidget {
           Container(
             alignment: AlignmentDirectional.center,
             padding: const EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(56), color: colorItem),
-            child: isUrl ? CacheImage(urlImage: nameImage, width: 40, height: 40, fit: BoxFit.contain) : SvgPicture.asset(nameImage),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(56),
+              color: colorItem,
+            ),
+            child:
+                isUrl
+                    ? CacheImage(
+                      urlImage: nameImage,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.contain,
+                    )
+                    : SvgPicture.asset(nameImage),
           ),
           const SizedBox(height: 10),
           Text(
             nameItem,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w400),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w400),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

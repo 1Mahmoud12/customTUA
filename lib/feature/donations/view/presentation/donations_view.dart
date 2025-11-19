@@ -31,7 +31,10 @@ class _DonationsViewState extends State<DonationsView> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(border: Border.all(color: AppColors.cP50, width: 2), borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.cP50, width: 2),
+                borderRadius: BorderRadius.circular(100),
+              ),
               child: InkWell(
                 onTap: () {
                   if (userCacheValue == null) {
@@ -40,18 +43,31 @@ class _DonationsViewState extends State<DonationsView> {
                   }
                   context.navigateToPage(const CreateCampaignView());
                 },
-                child: Text('create_campaign'.tr(), style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500)),
+                child: Text(
+                  'create_campaign'.tr(),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
           ),
         ],
-        title: Text('donations'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400)),
+        title: Text(
+          'donations'.tr(),
+          style: Theme.of(
+            context,
+          ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 16),
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 16.0), child: SearchWidget()),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: SearchWidget(),
+            ),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
