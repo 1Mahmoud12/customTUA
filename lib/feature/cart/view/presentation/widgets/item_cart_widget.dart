@@ -33,7 +33,7 @@ class ItemCartWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  cartItem.recurrence ?? '',
+                  cartItem.recurrence?.tr() ?? '',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: AppColors.cP50.withAlpha((.5 * 255).toInt()),
                     fontWeight: FontWeight.w500,

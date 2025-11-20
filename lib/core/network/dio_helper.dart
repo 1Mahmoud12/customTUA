@@ -10,23 +10,34 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:tua/core/network/end_points.dart';
 import 'package:tua/core/utils/constants.dart';
 
+import '../utils/device_id.dart';
+
 // ignore: avoid_classes_with_only_static_members
 class DioHelper {
   static Dio? dio;
 
   // ignore: always_declare_return_types
-  static init() {
+  static init() async {
+    final deviceId = await DeviceUUid().getUniqueDeviceId();
+
     dio = Dio(
       BaseOptions(
         baseUrl: EndPoints.baseUrl,
         receiveDataWhenStatusError: true,
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Cookie': 'PHPSESSID=$deviceId)',
+        },
       ),
     );
 
     // Accept expired/self-signed certificates for known dev domains in debug only
     assert(() {
-      final Set<String> allowedHosts = {Uri.parse(EndPoints.domain).host, Uri.parse(EndPoints.baseUrl).host};
+      final Set<String> allowedHosts = {
+        Uri.parse(EndPoints.domain).host,
+        Uri.parse(EndPoints.baseUrl).host,
+      };
 
       dio!.httpClientAdapter = IOHttpClientAdapter(
         createHttpClient: () {
@@ -52,10 +63,18 @@ class DioHelper {
     BuildContext? context,
     String? isolateToken,
   }) async {
+    final deviceId = await DeviceUUid().getUniqueDeviceId();
+    
+
     final String token = isolateToken ?? Constants.token;
     debugPrint('token: $token');
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': '$token', 'Content-Type': 'application/json', 'Accept': 'application/json',
-    'access_token':'$token'};
+    dio!.options.headers = {
+      if (token.isNotEmpty) 'Authorization': '$token',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Cookie': 'PHPSESSID=${deviceId.replaceAll('.', '')}',
+      'access_token': '$token',
+    };
     log('=======================================================');
     log('${dio?.options.baseUrl}$url');
     log('َQuery ====> $query');
@@ -83,9 +102,16 @@ class DioHelper {
     bool? isolateToken = false,
   }) async {
     final String token = isolateToken! ? '' : Constants.token;
+    final deviceId = await DeviceUUid().getUniqueDeviceId();
 
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json',
-      'access_token':'$token'};
+    dio!.options.headers = {
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'access_token': '$token',
+      'Cookie': 'PHPSESSID=${deviceId.replaceAll('.', '')}',
+
+    };
 
     log('=======================================================');
     log('the endpoint ${dio!.options.baseUrl}$url');
@@ -154,13 +180,15 @@ class DioHelper {
 
     query.addAll({'lang': arabicLanguage ? 'ar' : 'en'});
     data.addAll({'access_token': token});
-    return dio!.put(endPoint, queryParameters: query, data: (formDataIsEnabled ? FormData.fromMap(data) : data)).then((value) {
-      if (value.data['status'] == 0) {
-        throw value.data['detail'];
-      }
-      debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
-      return value;
-    });
+    return dio!
+        .put(endPoint, queryParameters: query, data: (formDataIsEnabled ? FormData.fromMap(data) : data))
+        .then((value) {
+          if (value.data['status'] == 0) {
+            throw value.data['detail'];
+          }
+          debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
+          return value;
+        });
   }
 
   // deleteData ====>>>
@@ -173,7 +201,11 @@ class DioHelper {
     final String token = Constants.token;
 
     // final String token = HiveReuse.mainBox.get(AppConst.tokenBox) ?? '';
-    dio!.options.headers = {if (token.isNotEmpty) 'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json'};
+    dio!.options.headers = {
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
     log('=======================================================');
     log('Headers in delete method ${dio!.options.baseUrl}/$endPoint');
     log('Headers in delete method ${dio!.options.headers}');
@@ -183,12 +215,18 @@ class DioHelper {
     data ??= {};
     query.addAll({'lang': arabicLanguage ? 'ar' : 'en'});
     data.addAll({'access_token': token});
-    return dio!.delete(endPoint, queryParameters: query, data: formDataIsEnabled ? FormData.fromMap(data) : data).then((value) {
-      if (value.data['status'] == 0) {
-        throw value.data['detail'];
-      }
-      debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
-      return value;
-    });
+    return dio!
+        .delete(
+          endPoint,
+          queryParameters: query,
+          data: formDataIsEnabled ? FormData.fromMap(data) : data,
+        )
+        .then((value) {
+          if (value.data['status'] == 0) {
+            throw value.data['detail'];
+          }
+          debugPrint('Success Data (${value.data['StatusCode']}) ===> ${value.data['Data']}');
+          return value;
+        });
   }
 }

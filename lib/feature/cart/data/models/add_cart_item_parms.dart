@@ -4,9 +4,9 @@ class AddCartItemParms {
   final String donation;
   final String? campaign;
   final String recurrence;
-  final String type;
+  final int type;
   final int quantity;
-  final int amount;
+  final double amount;
 
   AddCartItemParms({
     required this.programId,
@@ -41,9 +41,9 @@ class AddCartItemParms {
       donation: json['donation']?.toString() ?? '',
       campaign: json['campaign']?.toString(),
       recurrence: json['recurrence']?.toString() ?? '',
-      type: json['type']?.toString() ?? '',
+      type: json['type'],
       quantity: int.tryParse(json['quantity']?.toString() ?? '1') ?? 1,
-      amount: int.tryParse(json['amount']?.toString() ?? '0') ?? 0,
+      amount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0,
     );
   }
 }

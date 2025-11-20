@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/navigate.dart';
@@ -12,6 +13,8 @@ import 'package:tua/feature/navigation/view/presentation/widgets/login_required_
 import 'package:tua/feature/quickDonation/view/presentation/quick_donation_view.dart';
 
 import '../../../../core/network/local/cache.dart';
+import '../../../cart/data/data_source/cart_data_source_impl.dart';
+import '../../../cart/view/managers/cart/cart_cubit.dart';
 
 class NavigationView extends StatefulWidget {
   final int customIndex;
@@ -73,42 +76,42 @@ class _NavigationViewState extends State<NavigationView> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: index, children: screens),
+        body: IndexedStack(index: index, children: screens),
 
-      bottomSheet: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (index == 0 && userCacheValue!=null)
-            InkWell(
-              onTap: () {
-                context.navigateToPage(const QuickDonationView());
-              },
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 30),
-                  margin: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: AppColors.cRed900),
-                  child: Text(
-                    'quick_donation'.tr(),
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.white, fontWeight: FontWeight.w400),
+        bottomSheet: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (index == 0 && userCacheValue!=null)
+              InkWell(
+                onTap: () {
+                  context.navigateToPage(const QuickDonationView());
+                },
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 30),
+                    margin: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: AppColors.cRed900),
+                    child: Text(
+                      'quick_donation'.tr(),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.white, fontWeight: FontWeight.w400),
+                    ),
                   ),
                 ),
               ),
+            Container(
+              color: AppColors.white,
+              child: CustomBottomNavigationBar(
+                currentIndex: index,
+                onTap: (value) => _onItemTapped(value, context),
+                selectedIcons: selectedIcons,
+                unselectedIcons: unselectedIcons,
+                names: names,
+                showBadge: true, // Show badge on campaign tab (index 3)
+              ),
             ),
-          Container(
-            color: AppColors.white,
-            child: CustomBottomNavigationBar(
-              currentIndex: index,
-              onTap: (value) => _onItemTapped(value, context),
-              selectedIcons: selectedIcons,
-              unselectedIcons: unselectedIcons,
-              names: names,
-              showBadge: true, // Show badge on campaign tab (index 3)
-            ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
   }
 }

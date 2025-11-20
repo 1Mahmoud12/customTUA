@@ -14,10 +14,10 @@ class DeviceUUid {
     if (Platform.isIOS) {
       // import 'dart:io'
       final iosDeviceInfo = await deviceInfo.iosInfo;
-      uniqueDeviceId = '${iosDeviceInfo.name}:${iosDeviceInfo.identifierForVendor}'; // unique ID on iOS
+      uniqueDeviceId = '${iosDeviceInfo.identifierForVendor}'; // unique ID on iOS
     } else if (Platform.isAndroid) {
       final androidDeviceInfo = await deviceInfo.androidInfo;
-      uniqueDeviceId = '${androidDeviceInfo.model}:${androidDeviceInfo.id}'; // unique ID on Android
+      uniqueDeviceId = '${androidDeviceInfo.id}'; // unique ID on Android
     }
     if (uniqueDeviceId == '') {
       uniqueDeviceId = await userCache?.get('device_id') ?? '';

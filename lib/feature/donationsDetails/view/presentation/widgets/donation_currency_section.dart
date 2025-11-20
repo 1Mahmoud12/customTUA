@@ -19,10 +19,7 @@ class DonationCurrencySection extends StatelessWidget {
       children: [
         CurrencyWidget(details: detailsModel, onChange: (v) => onChange(v)),
         const CustomDividerWidget(height: 20),
-        BlocProvider(
-          create: (context) => ChangeCurrencyCubit(detailsModel),
-          child: const SelectCurrencyWidget(),
-        ),
+        const SelectCurrencyWidget(),
         const CustomDividerWidget(height: 20),
 
       ],

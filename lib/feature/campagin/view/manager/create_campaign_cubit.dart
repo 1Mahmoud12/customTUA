@@ -52,7 +52,7 @@ class CreateCampaignCubit extends Cubit<CreateCampaignState> {
       return;
     }
     if (donationTypeId == '-1' || donationTypeId.isEmpty) {
-      emit(CreateCampaignFailure('Please select donation type'));
+      emit(CreateCampaignFailure('select_donation_type'));
       return;
     }
 

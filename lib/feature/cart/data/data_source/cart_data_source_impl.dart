@@ -12,13 +12,21 @@ import '../../../../core/network/dio_helper.dart';
 import '../../../../core/network/end_points.dart';
 
 class CartDataSourceImpl implements CartDataSource {
+
   @override
-  Future<Either<Failure, Unit>> addCartItem({required AddCartItemParms params}) async {
+  Future<Either<Failure, Unit>> addCartItems({required List<AddCartItemParms> params}) async {
     try {
+      final body = <String, dynamic>{};
+
+      for (int i = 0; i < params.length; i++) {
+        body.addAll(params[i].toJson(index: i));
+      }
+      log('body == $body');
+
       final response = await DioHelper.postData(
         url: EndPoints.addToCart,
         formDataIsEnabled: true,
-        data: params.toJson(),
+        data: body,
       );
 
       if (response.statusCode == 200) {
@@ -29,11 +37,11 @@ class CartDataSourceImpl implements CartDataSource {
         } else {
           return Left(ServerFailure(data['message'] ?? 'Unexpected response'));
         }
-      } else {
-        return Left(ServerFailure('Server error: ${response.statusCode}'));
       }
+
+      return Left(ServerFailure('Server error: ${response.statusCode}'));
     } catch (error) {
-      log('error addCartItem == $error');
+      log('error addCartItems == $error');
 
       if (error is DioException) {
         return Left(ServerFailure.fromDioException(error));
@@ -47,15 +55,15 @@ class CartDataSourceImpl implements CartDataSource {
     try {
       final response = await DioHelper.postData(
         url: EndPoints.getCartItems,
-        query: {'access_token': userCacheValue?.accessToken??''},
-        data: {'access_token': userCacheValue?.accessToken??''}
+        query: {'access_token': userCacheValue?.accessToken ?? ''},
+        data: {'access_token': userCacheValue?.accessToken ?? ''},
       );
 
       if (response.statusCode == 200) {
         final data = response.data;
 
         if (data['success'] == true && data['data'] != null) {
-          return right(CartItemsResponseModel.fromJson(data['data']));
+          return right(CartItemsResponseModel.fromJson(data));
         } else {
           return Left(ServerFailure(data['message'] ?? 'Unexpected response'));
         }

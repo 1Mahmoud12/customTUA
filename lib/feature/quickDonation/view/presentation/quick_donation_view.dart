@@ -97,12 +97,12 @@ class _QuickDonationViewState extends State<QuickDonationView> {
       donation: donationGuid,
       campaign: quickDonation?.campaignGuid ?? '',
       recurrence: _recurrenceKey,
-      type: '1',
+      type: 1,
       quantity: 1,
-      amount: amount,
+      amount: amount.toDouble(),
     );
 
-    context.read<AddCartItemCubit>().addCartItem(params);
+    context.read<AddCartItemCubit>().addCartItems([params]);
   }
 
   @override

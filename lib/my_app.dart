@@ -16,6 +16,8 @@ import 'package:tua/feature/navigation/view/manager/homeBloc/state.dart';
 import 'package:tua/main.dart';
 import 'package:tua/social_view.dart';
 
+import 'feature/cart/view/managers/cart/cart_cubit.dart';
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -43,6 +45,9 @@ class _MyAppState extends State<MyApp> {
               BlocProvider(create: (context) => MainCubit()..getCurrency()),
               BlocProvider(create: (context) => AddCartItemCubit(CartDataSourceImpl())),
               BlocProvider(create: (_) => DonationProgramsCubit(DonationProgramsDataSource())..fetchDonationPrograms()),
+              BlocProvider(
+                create: (context) => CartCubit(CartDataSourceImpl())..fetchCartItems(),
+              )
               // BlocProvider(
               //   lazy: false,
               //   create: (context) => AuthCubit()..getCountryCode(),
