@@ -22,7 +22,7 @@ class HomeCubit extends Cubit<HomeState> {
     ) async {
       value.fold(
         (l) {
-          //  Utils.showToast(title: l.errMessage, state: UtilState.error);
+          // Utils.showToast(title: l.errMessage, state: UtilState.error);
           // failureModalBottomSheetWithNoReason(context, l.errMessage, onPress: () {});
           emit(GetSlidersErrorState(l.errMessage));
         },

@@ -17,6 +17,8 @@ import 'package:tua/main.dart';
 import 'package:tua/social_view.dart';
 
 import 'feature/cart/view/managers/cart/cart_cubit.dart';
+import 'feature/staticPages/data/data_source/basic_page_data_source.dart';
+import 'feature/staticPages/view/manager/basic_page_cubit.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -47,6 +49,9 @@ class _MyAppState extends State<MyApp> {
               BlocProvider(create: (_) => DonationProgramsCubit(DonationProgramsDataSource())..fetchDonationPrograms()),
               BlocProvider(
                 create: (context) => CartCubit(CartDataSourceImpl())..fetchCartItems(),
+              ),
+              BlocProvider(
+                create: (context) => BasicPageCubit(BasicPageDataSource()),
               )
               // BlocProvider(
               //   lazy: false,

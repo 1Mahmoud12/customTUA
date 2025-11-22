@@ -28,29 +28,49 @@ class SliderModel {
 }
 
 class SliderData {
-  SliderData({this.id, this.title, this.url, this.image, this.icon});
+  num? id;
+  String? title;
+  String? brief;
+  String? secondTitle;
+  String? content;
+  String? url;
+  String? image;
+  dynamic icon;
+
+  SliderData({
+    this.id,
+    this.title,
+    this.brief,
+    this.secondTitle,
+    this.content,
+    this.url,
+    this.image,
+    this.icon,
+  });
 
   SliderData.fromJson(dynamic json) {
     id = json['id'];
     title = json['title'];
+    brief = json['brief'];
+    secondTitle = json['second_title'];
+    content = json['content'];
     url = json['url'];
     image = json['image'];
     icon = json['icon'];
   }
 
-  num? id;
-  String? title;
-  String? url;
-  String? image;
-  dynamic icon;
-
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+
     map['id'] = id;
     map['title'] = title;
+    map['brief'] = brief;
+    map['second_title'] = secondTitle;
+    map['content'] = content;
     map['url'] = url;
     map['image'] = image;
     map['icon'] = icon;
+
     return map;
   }
 }
