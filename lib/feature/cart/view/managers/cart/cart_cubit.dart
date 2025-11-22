@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/feature/cart/data/data_source/cart_data_source.dart';
 import 'package:tua/feature/cart/data/models/cart_items_response_model.dart';
 
 import '../../../../../core/network/local/hive_data_base.dart';
+import '../../../../../core/utils/errorLoadingWidgets/dialog_loading_animation.dart';
 
 part 'cart_state.dart';
 
@@ -63,5 +65,31 @@ class CartCubit extends Cubit<CartState> {
         emit(CartLoaded(cart, fromCache: false));
       },
     );
+  }
+
+  Future<void> increaseItem(BuildContext context, String itemId) async {
+    animationDialogLoading(context);
+    final result = await _dataSource.increaseCartItem(itemId: itemId);
+
+    result.fold((failure) => emit(CartError(failure.errMessage)), (_) async => fetchCartItems());
+    closeDialog(context);
+  }
+
+  Future<void> decreaseItem(BuildContext context, String itemId) async {
+    animationDialogLoading(context);
+
+    final result = await _dataSource.decreaseCartItem(itemId: itemId);
+
+    result.fold((failure) => emit(CartError(failure.errMessage)), (_) async => fetchCartItems());
+    closeDialog(context);
+  }
+
+  Future<void> removeCartItem(BuildContext context, String itemId) async {
+    animationDialogLoading(context);
+
+    final result = await _dataSource.removeCartItem(uniqueKey: itemId);
+
+    result.fold((failure) => emit(CartError(failure.errMessage)), (_) async => fetchCartItems());
+    closeDialog(context);
   }
 }

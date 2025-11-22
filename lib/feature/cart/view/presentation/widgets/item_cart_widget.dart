@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/feature/cart/data/models/cart_items_response_model.dart';
+
+import '../../managers/cart/cart_cubit.dart';
 
 class ItemCartWidget extends StatelessWidget {
 
@@ -14,6 +17,7 @@ class ItemCartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<CartCubit>();
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.black100))),
@@ -62,7 +66,13 @@ class ItemCartWidget extends StatelessWidget {
             child: Row(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    if (cartItem.quantity =='1') {
+                      cubit.removeCartItem(context,cartItem.uniqueKey!);
+                    }else {
+                      cubit.decreaseItem(context,cartItem.uniqueKey!);
+                    }
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -92,7 +102,9 @@ class ItemCartWidget extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    cubit.increaseItem(context,cartItem.uniqueKey!);
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(

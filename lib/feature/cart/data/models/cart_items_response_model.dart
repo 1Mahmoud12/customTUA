@@ -26,8 +26,24 @@ class CartData {
   CartData({this.itemsCount, this.subTotal, this.total, this.users, required this.items});
 
   factory CartData.fromJson(Map<String, dynamic> json) {
-    final itemsMap = json['items'] as Map<String, dynamic>? ?? {};
-    final itemsList = itemsMap.entries.map((entry) => CartItem.fromJson(entry.value)..uniqueKey = entry.key).toList();
+    final rawItems = json['items'];
+
+    List<CartItem> itemsList = [];
+
+    if (rawItems is List) {
+      // items = List
+      itemsList = rawItems
+          .map((e) => CartItem.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else if (rawItems is Map) {
+      // items = Map
+      itemsList = rawItems.entries.map((entry) {
+        final item = CartItem.fromJson(entry.value);
+        item.uniqueKey = entry.key;
+        return item;
+      }).toList();
+    }
+
     return CartData(
       itemsCount: json['items_count'],
       subTotal: json['sub_total'],
@@ -36,7 +52,6 @@ class CartData {
       items: itemsList,
     );
   }
-
   Map<String, dynamic> toJson() => {
     'items_count': itemsCount,
     'sub_total': subTotal,
@@ -54,7 +69,7 @@ class CartItem {
   String? campaign;
   String? recurrence;
   String? type;
-  int? quantity;
+  String? quantity;
   num? amountJod;
   num? amountUsd;
   String? title;
@@ -90,7 +105,7 @@ class CartItem {
     campaign: json['campaign'],
     recurrence: json['recurrence'],
     type: json['type'],
-    quantity: json['quantity'],
+    quantity: json['quantity']?.toString(),
     amountJod: json['amount_jod'],
     amountUsd: json['amount_usd'],
     title: json['title'],

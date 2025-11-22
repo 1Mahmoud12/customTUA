@@ -51,33 +51,35 @@ class DonationBottomPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 5,
         children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children:
-                [50, 100, 200, 500, 1000].map((amount) {
-                  return ItemOptionsWidget(
-                    option: amount,
-                    isSelected: selectedAmount == amount,
-                    onTap: (_) => onAmountSelected(amount),
-                  );
-                }).toList(),
-          ),
-          CustomTextFormField(
-            controller: amountController,
-            onChange: (_) => onAmountChanged(),
-            hintText: 'enter_amount'.tr(),
-            textInputType: TextInputType.number,
-            suffixIcon: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                'JOD',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w400),
+          if (detailsModel.type == 1) ...[
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children:
+                  [50, 100, 200, 500, 1000].map((amount) {
+                    return ItemOptionsWidget(
+                      option: amount,
+                      isSelected: selectedAmount == amount,
+                      onTap: (_) => onAmountSelected(amount),
+                    );
+                  }).toList(),
+            ),
+            CustomTextFormField(
+              controller: amountController,
+              onChange: (_) => onAmountChanged(),
+              hintText: 'enter_amount'.tr(),
+              textInputType: TextInputType.number,
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'JOD',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w400),
+                ),
               ),
             ),
-          ),
+          ],
           BlocProvider(
             create: (context) => AddCartItemCubit(CartDataSourceImpl()),
             child: BlocConsumer<AddCartItemCubit, AddCartItemState>(
@@ -147,7 +149,7 @@ class DonationBottomPanel extends StatelessWidget {
           id: item.id.toString(),
           donation: item.donationTypeGuid ?? '',
           campaign: item.campaignGuid ?? "",
-          recurrence:selectedCurrency??'',
+          recurrence: selectedCurrency ?? '',
           type: detailsModel.type!,
           quantity: count,
           amount: unitAmount, // amount per item

@@ -12,7 +12,6 @@ import '../../../../core/network/dio_helper.dart';
 import '../../../../core/network/end_points.dart';
 
 class CartDataSourceImpl implements CartDataSource {
-
   @override
   Future<Either<Failure, Unit>> addCartItems({required List<AddCartItemParms> params}) async {
     try {
@@ -95,13 +94,76 @@ class CartDataSourceImpl implements CartDataSource {
         if (data['success'] == true && data['data'] != null) {
           return right(unit);
         } else {
+          log('error removeCartItem == ${response.statusCode}');
+          return Left(ServerFailure(data['message'] ?? 'Unexpected response'));
+        }
+      } else {
+        log('error removeCartItem == ${response.statusCode}');
+        return Left(ServerFailure('Server error: ${response.statusCode}'));
+      }
+    } catch (error) {
+      log('error removeCartItem == $error');
+
+      if (error is DioException) {
+        return Left(ServerFailure.fromDioException(error));
+      }
+      return Left(ServerFailure(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> decreaseCartItem({required String itemId}) async {
+    try {
+      final response = await DioHelper.postData(
+        url: EndPoints.decreaseCartItem,
+        data: {'item_id': itemId},
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+
+        if (data['status'] == true) {
+          return right(unit);
+        } else {
+          log('error decreaseCartItem == ${response.statusCode}');
+          return Left(ServerFailure(data['message'] ?? 'Unexpected response'));
+        }
+      } else {
+        log('error decreaseCartItem == ${response.statusCode}');
+        return Left(ServerFailure('Server error: ${response.statusCode}'));
+      }
+    } catch (error) {
+      log('error decreaseCartItem == $error');
+
+      if (error is DioException) {
+        return Left(ServerFailure.fromDioException(error));
+      }
+      return Left(ServerFailure(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> increaseCartItem({required String itemId}) async {
+    try {
+      final response = await DioHelper.postData(
+        url: EndPoints.increaseCartItem,
+        data: {'item_id': itemId},
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+
+        if (data['status'] == true) {
+          return right(unit);
+        } else {
+          log('error increaseCartItem == ${response.statusCode}');
           return Left(ServerFailure(data['message'] ?? 'Unexpected response'));
         }
       } else {
         return Left(ServerFailure('Server error: ${response.statusCode}'));
       }
     } catch (error) {
-      log('error removeCartItem == $error');
+      log('error increaseCartItem == $error');
 
       if (error is DioException) {
         return Left(ServerFailure.fromDioException(error));

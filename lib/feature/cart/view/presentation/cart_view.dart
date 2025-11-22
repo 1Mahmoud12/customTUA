@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tua/core/component/loadsErros/loading_widget.dart';
+import 'package:tua/core/utils/custom_show_toast.dart';
 import 'package:tua/core/utils/errorLoadingWidgets/empty_widget.dart';
 import 'package:tua/core/utils/cusotm_container.dart';
 import 'package:tua/core/themes/styles.dart';
@@ -32,7 +33,11 @@ class CartView extends StatelessWidget {
         leading: const SizedBox(),
       ),
       body: BlocConsumer<CartCubit, CartState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is CartError) {
+            customShowToast(context, state.message,showToastStatus: ShowToastStatus.error);
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<CartCubit>();
           CartItemsResponseModel? cart;

@@ -117,6 +117,8 @@ class EndPoints {
   static const addFeedbackList = 'Order/AddFeedbackList';
   static const submitCancellationRequest = 'Order/SubmitCancellationRequest';
   static const getOrderVisitTime = 'Order/GetOrderVisitTime';
+  static const increaseCartItem='cart/increment';
+  static const decreaseCartItem='cart/decrement';
 
   //Claims
   static const addClaimMessage = 'ClaimMessage/AddClaimMessage';
@@ -145,6 +147,7 @@ class EndPoints {
   // update profile
   static const changePassword = 'user/change-password';
   static const updateProfile = 'user/update-profile';
+  static const getProfileInfo ='user/get-user-info';
 
   //donations
   static const getDonationPrograms = 'utilities/donation-programs';
