@@ -357,5 +357,7 @@
   "server_error_message": "Server error: {}",
   "choose_donation_type": "Choose donation type",
   "select_donation_type": "Please select a donation type",
+  "download": "Download",
+  "no_items_selected": "No items selected",
   "": ""
 }

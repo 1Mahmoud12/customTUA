@@ -23,20 +23,20 @@ class CartViewBody extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          BlocProvider(
-            create: (context) => UserInfoCubit(GetUserInfoDataSource())..fetchUserInfo(),
-            child: BlocBuilder<UserInfoCubit, GetUserInfoState>(
-              builder: (context, state) {
-                final cubit = context.read<UserInfoCubit>();
-                return cubit.users.isNotEmpty
-                    ? CustomPopupMenu(
-                      nameField: 'select_donor',
-                      selectedItem: DropDownModel(name: 'select_donor', value: -1),
-                      items: cubit.users.map((e) => DropDownModel(name: e.name, value: e.id)).toList(),
-                    )
-                    : const SizedBox();
-              },
-            ),
+          BlocBuilder<UserInfoCubit, GetUserInfoState>(
+            builder: (context, state) {
+              final cubit = context.read<UserInfoCubit>();
+              return cubit.users.isNotEmpty
+                  ? CustomPopupMenu(
+                    nameField: 'select_donor',
+                    selectedItem: DropDownModel(
+                      name: cubit.users.first.name,
+                      value: cubit.users.first.id,
+                    ),
+                    items: cubit.users.map((e) => DropDownModel(name: e.name, value: e.id)).toList(),
+                  )
+                  : const SizedBox();
+            },
           ),
           const SizedBox(height: 16),
           Text(

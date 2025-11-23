@@ -88,6 +88,7 @@ class GenderItem {
 
 class QuickDonationLookup {
   final String? id;
+  final List<QuickDonationItem>? items;
   final String? programId;
   final String? itemId;
   final String? donationGuid;
@@ -95,6 +96,7 @@ class QuickDonationLookup {
 
   const QuickDonationLookup({
     this.id,
+    this.items,
     this.programId,
     this.itemId,
     this.donationGuid,
@@ -102,20 +104,60 @@ class QuickDonationLookup {
   });
 
   factory QuickDonationLookup.fromJson(Map<String, dynamic> json) {
+    final itemsJson = json['items'] as Map<String, dynamic>?;
+
+    final parsedItems = itemsJson != null
+        ? itemsJson.entries
+        .map((e) => QuickDonationItem.fromJson(e.key, e.value))
+        .toList()
+        : null;
+
     return QuickDonationLookup(
       id: json['id']?.toString(),
       programId: json['program_id']?.toString(),
       itemId: json['item_id']?.toString(),
       donationGuid: json['donation']?.toString(),
       campaignGuid: json['campaign']?.toString(),
+      items: parsedItems,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> itemsMap = {};
+
+    if (items != null) {
+      for (var item in items!) {
+        itemsMap[item.key] = item.value;
+      }
+    }
+
+    return {
+      'id': id,
+      'items': itemsMap,
+      'program_id': programId,
+      'item_id': itemId,
+      'donation': donationGuid,
+      'campaign': campaignGuid,
+    };
+  }
+}
+class QuickDonationItem {
+  final String key;
+  final int value;
+
+  const QuickDonationItem({
+    required this.key,
+    required this.value,
+  });
+
+  factory QuickDonationItem.fromJson(String key, dynamic value) {
+    return QuickDonationItem(
+      key: key,
+      value: int.tryParse(value.toString()) ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'program_id': programId,
-        'item_id': itemId,
-        'donation': donationGuid,
-        'campaign': campaignGuid,
-      };
+    key: value,
+  };
 }

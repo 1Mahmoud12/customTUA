@@ -29,7 +29,7 @@ class ItemOptionsWidget extends StatelessWidget {
         onTap(option);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.cP50.withOpacity(0.1) // subtle background when selected

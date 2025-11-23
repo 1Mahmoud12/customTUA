@@ -7,6 +7,7 @@ import '../../../../../core/component/fields/custom_text_form_field.dart';
 import '../../../../../core/component/loadsErros/loading_widget.dart';
 import '../../../../../core/network/local/cache.dart';
 import '../../../../../core/themes/colors.dart';
+import '../../../../../core/utils/constants_models.dart';
 import '../../../../cart/data/data_source/cart_data_source_impl.dart';
 import '../../../../cart/data/models/add_cart_item_parms.dart';
 import '../../../../cart/view/managers/add_cart_item/add_cart_item_cubit.dart';
@@ -38,6 +39,7 @@ class DonationBottomPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final quickItems = ConstantsModels.lookupModel?.data?.quickDonation?.items ?? [];
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: const BoxDecoration(
@@ -56,13 +58,23 @@ class DonationBottomPanel extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children:
-                  [50, 100, 200, 500, 1000].map((amount) {
-                    return ItemOptionsWidget(
-                      option: amount,
-                      isSelected: selectedAmount == amount,
-                      onTap: (_) => onAmountSelected(amount),
-                    );
-                  }).toList(),
+                  quickItems.isNotEmpty
+                      ? quickItems.map((item) {
+                        return ItemOptionsWidget(
+                          option: item.value, // 👈 استخدام value
+                          onTap: (selected) {
+                            onAmountSelected(selected);
+                          },
+                          isSelected: selectedAmount == item.value,
+                        );
+                      }).toList()
+                      : [50, 100, 200, 500, 1000].map((amount) {
+                        return ItemOptionsWidget(
+                          option: amount,
+                          isSelected: selectedAmount == amount,
+                          onTap: (_) => onAmountSelected(amount),
+                        );
+                      }).toList(),
             ),
             CustomTextFormField(
               controller: amountController,

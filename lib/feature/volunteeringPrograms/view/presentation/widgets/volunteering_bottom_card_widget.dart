@@ -22,7 +22,10 @@ class VolunteeringBottomCardWidget extends StatelessWidget {
         ? DecorationImage(
       image: NetworkImage(thirdItem!.image!),
       fit: BoxFit.cover,
-    )
+      colorFilter: ColorFilter.mode(
+        AppColors.cP50.withValues(alpha: .5),
+        BlendMode.darken,
+    ))
         : const DecorationImage(
       image: AssetImage(AppImages.backgroundDownloadAndApply),
       fit: BoxFit.cover,

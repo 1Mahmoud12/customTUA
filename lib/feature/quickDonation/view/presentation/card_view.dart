@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
@@ -18,6 +19,9 @@ import 'package:tua/feature/campagin/view/presentation/widgets/select_card_widge
 import 'package:tua/feature/common/data/dataSource/e_card_data_source.dart';
 import 'package:tua/feature/sponsorship/view/presentation/widgets/date_picker_dialog.dart';
 import 'package:tua/feature/sponsorship/view/presentation/widgets/phone_field_widget.dart';
+
+import '../../../cart/view/managers/get_user_info/get_user_info_cubit.dart';
+import '../../../cart/view/managers/get_user_info/get_user_info_state.dart';
 
 class CardView extends StatefulWidget {
   final String? amount;
@@ -285,17 +289,17 @@ class _CardViewState extends State<CardView> {
                             ),
                           ],
                         ),
-                        CustomPopupMenu(
-                          nameField: 'donor_name',
-                          selectedItem: DropDownModel(
-                            name: 'select_donor',
-                            value: -1,
-                          ),
-                          items: [
-                            DropDownModel(name: 'donor_name', value: 1),
-                            DropDownModel(name: 'donor_name2', value: 2),
-                            DropDownModel(name: 'donor_name3', value: 3),
-                          ],
+                        BlocBuilder<UserInfoCubit, GetUserInfoState>(
+                          builder: (context, state) {
+                            final cubit = context.read<UserInfoCubit>();
+                            return cubit.users.isNotEmpty
+                                ? CustomPopupMenu(
+                              nameField: 'select_donor',
+                              selectedItem: DropDownModel(name: cubit.users.first.name, value: cubit.users.first.id),
+                              items: cubit.users.map((e) => DropDownModel(name: e.name, value: e.id)).toList(),
+                            )
+                                : const SizedBox();
+                          },
                         ),
                         CustomTextFormField(
                           controller: _senderNameController,

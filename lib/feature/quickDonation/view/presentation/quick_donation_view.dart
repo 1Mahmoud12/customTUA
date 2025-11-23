@@ -107,6 +107,8 @@ class _QuickDonationViewState extends State<QuickDonationView> {
 
   @override
   Widget build(BuildContext context) {
+    final quickItems =
+        ConstantsModels.lookupModel?.data?.quickDonation?.items ?? [];
     return Scaffold(
       appBar: customAppBar(context: context, title: 'quick_donation'),
       body: ListView(
@@ -116,8 +118,8 @@ class _QuickDonationViewState extends State<QuickDonationView> {
           CustomSwitchButton(
             key: ValueKey(_selectedRecurrenceId),
             items: [
-              SwitchButtonModel(title: 'give_once', id: 1),
-              SwitchButtonModel(title: 'monthly', id: 2),
+              SwitchButtonModel(title: 'give_once'.tr(), id: 1),
+              SwitchButtonModel(title: 'monthly'.tr(), id: 2),
             ],
             onChange: (value) {
               setState(() {
@@ -135,21 +137,19 @@ class _QuickDonationViewState extends State<QuickDonationView> {
           Row(
             children: [
               Expanded(
-                child: Wrap(
+                child:  Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  alignment: WrapAlignment.spaceBetween,
-                  children:
-                      [50, 100, 200, 500, 1000].map((option) {
-                        return ItemOptionsWidget(
-                          option: option,
-                          onTap: (selected) {
-                            _onAmountSelected(selected);
-                          },
-                          isSelected:
-                              selectedAmount == option, // highlight selected
-                        );
-                      }).toList(),
+                  alignment: WrapAlignment.center,
+                  children: quickItems.map((item) {
+                    return ItemOptionsWidget(
+                      option: item.value, // 👈 استخدام value
+                      onTap: (selected) {
+                        _onAmountSelected(selected);
+                      },
+                      isSelected: selectedAmount == item.value,
+                    );
+                  }).toList(),
                 ),
               ),
             ],

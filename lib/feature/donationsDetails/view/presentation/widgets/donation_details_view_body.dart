@@ -56,9 +56,9 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
                             setState(() => selectedCurrency = curr);
                           },
                         ),
-                      const DonationExtrasSection(),
-                      const SizedBox(height: 10),
-                      DonationStatisticsSection(detailsModel: widget.detailsModel),
+                      // const DonationExtrasSection(),
+                      // const SizedBox(height: 10),
+                      // DonationStatisticsSection(detailsModel: widget.detailsModel),
                     ],
                   ),
                 ),

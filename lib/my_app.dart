@@ -16,7 +16,9 @@ import 'package:tua/feature/navigation/view/manager/homeBloc/state.dart';
 import 'package:tua/main.dart';
 import 'package:tua/social_view.dart';
 
+import 'feature/cart/data/data_source/get_user_info_data_source.dart';
 import 'feature/cart/view/managers/cart/cart_cubit.dart';
+import 'feature/cart/view/managers/get_user_info/get_user_info_cubit.dart';
 import 'feature/staticPages/data/data_source/basic_page_data_source.dart';
 import 'feature/staticPages/view/manager/basic_page_cubit.dart';
 
@@ -46,13 +48,13 @@ class _MyAppState extends State<MyApp> {
             providers: [
               BlocProvider(create: (context) => MainCubit()..getCurrency()),
               BlocProvider(create: (context) => AddCartItemCubit(CartDataSourceImpl())),
-              BlocProvider(create: (_) => DonationProgramsCubit(DonationProgramsDataSource())..fetchDonationPrograms()),
               BlocProvider(
-                create: (context) => CartCubit(CartDataSourceImpl())..fetchCartItems(),
+                create:
+                    (_) => DonationProgramsCubit(DonationProgramsDataSource())..fetchDonationPrograms(),
               ),
-              BlocProvider(
-                create: (context) => BasicPageCubit(BasicPageDataSource()),
-              )
+              BlocProvider(create: (context) => CartCubit(CartDataSourceImpl())..fetchCartItems()),
+              BlocProvider(create: (context) => BasicPageCubit(BasicPageDataSource())),
+              BlocProvider(create: (context) => UserInfoCubit(GetUserInfoDataSource())..fetchUserInfo()),
               // BlocProvider(
               //   lazy: false,
               //   create: (context) => AuthCubit()..getCountryCode(),
@@ -75,7 +77,9 @@ class _MyAppState extends State<MyApp> {
             ],
             child: BlocBuilder<MainCubit, MainState>(
               builder: (context, state) {
-                return Platform.isAndroid ? SafeArea(top: false, child: buildMaterialApp(context)) : buildMaterialApp(context);
+                return Platform.isAndroid
+                    ? SafeArea(top: false, child: buildMaterialApp(context))
+                    : buildMaterialApp(context);
               },
             ),
           ),
