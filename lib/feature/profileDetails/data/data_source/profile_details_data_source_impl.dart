@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-
 import 'package:tua/core/network/errors/failures.dart';
 import 'package:tua/core/network/local/cache.dart';
 import 'package:tua/feature/auth/data/models/login_model.dart';
@@ -13,14 +12,12 @@ import 'profile_details_data_source.dart';
 
 class ProfileDetailsDataSourceImpl implements ProfileDetailsDataSource {
   @override
-  Future<Either<Failure, Unit>> changePassword({
-    required String newPassword,
-    required String confirmNewPassword,
-  }) async {
+  Future<Either<Failure, Unit>> changePassword({required String password, required String newPassword, required String confirmNewPassword}) async {
     try {
       final response = await DioHelper.postData(
         url: EndPoints.changePassword,
         data: {
+          'password': password,
           'new_password': newPassword,
           'confirm_new_password': confirmNewPassword,
           'access_token': userCacheValue?.accessToken ?? '',
@@ -41,11 +38,7 @@ class ProfileDetailsDataSourceImpl implements ProfileDetailsDataSource {
   }
 
   @override
-  Future<Either<Failure, LoginModel>> updateProfile({
-    required String firstName,
-    required String lastName,
-    required String phone,
-  }) async {
+  Future<Either<Failure, LoginModel>> updateProfile({required String firstName, required String lastName, required String phone}) async {
     try {
       final response = await DioHelper.postData(
         url: EndPoints.updateProfile,

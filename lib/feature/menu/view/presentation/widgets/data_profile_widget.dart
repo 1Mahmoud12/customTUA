@@ -7,6 +7,7 @@ import 'package:tua/core/network/local/cache.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/navigate.dart';
+import 'package:tua/feature/navigation/view/presentation/widgets/login_required_dialog.dart';
 import 'package:tua/feature/profileDetails/view/presentation/profile_details_view.dart';
 
 class DataProfileWidget extends StatelessWidget {
@@ -18,6 +19,10 @@ class DataProfileWidget extends StatelessWidget {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
+        if (userCacheValue == null) {
+          loginRequiredDialog(context);
+          return;
+        }
         context.navigateToPage(const ProfileDetailsView(), pageTransitionType: PageTransitionType.rightToLeft);
       },
       child: Container(

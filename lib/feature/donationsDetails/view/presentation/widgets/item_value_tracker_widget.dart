@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tua/feature/donationsDetails/view/presentation/manager/change_currency_cubit.dart';
 
 import '../../../../../core/themes/colors.dart';
-import '../../../../donations/data/models/donation_program_details_model.dart';
 
 class ItemValueTrackerCurrencyWidget extends StatelessWidget {
   const ItemValueTrackerCurrencyWidget({
@@ -39,13 +36,11 @@ class ItemValueTrackerCurrencyWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: Theme.of(context).textTheme.titleSmall),
+                Text(name, style: Theme.of(context).textTheme.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 4),
                 Text(
                   '${value.toStringAsFixed(2)} $currency',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.displayMedium?.copyWith(color: AppColors.cHumanitarianAidColor),
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.cHumanitarianAidColor),
                 ),
               ],
             ),
@@ -57,18 +52,12 @@ class ItemValueTrackerCurrencyWidget extends StatelessWidget {
             onTap: onDecrease,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Icon(
-                Icons.remove,
-                color: count > 0 ? AppColors.cP50 : AppColors.cP50.withAlpha((.5 * 255).toInt()),
-              ),
+              child: Icon(Icons.remove, color: count > 0 ? AppColors.cP50 : AppColors.cP50.withAlpha((.5 * 255).toInt())),
             ),
           ),
 
           // count
-          Text(
-            count.toString(),
-            style: Theme.of(context).textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w500),
-          ),
+          Text(count.toString(), style: Theme.of(context).textTheme.displayMedium!.copyWith(fontWeight: FontWeight.w500)),
 
           const SizedBox(width: 8),
 

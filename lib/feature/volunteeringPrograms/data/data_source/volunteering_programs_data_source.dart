@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:tua/core/network/dio_helper.dart';
 import 'package:tua/core/network/end_points.dart';
 import 'package:tua/core/network/errors/failures.dart';
+import 'package:tua/core/utils/utils.dart';
 import 'package:tua/feature/volunteeringPrograms/data/models/donation_campaign_request_model.dart';
 import 'package:tua/feature/volunteeringPrograms/data/models/volunteering_program_model.dart';
 
@@ -24,11 +25,8 @@ class VolunteeringProgramsDataSource {
 
   Future<Either<Failure, VolunteeringProgramModel>> getVolunteeringProgramById(int id) async {
     try {
-      final response = await DioHelper.getData(
-        url: EndPoints.getVolunteeringProgramById,
-        query: {'id': id},
-      );
-      
+      final response = await DioHelper.getData(url: EndPoints.getVolunteeringProgramById, query: {'id': id});
+
       if (response.statusCode == 200) {
         final data = response.data;
         if (data['success'] == true && data['data'] != null) {
@@ -55,15 +53,13 @@ class VolunteeringProgramsDataSource {
 
   Future<Either<Failure, Unit>> createDonationCampaign(DonationCampaignRequestModel request) async {
     try {
-      final response = await DioHelper.postData(
-        url: EndPoints.createDonationCampaign,
-        formDataIsEnabled: true,
-        data: request.toJson(),
-      );
+      final response = await DioHelper.postData(url: EndPoints.createDonationCampaign, formDataIsEnabled: true, data: request.toJson());
 
       if (response.statusCode == 200) {
         final data = response.data;
         if (data['success'] == true) {
+          Utils.showToast(title: data['message'], state: UtilState.success);
+          //   customShowToast(navigatorKey.currentState!.context, data['message']);
           return right(unit);
         } else {
           return Left(ServerFailure(data['message'] ?? 'Failed to create donation campaign'));
@@ -80,4 +76,3 @@ class VolunteeringProgramsDataSource {
     }
   }
 }
-

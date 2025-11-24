@@ -16,9 +16,7 @@ class DonationDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) =>
-              DonationProgramDetailsCubit(DonationProgramsDataSource())..fetchDonationProgramById(id),
+      create: (context) => DonationProgramDetailsCubit(DonationProgramsDataSource())..fetchDonationProgramById(id),
       child: BlocConsumer<DonationProgramDetailsCubit, DonationProgramDetailsState>(
         listener: (context, state) {
           // TODO: implement listener
@@ -28,10 +26,7 @@ class DonationDetailsView extends StatelessWidget {
             appBar: customAppBar(context: context, title: 'donation_details'),
             body:
                 state is DonationProgramDetailsLoading
-                    ? const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 100.0),
-                      child: LoadingWidget(),
-                    )
+                    ? const Padding(padding: EdgeInsets.symmetric(vertical: 100.0), child: LoadingWidget())
                     : state is DonationProgramDetailsLoaded
                     ? DonationDetailsViewBody(detailsModel: state.program)
                     : state is DonationProgramDetailsError

@@ -34,10 +34,12 @@ class _SelectCardWidgetState extends State<SelectCardWidget> {
         });
       },
       (response) {
-        setState(() {
-          _eCards = response.data;
-          _isLoading = false;
-        });
+        if (context.mounted) {
+          setState(() {
+            _eCards = response.data;
+            _isLoading = false;
+          });
+        }
       },
     );
   }
@@ -59,23 +61,14 @@ class _SelectCardWidgetState extends State<SelectCardWidget> {
           child: Text.rich(
             TextSpan(
               text: 'select_an_e-card_design'.tr(),
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w400,
-                color: AppColors.cP50,
-              ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.cP50),
               children: [
-                TextSpan(
-                  text: ' ',
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                TextSpan(text: ' ', style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700)),
                 TextSpan(
                   text: '(${'optional'.tr()})',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.cP50.withAlpha((0.4 * 255).toInt()),
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.cP50.withAlpha((0.4 * 255).toInt())),
                 ),
               ],
             ),
@@ -83,10 +76,7 @@ class _SelectCardWidgetState extends State<SelectCardWidget> {
         ),
         const SizedBox(height: 16),
         if (_isLoading)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Center(child: CircularProgressIndicator()),
-          )
+          const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Center(child: CircularProgressIndicator()))
         else if (_eCards.isEmpty)
           const SizedBox.shrink()
         else
@@ -120,13 +110,7 @@ class ItemGiftWidget extends StatelessWidget {
   final Function(int) onPress;
   final ECardModel? card;
 
-  const ItemGiftWidget({
-    super.key,
-    required this.selected,
-    required this.onPress,
-    required this.index,
-    this.card,
-  });
+  const ItemGiftWidget({super.key, required this.selected, required this.onPress, required this.index, this.card});
 
   @override
   Widget build(BuildContext context) {
@@ -139,40 +123,23 @@ class ItemGiftWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color:
-                selected == true
-                    ? AppColors.cP50
-                    : AppColors.cP50.withAlpha((0.15 * 255).toInt()),
-          ),
+          border: Border.all(width: 2, color: selected == true ? AppColors.cP50 : AppColors.cP50.withAlpha((0.15 * 255).toInt())),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           children: [
-            CacheImage(
-              urlImage: card?.image ?? '',
-              width: 100,
-              height: 100,
-              borderRadius: 10,
-            ),
+            CacheImage(urlImage: card?.image ?? '', width: 100, height: 100, borderRadius: 10),
             const SizedBox(height: 10),
             Container(
               width: 26,
               height: 26,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.cP50, width: 1.5),
-              ),
+              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.cP50, width: 1.5)),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 width: 12,
                 height: 12,
                 margin: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: selected == true ? AppColors.cP50 : Colors.transparent,
-                ),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: selected == true ? AppColors.cP50 : Colors.transparent),
               ),
             ),
           ],

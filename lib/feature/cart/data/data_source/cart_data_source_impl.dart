@@ -20,13 +20,12 @@ class CartDataSourceImpl implements CartDataSource {
       for (int i = 0; i < params.length; i++) {
         body.addAll(params[i].toJson(index: i));
       }
+      if (userCacheValue?.accessToken != null) {
+        body['access_token'] = userCacheValue?.accessToken;
+      }
       log('body == $body');
 
-      final response = await DioHelper.postData(
-        url: EndPoints.addToCart,
-        formDataIsEnabled: true,
-        data: body,
-      );
+      final response = await DioHelper.postData(url: EndPoints.addToCart, formDataIsEnabled: true, data: body);
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -114,10 +113,7 @@ class CartDataSourceImpl implements CartDataSource {
   @override
   Future<Either<Failure, Unit>> decreaseCartItem({required String itemId}) async {
     try {
-      final response = await DioHelper.postData(
-        url: EndPoints.decreaseCartItem,
-        data: {'item_id': itemId},
-      );
+      final response = await DioHelper.postData(url: EndPoints.decreaseCartItem, data: {'item_id': itemId});
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -145,10 +141,7 @@ class CartDataSourceImpl implements CartDataSource {
   @override
   Future<Either<Failure, Unit>> increaseCartItem({required String itemId}) async {
     try {
-      final response = await DioHelper.postData(
-        url: EndPoints.increaseCartItem,
-        data: {'item_id': itemId},
-      );
+      final response = await DioHelper.postData(url: EndPoints.increaseCartItem, data: {'item_id': itemId});
 
       if (response.statusCode == 200) {
         final data = response.data;

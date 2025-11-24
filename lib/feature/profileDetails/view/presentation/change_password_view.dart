@@ -1,7 +1,7 @@
 // change_password_view.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/component/custom_app_bar.dart';
@@ -28,7 +28,6 @@ class ChangePasswordView extends StatelessWidget {
       child: BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccess) {
-
             context.navigateToPage(const SuccessChangePasswordView());
           } else if (state is ChangePasswordFailure) {
             customShowToast(context, state.message.tr(), showToastStatus: ShowToastStatus.error);
@@ -42,6 +41,12 @@ class ChangePasswordView extends StatelessWidget {
             body: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
+                CustomTextFormField(
+                  controller: cubit.passwordController,
+                  nameField: 'password',
+                  hintText: 'password_hint',
+                  textInputType: TextInputType.visiblePassword,
+                ),
                 CustomTextFormField(
                   controller: cubit.newPasswordController,
                   nameField: 'new_password',
@@ -63,9 +68,7 @@ class ChangePasswordView extends StatelessWidget {
                       child: Text(
                         'Please make sure you remember and login with your new password you just created. Changes are reflected real-time after you changed your password.'
                             .tr(),
-                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                          color: AppColors.cP50.withAlpha((0.5 * 255).toInt()),
-                        ),
+                        style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.cP50.withAlpha((0.5 * 255).toInt())),
                       ),
                     ),
                   ],

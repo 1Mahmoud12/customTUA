@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
@@ -19,10 +20,7 @@ import 'package:tua/feature/cart/view/managers/add_cart_item/add_cart_item_state
 import 'package:tua/feature/common/data/models/lookup_model.dart';
 import 'package:tua/feature/quickDonation/view/presentation/card_view.dart';
 
-import '../../../../core/network/local/cache.dart';
-import '../../../donationsDetails/view/presentation/widgets/item_option_widget.dart'
-    show ItemOptionsWidget;
-import '../../../navigation/view/presentation/widgets/login_required_dialog.dart';
+import '../../../donationsDetails/view/presentation/widgets/item_option_widget.dart' show ItemOptionsWidget;
 
 class QuickDonationView extends StatefulWidget {
   const QuickDonationView({super.key});
@@ -36,8 +34,7 @@ class _QuickDonationViewState extends State<QuickDonationView> {
   late final TextEditingController _amountController;
   int _selectedRecurrenceId = 1;
 
-  QuickDonationLookup? get _quickDonation =>
-      ConstantsModels.lookupModel?.data?.quickDonation;
+  QuickDonationLookup? get _quickDonation => ConstantsModels.lookupModel?.data?.quickDonation;
 
   String get _recurrenceKey => _selectedRecurrenceId == 1 ? 'once' : 'monthly';
 
@@ -67,27 +64,19 @@ class _QuickDonationViewState extends State<QuickDonationView> {
   }
 
   void _onDonatePressed(BuildContext context) {
-    if (userCacheValue == null) {
-      loginRequiredDialog(context);
-      return;
-    }
+    // if (userCacheValue == null) {
+    //   loginRequiredDialog(context);
+    //   return;
+    // }
     final amount = int.tryParse(_amountController.text.trim());
     if (amount == null || amount <= 0) {
-      customShowToast(
-        context,
-        'please_select_an_amount'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_select_an_amount'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
     final quickDonation = _quickDonation;
     final donationGuid = quickDonation?.donationGuid ?? quickDonation?.id;
     if (donationGuid == null || donationGuid.isEmpty) {
-      customShowToast(
-        context,
-        'quick_donation_not_available'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'quick_donation_not_available'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
 
@@ -107,8 +96,7 @@ class _QuickDonationViewState extends State<QuickDonationView> {
 
   @override
   Widget build(BuildContext context) {
-    final quickItems =
-        ConstantsModels.lookupModel?.data?.quickDonation?.items ?? [];
+    final quickItems = ConstantsModels.lookupModel?.data?.quickDonation?.items ?? [];
     return Scaffold(
       appBar: customAppBar(context: context, title: 'quick_donation'),
       body: ListView(
@@ -117,10 +105,7 @@ class _QuickDonationViewState extends State<QuickDonationView> {
         children: [
           CustomSwitchButton(
             key: ValueKey(_selectedRecurrenceId),
-            items: [
-              SwitchButtonModel(title: 'give_once'.tr(), id: 1),
-              SwitchButtonModel(title: 'monthly'.tr(), id: 2),
-            ],
+            items: [SwitchButtonModel(title: 'give_once'.tr(), id: 1), SwitchButtonModel(title: 'monthly'.tr(), id: 2)],
             onChange: (value) {
               setState(() {
                 _selectedRecurrenceId = value;
@@ -128,28 +113,24 @@ class _QuickDonationViewState extends State<QuickDonationView> {
             },
             initialIndex: _selectedRecurrenceId,
           ),
-          Text(
-            'choose_the_amount'.tr(),
-            style: Theme.of(
-              context,
-            ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
-          ),
+          Text('choose_the_amount'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400)),
           Row(
             children: [
               Expanded(
-                child:  Wrap(
+                child: Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  alignment: WrapAlignment.center,
-                  children: quickItems.map((item) {
-                    return ItemOptionsWidget(
-                      option: item.value, // 👈 استخدام value
-                      onTap: (selected) {
-                        _onAmountSelected(selected);
-                      },
-                      isSelected: selectedAmount == item.value,
-                    );
-                  }).toList(),
+                  alignment: WrapAlignment.spaceAround,
+                  children:
+                      quickItems.map((item) {
+                        return ItemOptionsWidget(
+                          option: item.value, // 👈 استخدام value
+                          onTap: (selected) {
+                            _onAmountSelected(selected);
+                          },
+                          isSelected: selectedAmount == item.value,
+                        );
+                      }).toList(),
                 ),
               ),
             ],
@@ -160,44 +141,35 @@ class _QuickDonationViewState extends State<QuickDonationView> {
             nameField: 'amount_value',
             textInputType: TextInputType.number,
             onChange: _onAmountChanged,
-            suffixIcon: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                'jod'.tr(),
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-            ),
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            // suffixIcon: Padding(
+            //   padding: const EdgeInsets.all(16),
+            //   child: Text(
+            //     'jod'.tr(),
+            //     style: Theme.of(context).textTheme.displayMedium,
+            //   ),
+            // ),
           ),
           InkWell(
             onTap: () {
-              if (userCacheValue == null) {
-                loginRequiredDialog(context);
-                return;
-              }
+              // if (userCacheValue == null) {
+              //   loginRequiredDialog(context);
+              //   return;
+              // }
               final amount = _amountController.text.trim();
               if (amount.isEmpty) {
-                customShowToast(
-                  context,
-                  'please_select_an_amount'.tr(),
-                  showToastStatus: ShowToastStatus.error,
-                );
+                customShowToast(context, 'please_select_an_amount'.tr(), showToastStatus: ShowToastStatus.error);
                 return;
               }
               final quickDonation = _quickDonation;
               final donorId = quickDonation?.id ?? quickDonation?.donationGuid;
 
-              context.navigateToPage(
-                CardView(amount: amount, donorId: donorId),
-                pageTransitionType: PageTransitionType.rightToLeft,
-              );
+              context.navigateToPage(CardView(amount: amount, donorId: donorId), pageTransitionType: PageTransitionType.rightToLeft);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: AppColors.black100),
-                  bottom: BorderSide(color: AppColors.black100),
-                ),
+                border: Border(top: BorderSide(color: AppColors.black100), bottom: BorderSide(color: AppColors.black100)),
               ),
               child: Row(
                 children: [
@@ -215,10 +187,7 @@ class _QuickDonationViewState extends State<QuickDonationView> {
               ),
             ),
           ),
-          Text(
-            'this_donation_will_be_allocated_to_support_families_in_need'.tr(),
-            style: Theme.of(context).textTheme.displayMedium,
-          ),
+          Text('this_donation_will_be_allocated_to_support_families_in_need'.tr(), style: Theme.of(context).textTheme.displayMedium),
         ].paddingDirectional(top: 16),
       ),
       persistentFooterButtons: [
@@ -227,29 +196,19 @@ class _QuickDonationViewState extends State<QuickDonationView> {
             if (state is AddCartItemSuccess) {
               customShowToast(context, 'item_added_success'.tr());
             } else if (state is AddCartItemFailure) {
-              customShowToast(
-                context,
-                state.message.tr(),
-                showToastStatus: ShowToastStatus.error,
-              );
+              customShowToast(context, state.message.tr(), showToastStatus: ShowToastStatus.error);
             }
           },
           builder: (context, state) {
             if (state is AddCartItemLoading) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 12),
-                child: Center(
-                  child: CircularProgressIndicator(color: AppColors.cRed900),
-                ),
+                child: Center(child: CircularProgressIndicator(color: AppColors.cRed900)),
               );
             }
             return Container(
               padding: const EdgeInsets.only(top: 16),
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: 1, color: AppColors.black100),
-                ),
-              ),
+              decoration: const BoxDecoration(border: Border(top: BorderSide(width: 1, color: AppColors.black100))),
               child: Row(
                 children: [
                   Expanded(
@@ -263,33 +222,20 @@ class _QuickDonationViewState extends State<QuickDonationView> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(
-                            AppIcons.unSelectedDonationIc,
-                            colorFilter: const ColorFilter.mode(
-                              AppColors.white,
-                              BlendMode.srcIn,
-                            ),
-                          ),
+                          SvgPicture.asset(AppIcons.unSelectedDonationIc, colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn)),
                           const SizedBox(width: 8),
-                          Text(
-                            'donate'.tr(),
-                            style: Theme.of(context).textTheme.displayMedium
-                                ?.copyWith(color: AppColors.white),
-                          ),
+                          Text('donate'.tr(), style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.white)),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(width: 1.5, color: AppColors.cP50),
-                    ),
-
-                    child: SvgPicture.asset(AppIcons.cartIc),
-                  ),
+                  // const SizedBox(width: 10),
+                  // Container(
+                  //   padding: const EdgeInsets.all(10),
+                  //   decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1.5, color: AppColors.cP50)),
+                  //
+                  //   child: SvgPicture.asset(AppIcons.cartIc),
+                  // ),
                 ],
               ),
             );
