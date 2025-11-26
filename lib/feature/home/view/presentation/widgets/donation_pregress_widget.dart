@@ -71,7 +71,13 @@ class DonationsProgressWidget extends StatelessWidget {
               const SizedBox(height: 26),
               const CustomDivider(),
               const SizedBox(height: 26),
-              for (final type in types) TypedDonationProgramsWidget(type: type, title: type),
+              for (final type in types) Column(
+                children: [
+                  // SizedBox(height: 25,),
+                  TypedDonationProgramsWidget(type: type, title: type),
+                // SizedBox(height: 100,)
+                ],
+              ),
             ],
           ),
         );

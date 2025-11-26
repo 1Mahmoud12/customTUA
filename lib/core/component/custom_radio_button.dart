@@ -14,8 +14,11 @@ class RadioButtonModel {
 class CustomRadioListButton extends StatefulWidget {
   final String? title;
   final List<RadioButtonModel> items;
+  final ValueChanged<int>? onChanged;
 
-  const CustomRadioListButton({super.key, this.title, required this.items});
+
+  const CustomRadioListButton({super.key, this.title, required this.items,    this.onChanged,
+  });
 
   @override
   State<CustomRadioListButton> createState() => _CustomRadioListButtonState();
@@ -44,6 +47,9 @@ class _CustomRadioListButtonState extends State<CustomRadioListButton> {
                     }
                     e.value = true;
                     setState(() {});
+                    if (widget.onChanged != null) {
+                      widget.onChanged!(e.id);
+                    }
                   },
                 ),
               ),

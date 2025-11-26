@@ -71,7 +71,7 @@ class DonationBottomPanel extends StatelessWidget {
             CustomTextFormField(
               controller: amountController,
               onChange: (_) => onAmountChanged(),
-              hintText: 'enter_amount'.tr(),
+              hintText: 'enter_quantity'.tr(),
               textInputType: TextInputType.number,
               // suffixIcon: Padding(
               //   padding: const EdgeInsets.all(16),
@@ -123,8 +123,8 @@ class DonationBottomPanel extends StatelessWidget {
           campaign: detailsModel.items!.first.campaignGuid ?? '',
           recurrence: 'once',
           type: detailsModel.type!,
-          quantity: 1,
-          amount: double.tryParse(amountController.text) ?? 0,
+          quantity: int.tryParse(amountController.text) ?? 0,
+          amount: 1,
         ),
       ];
     }

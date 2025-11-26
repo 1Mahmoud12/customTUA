@@ -329,7 +329,8 @@
   "no_items_in_cart": "No items found in your cart",
   "you_need_to_login_to_access_this_feature": "You need to log in to access this feature.",
   "login_now": "Login now",
-  "please_select_an_amount": "Please select an amount to donate.",
+  "please_select_an_amount": "Please select the quantity you want to donate.",
+  "sender_number": "Sender Number",
   "to_apply_please_fill_fields": "To apply, please fill out the fields below!",
   "enter_campaign_name": "Enter campaign name",
   "dd_mm_yyyy": "DD-MM-YYYY",
@@ -363,5 +364,12 @@
   "no_programs_found": "No programs found",
   "phone_must_be_9_digits": "Phone number must be 9 digits",
   "jordan_phone_must_start_with_7": "Jordan phone number must start with 7",
+  "zakat_percentage_note": "The percentage of Zakat according to the selected year is: 0.025%",
+  "zakat_on_cash_info": "Zakat on cash becomes obligatory when the amount of cash, whether held in bank or on hand, fulfills Nisab. It also includes money held in retirement and pension accounts. The percentage of Nisab that is payable as Zakat is a quarter of one-tenth (2.5%) of the total money owned after one lunar year.",
+  "start_date_cannot_be_after_end_date": "Start date cannot be after the end date",
+  "end_date_cannot_be_before_start_date": "End date cannot be before the start date",
+  "please_select_start_date_first": "Please select the start date first.",
+  "please_select_e_card_design": "Please select an e-card design.",
+  "enter_quantity": "Enter quantity",
   "": ""
 }

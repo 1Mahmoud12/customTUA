@@ -41,6 +41,15 @@ class CreateCampaignCubit extends Cubit<CreateCampaignState> {
   }
 
   void onEndDateSelected(DateTime date) {
+    if (startDate==null) {
+      emit(CreateCampaignFailure('please_select_start_date_first'));
+      return;
+    }
+    if (startDate != null && date.isBefore(startDate!)) {
+      emit(CreateCampaignFailure( 'end_date_cannot_be_before_start_date'));
+      return;
+    }
+
     endDate = date;
     endDateController.text = DateFormat('dd-MM-yyyy').format(date);
     emit(CreateCampaignInitial());
@@ -53,6 +62,10 @@ class CreateCampaignCubit extends Cubit<CreateCampaignState> {
     }
     if (donationTypeId == '-1' || donationTypeId.isEmpty) {
       emit(CreateCampaignFailure('select_donation_type'));
+      return;
+    }
+    if (eCardIdController.text.isEmpty) {
+      emit(CreateCampaignFailure('please_select_e_card_design'));
       return;
     }
 

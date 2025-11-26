@@ -7,8 +7,9 @@ import 'package:tua/feature/common/data/models/e_card_model.dart';
 
 class SelectCardWidget extends StatefulWidget {
   final Function(int?)? onCardSelected;
+  final bool isOptional;
 
-  const SelectCardWidget({super.key, this.onCardSelected});
+  const SelectCardWidget({super.key, this.onCardSelected, this.isOptional = true});
 
   @override
   State<SelectCardWidget> createState() => _SelectCardWidgetState();
@@ -65,7 +66,7 @@ class _SelectCardWidgetState extends State<SelectCardWidget> {
               children: [
                 TextSpan(text: ' ', style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700)),
                 TextSpan(
-                  text: '(${'optional'.tr()})',
+                  text:widget.isOptional == true ? '(${'optional'.tr()})':'',
                   style: Theme.of(
                     context,
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.cP50.withAlpha((0.4 * 255).toInt())),
