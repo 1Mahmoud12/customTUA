@@ -16,6 +16,7 @@ import '../../../../core/utils/custom_show_toast.dart';
 import '../../../auth/views/presentation/login_view.dart';
 import '../../../auth/views/presentation/otp_view.dart';
 import '../../../auth/views/presentation/widgets/link_text.dart';
+import '../../../cart/view/managers/hyper_pay/hyper_pay_checkout_cubit.dart';
 import '../../../sponsorship/view/presentation/widgets/phone_field_widget.dart';
 
 class CheckoutAsAVisitorView extends StatelessWidget {
@@ -30,8 +31,13 @@ class CheckoutAsAVisitorView extends StatelessWidget {
         child: BlocConsumer<CheckoutAsVisitorCubit, CheckoutAsVisitorState>(
           listener: (context, state) {
             if (state is CheckoutAsVisitorSuccess) {
-              context.navigateToPage(const VerifyOtpView());
-            }
+              final hyperCubit = context.read<HyperPayCubit>();
+              context.navigateToPage(
+                BlocProvider.value(
+                  value: hyperCubit,
+                  child: const VerifyOtpView(),
+                ),
+              );            }
             if (state is CheckoutAsVisitorError) {
               customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
             }

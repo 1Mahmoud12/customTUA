@@ -126,7 +126,9 @@ class _CartViewState extends State<CartView> {
                                                 ? null
                                                 : () async {
                                                   if (userCacheValue == null) {
-                                                    context.navigateToPage(const CheckoutAsAVisitorView());
+                                                    context.navigateToPage(BlocProvider.value(
+                                                        value: context.read<HyperPayCubit>(),
+                                                        child: const CheckoutAsAVisitorView()));
                                                     return;
                                                   }
 
