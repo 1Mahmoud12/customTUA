@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/component/custom_app_bar.dart';
+import 'package:tua/core/component/loadsErros/loading_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
@@ -37,10 +38,17 @@ class VerifyOtpView extends StatelessWidget {
                     child: Column(
                       children: [
                         SvgPicture.asset(AppIcons.forgetPasswordIc),
-                        Text('check_your_email'.tr(), style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500)),
+                        Text(
+                          'check_your_email'.tr(),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500),
+                        ),
                         Text(
                           'we’ve_send_the_code_to_your_email_address'.tr(),
-                          style: Theme.of(context).textTheme.displayMedium!.copyWith(color: AppColors.cP50),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displayMedium!.copyWith(color: AppColors.cP50),
                           textAlign: TextAlign.center,
                         ),
 
@@ -84,12 +92,16 @@ class VerifyOtpView extends StatelessWidget {
                               child: Text.rich(
                                 TextSpan(
                                   text: ' ${'resend_code'.tr()} ',
-                                  style: Theme.of(context).textTheme.displayMedium!.copyWith(color: AppColors.cP50),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.displayMedium!.copyWith(color: AppColors.cP50),
                                   children: [
                                     if (state is OTPTimerRunning)
                                       TextSpan(
                                         text: state.timerText,
-                                        style: Theme.of(context).textTheme.displayMedium!.copyWith(color: AppColors.primaryColor),
+                                        style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                                          color: AppColors.primaryColor,
+                                        ),
                                       ),
                                   ],
                                 ),
@@ -121,23 +133,33 @@ class VerifyOtpView extends StatelessWidget {
                                     // WebView will be opened in listener when HyperPayCheckoutCreated is emitted
                                   }
                                   if (state is VerifyOtpError) {
-                                    customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+                                    customShowToast(
+                                      context,
+                                      state.message,
+                                      showToastStatus: ShowToastStatus.error,
+                                    );
                                   }
                                 },
                                 builder: (context, state) {
-                                  return CustomTextButton(
-                                    // state: state is OTPLoading,
-                                    childText: 'send'.tr(),
-                                    onPress: () {
-                                      final otp = cubit.codeController.text.trim();
+                                  return state is VerifyOtpLoading
+                                      ? LoadingWidget()
+                                      : CustomTextButton(
+                                        // state: state is OTPLoading,
+                                        childText: 'send'.tr(),
+                                        onPress: () {
+                                          final otp = cubit.codeController.text.trim();
 
-                                      if (otp.length != 4) {
-                                        customShowToast(context, 'please_enter_valid_otp'.tr(), showToastStatus: ShowToastStatus.error);
-                                        return;
-                                      }
-                                      context.read<VerifyOtpCubit>().verifyOtp(otp);
-                                    },
-                                  );
+                                          if (otp.length != 4) {
+                                            customShowToast(
+                                              context,
+                                              'please_enter_valid_otp'.tr(),
+                                              showToastStatus: ShowToastStatus.error,
+                                            );
+                                            return;
+                                          }
+                                          context.read<VerifyOtpCubit>().verifyOtp(otp);
+                                        },
+                                      );
                                 },
                               );
                             },
