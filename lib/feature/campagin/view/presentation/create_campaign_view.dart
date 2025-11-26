@@ -175,8 +175,10 @@ class CreateCampaignView extends StatelessWidget {
                   ),
 
                   SelectCardWidget(
+                    isOptional: false,
                     onCardSelected: (value) {
                       log(value.toString());
+                      cubit.eCardIdController.text = value.toString();
                     },
                   ),
 

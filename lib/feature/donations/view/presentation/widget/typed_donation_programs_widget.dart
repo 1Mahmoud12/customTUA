@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/component/loadsErros/loading_widget.dart';
 import 'package:tua/core/component/see_all_widget.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
+import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/donations/data/models/donation_program_model.dart';
 import 'package:tua/feature/donations/view/manager/donation_programs_cubit.dart';
 import 'package:tua/feature/home/view/presentation/widgets/quick_donation_widget.dart';
+
+import '../../../../programs/view/presentation/programs_by_tag_view.dart';
 
 class TypedDonationProgramsWidget extends StatelessWidget {
   final String type; // The tag/type to filter by (e.g., "Feeding", "Humanitarian Aid")
@@ -38,7 +41,12 @@ class TypedDonationProgramsWidget extends StatelessWidget {
 
         return Column(
           children: [
-            SeeAllWidget(title: title),
+            const SizedBox(height: 16,),
+
+            SeeAllWidget(title: title,showSeeAll: filteredPrograms.length>3,onTap: (){
+              context.navigateToPage(ProgramsByTagView(tag: type, title: title));
+
+            },),
             const SizedBox(height: 16),
             // ⏳ Loading
             if (state is DonationProgramsLoading && allPrograms.isEmpty)
@@ -49,13 +57,15 @@ class TypedDonationProgramsWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.zero,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 16),
-                    ...filteredPrograms.map((program) => ItemDonationsWidget(donation: program)),
+                    const SizedBox(width: 8),
+                    ...filteredPrograms.take(3).map((program) => ItemDonationsWidget(donation: program)),
                     const SizedBox(width: 16),
                   ],
                 ),
-              ),
+              )
+
           ],
         );
       },

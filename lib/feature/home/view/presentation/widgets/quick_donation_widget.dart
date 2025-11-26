@@ -60,7 +60,14 @@ class QuickDonations extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(width: 16),
-                      ...programs.take(5).map((program) => ItemDonationsWidget(donation: program)),
+                      ...programs
+                          .take(5)
+                          .map(
+                            (program) => Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: ItemDonationsWidget(donation: program),
+                            ),
+                          ),
                       const SizedBox(width: 16),
                     ],
                   ),
@@ -107,9 +114,10 @@ class ItemDonationsWidget extends StatelessWidget {
             BoxShadow(color: Color(0x33B6B6B6), blurRadius: 30, offset: Offset(0, 20), spreadRadius: 0),
           ],
         ),
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        margin: const EdgeInsets.only(right: 8, bottom: 20, left: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [

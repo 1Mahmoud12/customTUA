@@ -24,7 +24,7 @@ class CurrentNisabValueWidget extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('current_nisab_value', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
+              Text('current_nisab_value'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
               const SizedBox(height: 4),
               Text(
                 '25708.25 ${'jod'.tr()}',

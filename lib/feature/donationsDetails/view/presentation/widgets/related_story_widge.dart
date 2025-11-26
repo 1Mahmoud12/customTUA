@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
@@ -10,17 +11,27 @@ import 'package:tua/core/component/see_all_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/extensions.dart';
+import 'package:tua/core/utils/navigate.dart';
+import 'package:tua/feature/cart/data/models/add_cart_item_parms.dart';
 import 'package:tua/feature/donations/data/models/donation_program_details_model.dart';
+import 'package:tua/feature/navigation/view/presentation/navigation_view.dart';
+
+import '../../../../../core/component/loadsErros/loading_widget.dart';
+import '../../../../../core/utils/custom_show_toast.dart';
+import '../../../../cart/data/data_source/cart_data_source_impl.dart';
+import '../../../../cart/view/managers/add_cart_item/add_cart_item_cubit.dart';
+import '../../../../cart/view/managers/add_cart_item/add_cart_item_state.dart';
+import '../../../../cart/view/managers/cart/cart_cubit.dart';
 
 class RelatedStoryWidget extends StatelessWidget {
   final List<RelatedDonationProgramModel> relatedPrograms;
-  
+
   const RelatedStoryWidget({super.key, required this.relatedPrograms});
 
   @override
   Widget build(BuildContext context) {
     if (relatedPrograms.isEmpty) return const SizedBox.shrink();
-    
+
     return Column(
       children: [
         const SeeAllWidget(title: 'related_story'),
@@ -28,7 +39,8 @@ class RelatedStoryWidget extends StatelessWidget {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: relatedPrograms.map((program) => ItemRelatedStoryWidget(program: program)).toList(),
+            children:
+                relatedPrograms.map((program) => ItemRelatedStoryWidget(program: program)).toList(),
           ),
         ),
       ],
@@ -38,7 +50,7 @@ class RelatedStoryWidget extends StatelessWidget {
 
 class ItemRelatedStoryWidget extends StatefulWidget {
   final RelatedDonationProgramModel program;
-  
+
   const ItemRelatedStoryWidget({super.key, required this.program});
 
   @override
@@ -46,6 +58,8 @@ class ItemRelatedStoryWidget extends StatefulWidget {
 }
 
 class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
+  int? selectedItemId;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,7 +68,13 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
         borderRadius: BorderRadius.circular(16),
         color: AppColors.scaffoldBackGround,
         border: Border.all(color: AppColors.cP50.withAlpha((0.3 * 255).toInt())),
-        boxShadow: [BoxShadow(color: AppColors.greyG700.withAlpha((0.2 * 255).toInt()), blurRadius: 30, offset: const Offset(0, 20))],
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.greyG700.withAlpha((0.2 * 255).toInt()),
+            blurRadius: 30,
+            offset: const Offset(0, 20),
+          ),
+        ],
       ),
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -63,13 +83,16 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
                 child: CacheImage(
-                  urlImage: widget.program.image ?? '', 
-                  width: context.screenWidth * .8, 
-                  height: 160.h, 
-                  fit: BoxFit.cover, 
-                  borderRadius: 0
+                  urlImage: widget.program.image ?? '',
+                  width: context.screenWidth * .8,
+                  height: 160.h,
+                  fit: BoxFit.cover,
+                  borderRadius: 0,
                 ),
               ),
               Padding(
@@ -79,13 +102,24 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                      decoration: BoxDecoration(color: AppColors.cRed900, borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(
+                        color: AppColors.cRed900,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(AppIcons.incidentsIc, colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn)),
+                          SvgPicture.asset(
+                            AppIcons.incidentsIc,
+                            colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn),
+                          ),
                           const SizedBox(width: 4),
-                          Text('Incidents'.tr(), style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.white)),
+                          Text(
+                            'Incidents'.tr(),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displayMedium?.copyWith(color: AppColors.white),
+                          ),
                         ],
                       ),
                     ),
@@ -110,7 +144,9 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                     widget.program.brief!,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.cP50.withAlpha((.5 * 255).toInt())),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: AppColors.cP50.withAlpha((.5 * 255).toInt()),
+                    ),
                   ),
                 ],
               ],
@@ -123,34 +159,92 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
               children: [
                 if (widget.program.items != null && widget.program.items!.isNotEmpty)
                   CustomRadioListButton(
-                    items: widget.program.items!.take(2).map((item) {
-                      final amount = item.amountJod ?? item.amountUsd ?? 0.0;
-                      return RadioButtonModel(
-                        id: item.id,
-                        name: '${amount.toStringAsFixed(0)} ${'jod'.tr()}',
-                        subtitle: item.title,
-                      );
-                    }).toList(),
+                    items:
+                        widget.program.items!.take(2).map((item) {
+                          final amount = item.amountJod ?? item.amountUsd ?? 0.0;
+                          return RadioButtonModel(
+                            id: item.id,
+                            name: '${amount.toStringAsFixed(0)} ${'jod'.tr()}',
+                            subtitle: item.title,
+                          );
+                        }).toList(),
+                    onChanged: (value) {
+                      selectedItemId = value;
+                    },
                   ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: CustomTextButton(
-                        onPress: () {},
-                        borderColor: AppColors.cRed900,
-                        borderWidth: 2,
-                        colorText: AppColors.cRed900,
-                        childText: 'take_care_of_me'.tr(),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1.5, color: AppColors.cP50)),
-                      child: SvgPicture.asset(AppIcons.cartIc),
-                    ),
-                  ],
+                BlocProvider(
+                  create: (context) => AddCartItemCubit(CartDataSourceImpl()),
+                  child: BlocConsumer<AddCartItemCubit, AddCartItemState>(
+                    listener: (context, state) {
+                      if (state is AddCartItemSuccess) {
+                        customShowToast(context, 'item_added_success'.tr());
+                        context.read<CartCubit>().fetchCartItems();
+                      } else if (state is AddCartItemFailure) {
+                        customShowToast(
+                          context,
+                          state.message.tr(),
+                          showToastStatus: ShowToastStatus.error,
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child:
+                                state is AddCartItemLoading
+                                    ? const LoadingWidget(color: AppColors.cRed900)
+                                    : CustomTextButton(
+                                      onPress: () {
+                                        if (selectedItemId == null) {
+                                          customShowToast(
+                                            context,
+                                            'no_items_selected'.tr(),
+                                            showToastStatus: ShowToastStatus.error,
+                                          );
+                                          return;
+                                        }
+                                        final selectedItem = widget.program.items!.firstWhere(
+                                          (e) => e.id == selectedItemId,
+                                        );
+                                        context.read<AddCartItemCubit>().addCartItems([
+                                          AddCartItemParms(
+                                            programId: widget.program.id.toString(),
+                                            id: selectedItem.id.toString(),
+                                            donation: selectedItem.donationTypeGuid ?? '',
+                                            recurrence: 'once',
+                                            campaign: selectedItem.campaignGuid ?? '',
+                                            type: selectedItem.donationTypeId ?? 0,
+                                            quantity: 1,
+                                            amount: selectedItem.amountJod ?? 2,
+                                          ),
+                                        ]);
+                                      },
+                                      borderColor: AppColors.cRed900,
+                                      borderWidth: 2,
+                                      colorText: AppColors.cRed900,
+                                      childText: 'take_care_of_me'.tr(),
+                                    ),
+                          ),
+                          const SizedBox(width: 10),
+                          InkWell(
+                            onTap: () {
+                              context.navigateToPage(const NavigationView(customIndex: 2));
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(width: 1.5, color: AppColors.cP50),
+                              ),
+                              child: SvgPicture.asset(AppIcons.cartIc),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ].paddingDirectional(bottom: 12),
             ),
