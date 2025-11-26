@@ -122,8 +122,10 @@ class EndPoints {
   static const decreaseCartItem = 'cart/decrement';
   static const checkoutAsVisitor = 'cart/guest-donor';
   static const verifyOtp = 'cart/verify-otp';
+
   static const hyperPayCheckout = 'cart/hyperpay-checkout';
   static const hyperPayHandler = 'cart/hyperpay-handler';
+  static const hyperPayConfig = 'utilities/hyperpay-config';
 
   //Claims
   static const addClaimMessage = 'ClaimMessage/AddClaimMessage';

@@ -19,6 +19,8 @@ class CartCubit extends Cubit<CartState> {
 
   CartItemsResponseModel? get cachedCart => _cachedCart;
 
+  static CartCubit of(BuildContext context) => context.read<CartCubit>();
+
   /// Public method to get cart items
   Future<void> fetchCartItems() async {
     await _loadCachedCart();
