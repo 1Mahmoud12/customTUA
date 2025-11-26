@@ -65,11 +65,16 @@ class _ViewAllQuickDonationsViewState extends State<ViewAllQuickDonationsView> {
                       if (filteredPrograms.isEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 50.0),
-                          child: Center(child: Text('no_donations_found'.tr(), style: Theme.of(context).textTheme.titleLarge)),
+                          child: Center(
+                            child: Text(
+                              'no_donations_found'.tr(),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ),
                         )
                       else
                         ...filteredPrograms.map(
-                          (program) => Padding(padding: const EdgeInsets.only(bottom: 16), child: ItemDonationsWidget(donation: program)),
+                          (program) => ItemDonationsWidget(donation: program),
                         ),
                     ].paddingDirectional(top: 16),
                   ),

@@ -5,6 +5,7 @@ import 'package:tua/core/component/custom_app_bar.dart';
 import 'package:tua/core/component/loadsErros/loading_widget.dart';
 import 'package:tua/core/component/search_widget.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
+import 'package:tua/core/utils/errorLoadingWidgets/empty_widget.dart';
 import 'package:tua/core/utils/extensions.dart';
 import 'package:tua/feature/donations/data/data_source/donation_programs_data_source.dart';
 import 'package:tua/feature/donations/data/models/donation_program_model.dart';
@@ -45,7 +46,7 @@ class _ProgramsByTagViewState extends State<ProgramsByTagView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DonationProgramsCubit(DonationProgramsDataSource())..fetchDonationPrograms(),
+      create: (_) => DonationProgramsCubit(DonationProgramsDataSource())..fetchDonationPrograms( widget.tag),
       child: BlocConsumer<DonationProgramsCubit, DonationProgramsState>(
         listener: (context, state) {
           if (state is DonationProgramsError) {
@@ -63,7 +64,7 @@ class _ProgramsByTagViewState extends State<ProgramsByTagView> {
 
           return Scaffold(
             appBar: customAppBar(context: context, title: widget.title),
-            body: (state is DonationProgramsLoading && allPrograms.isEmpty)
+            body: (state is DonationProgramsLoading && filteredPrograms.isEmpty)
                 ? const Padding(
                     padding: EdgeInsets.symmetric(vertical: 100.0),
                     child: LoadingWidget(),
@@ -81,12 +82,7 @@ class _ProgramsByTagViewState extends State<ProgramsByTagView> {
                       if (filteredPrograms.isEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 50.0),
-                          child: Center(
-                            child: Text(
-                              'no_programs_found'.tr(),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ),
+                          child: EmptyWidget(data: 'no_programs_found',),
                         )
                       else
                         ...filteredPrograms.map(

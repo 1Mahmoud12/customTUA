@@ -361,5 +361,9 @@
   "select_donation_type": "من فضلك اختر نوع التبرع",
   "download": "تنزيل",
   "no_items_selected": "لم يتم اختيار أي عناصر",
+  "checkout_as_visitor": "الدفع كزائر",
+  "no_programs_found": "لا توجد برامج متاحة حالياً",
+  "phone_must_be_9_digits": "رقم الهاتف يجب أن يكون 9 أرقام",
+  "jordan_phone_must_start_with_7": "رقم الهاتف الأردني يجب أن يبدأ بـ 7",
   "": ""
 }

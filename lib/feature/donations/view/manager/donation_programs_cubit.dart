@@ -20,13 +20,14 @@ class DonationProgramsCubit extends Cubit<DonationProgramsState> {
   List<DonationProgramModel> get cachedPrograms => _cachedPrograms;
 
   /// Public method to get donation programs
-  Future<void> fetchDonationPrograms() async {
+  Future<void> fetchDonationPrograms([String tag = '']) async {
     await _loadCachedPrograms();
-    await _fetchProgramsFromApi();
+    await _fetchProgramsFromApi(tag);
   }
 
   /// Load from Hive cache first
   Future<void> _loadCachedPrograms() async {
+
     final box = await openHiveBox('donationProgramsBox');
     final cachedJson = box.get(donationProgramsCacheKey);
 
@@ -45,8 +46,10 @@ class DonationProgramsCubit extends Cubit<DonationProgramsState> {
   }
 
   /// Fetch fresh programs from API and cache them
-  Future<void> _fetchProgramsFromApi() async {
-    final result = await _dataSource.getDonationPrograms();
+  Future<void> _fetchProgramsFromApi(String tag) async {
+    emit(DonationProgramsLoading());
+
+    final result = await _dataSource.getDonationPrograms(tag);
 
     result.fold(
       (failure) {

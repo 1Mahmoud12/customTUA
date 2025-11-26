@@ -57,6 +57,7 @@ class QuickDonations extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(width: 16),
                       ...programs.take(5).map((program) => ItemDonationsWidget(donation: program)),
@@ -97,21 +98,33 @@ class ItemDonationsWidget extends StatelessWidget {
       highlightColor: Colors.transparent,
       child: Container(
         width: context.screenWidth * .8,
+        // height: 300.h,
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           color: AppColors.scaffoldBackGround,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          shadows: const [BoxShadow(color: Color(0x33B6B6B6), blurRadius: 30, offset: Offset(0, 20), spreadRadius: 0)],
+          shadows: const [
+            BoxShadow(color: Color(0x33B6B6B6), blurRadius: 30, offset: Offset(0, 20), spreadRadius: 0),
+          ],
         ),
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-                  child: CacheImage(urlImage: donation.image, width: double.infinity, height: 160.h, fit: BoxFit.cover, borderRadius: 0),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                  child: CacheImage(
+                    urlImage: donation.image,
+                    width: double.infinity,
+                    height: 160.h,
+                    fit: BoxFit.cover,
+                    borderRadius: 0,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -121,18 +134,31 @@ class ItemDonationsWidget extends StatelessWidget {
                       if (donation.tagIcon.isNotEmpty || donation.color.isNotEmpty)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                          decoration: BoxDecoration(color: tagColor, borderRadius: BorderRadius.circular(8)),
+                          decoration: BoxDecoration(
+                            color: tagColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (donation.tagIcon.isNotEmpty)
-                                CacheImage(urlImage: donation.tagIcon, width: 16, height: 16, fit: BoxFit.contain)
+                                CacheImage(
+                                  urlImage: donation.tagIcon,
+                                  width: 16,
+                                  height: 16,
+                                  fit: BoxFit.contain,
+                                )
                               else
-                                SvgPicture.asset(AppIcons.incidentsIc, colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn)),
+                                SvgPicture.asset(
+                                  AppIcons.incidentsIc,
+                                  colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn),
+                                ),
                               const SizedBox(width: 8),
                               Text(
-                                donation.tag.isEmpty ? '' : donation.tag,
-                                style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.white),
+                                donation.tag.isEmpty ? '' : donation.tag.tr(),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.displayMedium?.copyWith(color: AppColors.white),
                               ),
                             ],
                           ),
@@ -148,32 +174,49 @@ class ItemDonationsWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(donation.title, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('raised'.tr(), style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.cRed900)),
-                          const SizedBox(height: 6),
-                          Text(donation.raised, style: Theme.of(context).textTheme.displayMedium),
-                          const SizedBox(height: 4),
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text('goal'.tr(), style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.cRed900)),
-                          const SizedBox(height: 6),
-                          Text(donation.goal, style: Theme.of(context).textTheme.displayMedium),
-                          const SizedBox(height: 4),
-                        ],
-                      ),
-                    ],
+                  Text(
+                    donation.title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400),
                   ),
-                  SliderCustom(valueSlider: donation.progress.toDouble() < 0 ? 0 : donation.progress.toDouble()),
+                  const SizedBox(height: 8),
+                  if (donation.goal.isNotEmpty && donation.raised.isNotEmpty)
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'raised'.tr(),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleSmall?.copyWith(color: AppColors.cRed900),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(donation.raised, style: Theme.of(context).textTheme.displayMedium),
+                            const SizedBox(height: 4),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'goal'.tr(),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleSmall?.copyWith(color: AppColors.cRed900),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(donation.goal, style: Theme.of(context).textTheme.displayMedium),
+                            const SizedBox(height: 4),
+                          ],
+                        ),
+                      ],
+                    ),
+                  if (donation.progress > 0)
+                    SliderCustom(
+                      valueSlider: donation.progress.toDouble() < 0 ? 0 : donation.progress.toDouble(),
+                    ),
                   if (donation.campaignReport != null && donation.campaignReport!.isNotEmpty) ...[
                     const SizedBox(height: 14),
                     Row(
@@ -181,7 +224,9 @@ class ItemDonationsWidget extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Donations collected. Review the campaign report',
-                            style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w500),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w500),
                           ),
                         ),
                         const SizedBox(width: 16),

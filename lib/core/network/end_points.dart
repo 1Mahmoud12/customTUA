@@ -79,7 +79,7 @@ class EndPoints {
   static const staticPage = 'StaticPage/StaticPage';
   static const getAdvertises = 'Advertise/GetAdvertises';
   static const String getCurrency = 'user/get-currency';
-  static const getBasicPage='utilities/basic-page';
+  static const getBasicPage = 'utilities/basic-page';
 
   //  Service
   static const getCategories = 'Service/GetCategories';
@@ -118,8 +118,12 @@ class EndPoints {
   static const addFeedbackList = 'Order/AddFeedbackList';
   static const submitCancellationRequest = 'Order/SubmitCancellationRequest';
   static const getOrderVisitTime = 'Order/GetOrderVisitTime';
-  static const increaseCartItem='cart/increment';
-  static const decreaseCartItem='cart/decrement';
+  static const increaseCartItem = 'cart/increment';
+  static const decreaseCartItem = 'cart/decrement';
+  static const checkoutAsVisitor = 'cart/guest-donor';
+  static const verifyOtp = 'cart/verify-otp';
+  static const hyperPayCheckout = 'cart/hyperpay-checkout';
+  static const hyperPayHandler = 'cart/hyperpay-handler';
 
   //Claims
   static const addClaimMessage = 'ClaimMessage/AddClaimMessage';
@@ -148,18 +152,18 @@ class EndPoints {
   // update profile
   static const changePassword = 'user/change-password';
   static const updateProfile = 'user/update-profile';
-  static const getProfileInfo ='user/get-user-info';
+  static const getProfileInfo = 'user/get-user-info';
 
   //donations
   static const getDonationPrograms = 'utilities/donation-programs';
-  static const getDonationProgramById='utilities/donation-program-by-id';
+  static const getDonationProgramById = 'utilities/donation-program-by-id';
   static const getProgramsTag = 'utilities/programs-tag';
   static const getDonationsTypes = 'utilities/donation-types';
-  
+
   //e-cards
   static const getECards = 'utilities/e-cards';
   static const sendECard = 'utilities/send-ecard';
-  
+
   //volunteering
   static const getVolunteeringPrograms = 'utilities/volunteering-programs';
   static const getVolunteeringProgramById = 'utilities/volunteering-program-by-id';

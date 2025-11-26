@@ -9,14 +9,18 @@ import 'package:tua/core/utils/cusotm_container.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
 import 'package:tua/core/utils/errorLoadingWidgets/empty_widget.dart';
 import 'package:tua/core/utils/navigate.dart';
+import 'package:tua/feature/cart/data/data_source/hyper_pay_data_source.dart';
 import 'package:tua/feature/cart/data/models/cart_items_response_model.dart';
 import 'package:tua/feature/cart/view/managers/cart/cart_cubit.dart';
+import 'package:tua/feature/cart/view/managers/hyper_pay/hyper_pay_checkout_cubit.dart';
 import 'package:tua/feature/cart/view/presentation/cart_view_body.dart';
 import 'package:tua/feature/navigation/view/presentation/navigation_view.dart';
 
 import '../../../../core/component/buttons/custom_text_button.dart';
 import '../../../../core/component/custom_divider_widget.dart';
+import '../../../../core/network/local/cache.dart';
 import '../../../../core/themes/colors.dart';
+import '../../../checkout_as_a_visitor/view/presentation/checkout_as_a_visitor_view.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
@@ -30,7 +34,10 @@ class _CartViewState extends State<CartView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('cart'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400)),
+        title: Text(
+          'cart'.tr(),
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
+        ),
         centerTitle: false,
         leading: const SizedBox(),
       ),
@@ -75,28 +82,65 @@ class _CartViewState extends State<CartView> {
                         children: [
                           Text(
                             '${'total_donations'.tr()}: ',
-                            style: Theme.of(context).textTheme.displaySmall?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w500),
+                            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                              color: AppColors.cP50,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          Text(total, style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700)),
+                          Text(
+                            total,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       Row(
                         children: [
                           Expanded(
-                            child: CustomTextButton(
-                              onPress: () {},
-                              childText: 'donate_securely',
-                              backgroundColor: Colors.transparent,
-                              borderColor: AppColors.cP50,
-                              borderWidth: 2,
+                            child: BlocProvider(
+                              create: (context) => HyperPayCubit(HyperPayDataSource()),
+                              child: Builder(
+                                builder: (context) {
+                                  return BlocConsumer<HyperPayCubit, HyperPayState>(
+                                    listener: (context, state) {
+                                      if (state is HyperPayCheckoutError) {
+                                        customShowToast(
+                                          context,
+                                          state.message,
+                                          showToastStatus: ShowToastStatus.error,
+                                        );
+                                      }
+                                    },
+                                    builder: (context, state) {
+                                      return CustomTextButton(
+                                        onPress: () {
+                                          if (userCacheValue == null) {
+                                            context.navigateToPage(const CheckoutAsAVisitorView());
+                                            return;
+                                          }
+                                          context.read<HyperPayCubit>().hyperPayCheckout();
+                                        },
+                                        childText: 'donate_securely',
+                                        backgroundColor: Colors.transparent,
+                                        borderColor: AppColors.cP50,
+                                        borderWidth: 2,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: CustomTextButton(
                               onPress: () {
-                                context.navigateToPage(const NavigationView(), pageTransitionType: PageTransitionType.fade);
+                                context.navigateToPage(
+                                  const NavigationView(),
+                                  pageTransitionType: PageTransitionType.fade,
+                                );
                               },
                               childText: 'keep_giving',
                               backgroundColor: Colors.transparent,
@@ -129,7 +173,11 @@ class _CartViewState extends State<CartView> {
                       child: CustomContainer(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [const Icon(Icons.refresh), SizedBox(width: 4.w), Text('retry'.tr(), style: Styles.style12500)],
+                          children: [
+                            const Icon(Icons.refresh),
+                            SizedBox(width: 4.w),
+                            Text('retry'.tr(), style: Styles.style12500),
+                          ],
                         ),
                       ),
                     ),
@@ -140,7 +188,9 @@ class _CartViewState extends State<CartView> {
           }
           // ⏳ Loading
           else if (state is CartLoading) {
-            return const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 50.0), child: LoadingWidget()));
+            return const Center(
+              child: Padding(padding: EdgeInsets.symmetric(vertical: 50.0), child: LoadingWidget()),
+            );
           }
 
           // 💤 Empty
@@ -157,7 +207,11 @@ class _CartViewState extends State<CartView> {
                     child: CustomContainer(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [const Icon(Icons.refresh), SizedBox(width: 4.w), Text('reload_cart'.tr(), style: Styles.style12500)],
+                        children: [
+                          const Icon(Icons.refresh),
+                          SizedBox(width: 4.w),
+                          Text('reload_cart'.tr(), style: Styles.style12500),
+                        ],
                       ),
                     ),
                   ),

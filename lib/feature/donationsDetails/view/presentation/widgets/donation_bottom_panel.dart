@@ -95,14 +95,12 @@ class DonationBottomPanel extends StatelessWidget {
                     ? const LoadingWidget(color: AppColors.cRed900)
                     : DonationButton(
                       onTap: () {
-                        // if (userCacheValue == null) {
-                        //   loginRequiredDialog(context);
-                        //   return;
-                        // }
+
                         if (detailsModel.type == 1 && (selectedAmount == null || selectedAmount == 0)) {
                           customShowToast(context, 'please_select_an_amount'.tr());
                           return;
                         }
+
                         context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
                       },
                     );
