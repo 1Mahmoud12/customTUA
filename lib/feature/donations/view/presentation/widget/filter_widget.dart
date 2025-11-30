@@ -27,6 +27,25 @@ class _FiltersWidgetState extends State<FiltersWidget> {
     super.initState();
     _loadProgramTags();
   }
+  @override
+  void didChangeDependencies() async{
+    super.didChangeDependencies();
+    final result = await ProgramTagDataSource.fetchProgramTags();
+    result.fold(
+          (failure) {
+        setState(() {
+          _isLoading = false;
+        });
+      },
+          (response) {
+        ConstantsModels.programTagModel = response;
+        setState(() {
+          _programTags = response.data;
+          _isLoading = false;
+        });
+      },
+    );
+  }
 
   Future<void> _loadProgramTags() async {
     // Check cache first

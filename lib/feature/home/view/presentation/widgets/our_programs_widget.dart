@@ -25,6 +25,26 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
     super.initState();
     _loadProgramTags();
   }
+  @override
+  void didChangeDependencies() async{
+    super.didChangeDependencies();
+// Fetch from API
+    final result = await ProgramTagDataSource.fetchProgramTags();
+    result.fold(
+          (failure) {
+        setState(() {
+          _isLoading = false;
+        });
+      },
+          (response) {
+        ConstantsModels.programTagModel = response;
+        setState(() {
+          _programTags = response.data;
+          _isLoading = false;
+        });
+      },
+    );  }
+
 
   Future<void> _loadProgramTags() async {
     // Check cache first
@@ -113,7 +133,7 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
                           right: row.indexOf(tag) == 0 ? 8 : 0,
                         ),
                         child: ItemProgramWidget(
-                          nameItem: tag.title,
+                          nameItem: tag.title.trim().tr(),
                           nameImage: tag.tagIcon,
                           colorItem: _parseColor(
                             tag.color,

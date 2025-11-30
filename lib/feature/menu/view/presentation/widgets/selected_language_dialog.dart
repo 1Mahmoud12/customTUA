@@ -1,8 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/themes/colors.dart';
+import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/navigation/view/manager/homeBloc/cubit.dart';
+import 'package:tua/feature/navigation/view/presentation/navigation_view.dart';
+
+import '../../../../donations/view/manager/donation_programs_cubit.dart';
 
 class SelectLanguageDialog extends StatefulWidget {
   const SelectLanguageDialog({super.key, required this.selectedIndex});
@@ -114,15 +119,19 @@ class _SelectLanguageDialogState extends State<SelectLanguageDialog> {
 
                   CustomTextButton(
                     childText: 'Confirm'.tr(),
-                    onPress: () {
+                    onPress: () async{
                       setState(() {
                         if (selectedValue == 0) {
                           MainCubit.of(context).changeLanguage(const Locale('ar', 'SA'), context);
                         } else {
                           MainCubit.of(context).changeLanguage(const Locale('en', 'US'), context);
                         }
-                        Navigator.pop(context);
                       });
+                      Navigator.pop(context);
+                      context.read<DonationProgramsCubit>().fetchDonationPrograms();
+
+                      context.navigateToPage(NavigationView());
+
                     },
                   ),
                 ],
