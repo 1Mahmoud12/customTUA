@@ -381,6 +381,7 @@ class _CardViewState extends State<CardView> {
                             _selectedCardId = cardId;
                           });
                         },
+                        isOptional: false,
                       ),
                       const SizedBox(height: 16),
                       Padding(

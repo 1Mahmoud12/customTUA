@@ -8,6 +8,8 @@ import 'package:tua/core/utils/constants.dart';
 import 'package:tua/feature/navigation/data/homeDataSource/home_data_source.dart';
 import 'package:tua/feature/navigation/view/manager/homeBloc/state.dart';
 
+import '../../../../../core/utils/constants_models.dart';
+
 class MainCubit extends Cubit<MainState> {
   MainCubit() : super(MainInitial());
   final HomeDataSource _homeDataSource = HomeDataSource();
@@ -43,7 +45,22 @@ class MainCubit extends Cubit<MainState> {
         emit(GetCurrencyErrorState(l.errMessage));
       },
       (r) {
+        ConstantsModels.currency = r;
         emit(GetCurrencySuccessState());
+      },
+    );
+  }
+
+  Future<void> changeCurrency(String currency) async {
+    emit(ChangeCurrencyLoadingState());
+    final response = await _homeDataSource.changeCurrency(currency);
+    response.fold(
+      (l) {
+        emit(ChangeCurrencyErrorState(l.errMessage));
+      },
+      (data) {
+        ConstantsModels.currency = data.data.currency;
+        emit(ChangeCurrencySuccessState(data));
       },
     );
   }

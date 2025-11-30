@@ -1,3 +1,5 @@
+import 'package:tua/feature/home/data/model/change_currency_response.dart';
+
 abstract class MainState {}
 
 class MainInitial extends MainState {}
@@ -41,13 +43,27 @@ class GetHomeNotificationErrorState extends MainState {
 class ReadHomeOneNotificationState extends MainState {}
 
 class ReadHomeAllNotificationState extends MainState {}
+
 class GetCurrencySuccessState extends MainState {}
+
 class GetCurrencyLoadingState extends MainState {}
+
 class GetCurrencyErrorState extends MainState {
   String error;
 
   GetCurrencyErrorState(this.error);
 }
 
+class ChangeCurrencyLoadingState extends MainState {}
 
+class ChangeCurrencySuccessState extends MainState {
+  ChangeCurrencyResponse data;
 
+  ChangeCurrencySuccessState(this.data);
+}
+
+class ChangeCurrencyErrorState extends MainState {
+  String error;
+
+  ChangeCurrencyErrorState(this.error);
+}

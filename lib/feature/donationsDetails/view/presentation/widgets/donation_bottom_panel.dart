@@ -2,11 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
+import 'package:tua/feature/donationsDetails/view/presentation/widgets/amount_text_field.dart';
 
-import '../../../../../core/component/fields/custom_text_form_field.dart';
 import '../../../../../core/component/loadsErros/loading_widget.dart';
 import '../../../../../core/themes/colors.dart';
-import '../../../../../core/utils/constants_models.dart';
 import '../../../../cart/data/data_source/cart_data_source_impl.dart';
 import '../../../../cart/data/models/add_cart_item_parms.dart';
 import '../../../../cart/view/managers/add_cart_item/add_cart_item_cubit.dart';
@@ -15,7 +14,6 @@ import '../../../../cart/view/managers/cart/cart_cubit.dart';
 import '../../../../donations/data/models/donation_program_details_model.dart';
 import '../manager/change_currency_cubit.dart';
 import 'donation_button.dart';
-import 'item_option_widget.dart';
 
 class DonationBottomPanel extends StatelessWidget {
   final int? selectedAmount;
@@ -37,11 +35,13 @@ class DonationBottomPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final quickItems = ConstantsModels.lookupModel?.data?.quickDonation?.items ?? [];
+    // final quickItems = ConstantsModels.lookupModel?.data?.quickDonation?.items ?? [];
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: const BoxDecoration(
-        boxShadow: [BoxShadow(color: AppColors.cBorderButtonColor, blurRadius: 4, offset: Offset(2, -2))],
+        boxShadow: [
+          BoxShadow(color: AppColors.cBorderButtonColor, blurRadius: 4, offset: Offset(2, -2)),
+        ],
         color: AppColors.scaffoldBackGround,
         border: Border(top: BorderSide(color: AppColors.cBorderButtonColor)),
       ),
@@ -50,34 +50,25 @@ class DonationBottomPanel extends StatelessWidget {
         spacing: 5,
         children: [
           if (detailsModel.type == 1) ...[
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children:
-                  quickItems.isNotEmpty
-                      ? quickItems.map((item) {
-                        return ItemOptionsWidget(
-                          option: item.value, // 👈 استخدام value
-                          onTap: (selected) {
-                            onAmountSelected(selected);
-                          },
-                          isSelected: selectedAmount == item.value,
-                        );
-                      }).toList()
-                      : [50, 100, 200, 500, 1000].map((amount) {
-                        return ItemOptionsWidget(option: amount, isSelected: selectedAmount == amount, onTap: (_) => onAmountSelected(amount));
-                      }).toList(),
-            ),
-            CustomTextFormField(
-              controller: amountController,
-              onChange: (_) => onAmountChanged(),
-              hintText: 'enter_quantity'.tr(),
-              textInputType: TextInputType.number,
-              // suffixIcon: Padding(
-              //   padding: const EdgeInsets.all(16),
-              //   child: Text('JOD', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w400)),
-              // ),
-            ),
+            // Wrap(
+            //   spacing: 8,
+            //   runSpacing: 8,
+            //   children:
+            //       quickItems.isNotEmpty
+            //           ? quickItems.map((item) {
+            //             return ItemOptionsWidget(
+            //               option: item.value,
+            //               onTap: (selected) {
+            //                 onAmountSelected(selected);
+            //               },
+            //               isSelected: selectedAmount == item.value,
+            //             );
+            //           }).toList()
+            //           : [50, 100, 200, 500, 1000].map((amount) {
+            //             return ItemOptionsWidget(option: amount, isSelected: selectedAmount == amount, onTap: (_) => onAmountSelected(amount));
+            //           }).toList(),
+            // ),
+            AmountTextField(amountController: amountController, onAmountChanged: onAmountChanged),
           ],
           BlocProvider(
             create: (context) => AddCartItemCubit(CartDataSourceImpl()),
@@ -95,7 +86,6 @@ class DonationBottomPanel extends StatelessWidget {
                     ? const LoadingWidget(color: AppColors.cRed900)
                     : DonationButton(
                       onTap: () {
-
                         if (detailsModel.type == 1 && (selectedAmount == null || selectedAmount == 0)) {
                           customShowToast(context, 'please_select_an_amount'.tr());
                           return;
@@ -123,8 +113,8 @@ class DonationBottomPanel extends StatelessWidget {
           campaign: detailsModel.items!.first.campaignGuid ?? '',
           recurrence: 'once',
           type: detailsModel.type!,
-          quantity: int.tryParse(amountController.text) ?? 0,
-          amount: 1,
+          quantity: 1,
+          amount: double.tryParse(amountController.text) ?? 0,
         ),
       ];
     }

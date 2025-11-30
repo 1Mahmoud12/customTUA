@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tua/core/component/fields/custom_text_form_field.dart';
+import 'package:tua/core/utils/constants_models.dart';
 
 class DetailedCalculateWidget extends StatelessWidget {
   const DetailedCalculateWidget({super.key});
@@ -16,7 +17,7 @@ class DetailedCalculateWidget extends StatelessWidget {
           nameField: 'my_financial_accounts',
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text(ConstantsModels.currency.tr(), style: Theme.of(context).textTheme.displayMedium)),
         ),
         const SizedBox(height: 24),
         CustomTextFormField(
@@ -24,7 +25,7 @@ class DetailedCalculateWidget extends StatelessWidget {
           hintText: 'value_of_the_bank_account',
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text(ConstantsModels.currency.tr(), style: Theme.of(context).textTheme.displayMedium)),
         ),
         const SizedBox(height: 24),
         CustomTextFormField(
@@ -33,7 +34,7 @@ class DetailedCalculateWidget extends StatelessWidget {
           nameField: 'creditor',
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text(ConstantsModels.currency.tr(), style: Theme.of(context).textTheme.displayMedium)),
         ),
         const SizedBox(height: 24),
         CustomTextFormField(
@@ -42,7 +43,7 @@ class DetailedCalculateWidget extends StatelessWidget {
           nameField: 'debtor',
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text(ConstantsModels.currency.tr(), style: Theme.of(context).textTheme.displayMedium)),
         ),
         const SizedBox(height: 24),
         CustomTextFormField(
@@ -50,7 +51,7 @@ class DetailedCalculateWidget extends StatelessWidget {
           hintText: 'instalment_value',
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text(ConstantsModels.currency.tr(), style: Theme.of(context).textTheme.displayMedium)),
         ),
         const SizedBox(height: 24),
         CustomTextFormField(
@@ -58,7 +59,7 @@ class DetailedCalculateWidget extends StatelessWidget {
           hintText: 'value_of_the_car_installment',
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+          suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text(ConstantsModels.currency.tr(), style: Theme.of(context).textTheme.displayMedium)),
         ),
       ],
     );

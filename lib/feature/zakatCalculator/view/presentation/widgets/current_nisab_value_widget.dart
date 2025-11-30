@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 
+import '../../../../../core/utils/constants_models.dart';
+
 class CurrentNisabValueWidget extends StatelessWidget {
   const CurrentNisabValueWidget({super.key});
 
@@ -27,7 +29,7 @@ class CurrentNisabValueWidget extends StatelessWidget {
               Text('current_nisab_value'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
               const SizedBox(height: 4),
               Text(
-                '25708.25 ${'jod'.tr()}',
+                '25708.25 ${ConstantsModels.currency.tr()}',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.primaryColor),
               ),
             ],

@@ -8,4 +8,5 @@ class ConstantsModels {
   static SliderModel? sliderModel;
   static LookupModel? lookupModel;
   static ProgramTagResponseModel? programTagModel;
+  static String currency='JOD';
 }

@@ -13,7 +13,7 @@ class AddCartItemCubit extends Cubit<AddCartItemState> {
 
   Future<void> addCartItems(List<AddCartItemParms> params) async {
     if (params.isEmpty) {
-      emit(AddCartItemFailure('no_items_selected'));
+      emit(const AddCartItemFailure('no_items_selected'));
       return;
     }
 

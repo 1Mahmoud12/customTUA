@@ -329,7 +329,7 @@
   "no_items_in_cart": "No items found in your cart",
   "you_need_to_login_to_access_this_feature": "You need to log in to access this feature.",
   "login_now": "Login now",
-  "please_select_an_amount": "Please select the quantity you want to donate.",
+  "please_select_an_amount": "Please select the amount you want to donate.",
   "sender_number": "Sender Number",
   "to_apply_please_fill_fields": "To apply, please fill out the fields below!",
   "enter_campaign_name": "Enter campaign name",
@@ -371,5 +371,7 @@
   "please_select_start_date_first": "Please select the start date first.",
   "please_select_e_card_design": "Please select an e-card design.",
   "enter_quantity": "Enter quantity",
+  "us_dollar": "US Dollar",
+  "jordanian_dinar": "Jordanian Dinar",
   "": ""
 }

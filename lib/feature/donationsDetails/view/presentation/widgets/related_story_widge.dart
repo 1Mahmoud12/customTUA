@@ -10,6 +10,7 @@ import 'package:tua/core/component/custom_radio_button.dart';
 import 'package:tua/core/component/see_all_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
+import 'package:tua/core/utils/constants_models.dart';
 import 'package:tua/core/utils/extensions.dart';
 import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/cart/data/models/add_cart_item_parms.dart';
@@ -161,10 +162,16 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                   CustomRadioListButton(
                     items:
                         widget.program.items!.take(2).map((item) {
-                          final amount = item.amountJod ?? item.amountUsd ?? 0.0;
+                          double? amount;
+                          if (ConstantsModels.currency.toLowerCase() == 'usd') {
+                            amount = item.amountUsd;
+                          } else {
+                            amount = item.amountJod;
+                          }
+
                           return RadioButtonModel(
                             id: item.id,
-                            name: '${amount.toStringAsFixed(0)} ${'jod'.tr()}',
+                            name: '${amount?.toStringAsFixed(0) ?? 0.0} ${ConstantsModels.currency.tr()}',
                             subtitle: item.title,
                           );
                         }).toList(),

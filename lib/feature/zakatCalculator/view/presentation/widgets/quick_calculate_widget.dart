@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tua/core/component/fields/custom_text_form_field.dart';
 
+import '../../../../../core/utils/constants_models.dart';
+
 class QuickCalculateWidget extends StatelessWidget {
   const QuickCalculateWidget({super.key});
 
@@ -14,7 +16,7 @@ class QuickCalculateWidget extends StatelessWidget {
       nameField: 'amount_value',
       textInputType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text('jod'.tr(), style: Theme.of(context).textTheme.displayMedium)),
+      suffixIcon: Padding(padding: const EdgeInsets.all(16), child: Text(ConstantsModels.currency.tr(), style: Theme.of(context).textTheme.displayMedium)),
     );
   }
 }

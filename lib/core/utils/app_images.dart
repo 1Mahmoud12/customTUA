@@ -78,4 +78,5 @@ class AppImages {
   static const checkUdhiyah = '$baseUrl/checkUdhiyah.png';
   static const backgroundDownloadAndApply = '$baseUrl/backgroundDownloadAndApply.png';
   static const warning='$baseUrl/warning.png';
+  static const changeCurrency='$baseUrl/changeCurrency.png';
 }

@@ -15,6 +15,8 @@ import 'package:tua/feature/zakatCalculator/view/presentation/widgets/detailed_c
 import 'package:tua/feature/zakatCalculator/view/presentation/widgets/form_money_widget.dart';
 import 'package:tua/feature/zakatCalculator/view/presentation/widgets/quick_calculate_widget.dart';
 
+import '../../../../core/utils/constants_models.dart';
+
 class ZakatCalculatorView extends StatefulWidget {
   const ZakatCalculatorView({super.key});
 
@@ -92,7 +94,7 @@ class _ZakatCalculatorViewState extends State<ZakatCalculatorView> {
                       ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      '1000 ${'jod'.tr()}',
+                      '1000 ${ConstantsModels.currency.tr()}',
                       style: Theme.of(
                         context,
                       ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
