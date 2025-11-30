@@ -35,7 +35,10 @@ class _CartViewState extends State<CartView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('cart'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400)),
+        title: Text(
+          'cart'.tr(),
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
+        ),
         centerTitle: false,
         leading: const SizedBox(),
       ),
@@ -80,9 +83,17 @@ class _CartViewState extends State<CartView> {
                         children: [
                           Text(
                             '${'total_donations'.tr()}: ',
-                            style: Theme.of(context).textTheme.displaySmall?.copyWith(color: AppColors.cP50, fontWeight: FontWeight.w500),
+                            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                              color: AppColors.cP50,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          Text(total, style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700)),
+                          Text(
+                            total,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -96,9 +107,17 @@ class _CartViewState extends State<CartView> {
                                   return BlocConsumer<HyperPayCubit, HyperPayState>(
                                     listener: (context, state) {
                                       if (state is HyperPayCheckoutError) {
-                                        customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+                                        customShowToast(
+                                          context,
+                                          state.message,
+                                          showToastStatus: ShowToastStatus.error,
+                                        );
                                       } else if (state is HyperPayConfigError) {
-                                        customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+                                        customShowToast(
+                                          context,
+                                          state.message,
+                                          showToastStatus: ShowToastStatus.error,
+                                        );
                                       } else if (state is HyperPayCheckoutCreated) {
                                         // Get config from cubit
                                         final cubit = context.read<HyperPayCubit>();
@@ -109,16 +128,25 @@ class _CartViewState extends State<CartView> {
                                           context.navigateToPage(
                                             BlocProvider.value(
                                               value: cubit,
-                                              child: HyperPayWebView(checkoutData: state.checkoutData, config: config),
+                                              child: HyperPayWebView(
+                                                checkoutData: state.checkoutData,
+                                                config: config,
+                                                purchaseType: PurchaseType.cart,
+                                              ),
                                             ),
                                           );
                                         } else {
-                                          customShowToast(context, 'payment_config_error'.tr(), showToastStatus: ShowToastStatus.error);
+                                          customShowToast(
+                                            context,
+                                            'payment_config_error'.tr(),
+                                            showToastStatus: ShowToastStatus.error,
+                                          );
                                         }
                                       }
                                     },
                                     builder: (context, state) {
-                                      final isLoading = state is HyperPayLoading || state is HyperPayConfigLoading;
+                                      final isLoading =
+                                          state is HyperPayLoading || state is HyperPayConfigLoading;
 
                                       return CustomTextButton(
                                         onPress:
@@ -126,9 +154,12 @@ class _CartViewState extends State<CartView> {
                                                 ? null
                                                 : () async {
                                                   if (userCacheValue == null) {
-                                                    context.navigateToPage(BlocProvider.value(
+                                                    context.navigateToPage(
+                                                      BlocProvider.value(
                                                         value: context.read<HyperPayCubit>(),
-                                                        child: const CheckoutAsAVisitorView()));
+                                                        child: const CheckoutAsAVisitorView(),
+                                                      ),
+                                                    );
                                                     return;
                                                   }
 
@@ -163,7 +194,10 @@ class _CartViewState extends State<CartView> {
                           Expanded(
                             child: CustomTextButton(
                               onPress: () {
-                                context.navigateToPage(const NavigationView(), pageTransitionType: PageTransitionType.fade);
+                                context.navigateToPage(
+                                  const NavigationView(),
+                                  pageTransitionType: PageTransitionType.fade,
+                                );
                               },
                               childText: 'keep_giving',
                               backgroundColor: Colors.transparent,
@@ -196,7 +230,11 @@ class _CartViewState extends State<CartView> {
                       child: CustomContainer(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [const Icon(Icons.refresh), SizedBox(width: 4.w), Text('retry'.tr(), style: Styles.style12500)],
+                          children: [
+                            const Icon(Icons.refresh),
+                            SizedBox(width: 4.w),
+                            Text('retry'.tr(), style: Styles.style12500),
+                          ],
                         ),
                       ),
                     ),
@@ -207,7 +245,9 @@ class _CartViewState extends State<CartView> {
           }
           // ⏳ Loading
           else if (state is CartLoading) {
-            return const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 50.0), child: LoadingWidget()));
+            return const Center(
+              child: Padding(padding: EdgeInsets.symmetric(vertical: 50.0), child: LoadingWidget()),
+            );
           }
 
           // 💤 Empty
@@ -224,7 +264,11 @@ class _CartViewState extends State<CartView> {
                     child: CustomContainer(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [const Icon(Icons.refresh), SizedBox(width: 4.w), Text('reload_cart'.tr(), style: Styles.style12500)],
+                        children: [
+                          const Icon(Icons.refresh),
+                          SizedBox(width: 4.w),
+                          Text('reload_cart'.tr(), style: Styles.style12500),
+                        ],
                       ),
                     ),
                   ),

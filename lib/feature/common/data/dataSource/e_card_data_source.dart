@@ -7,6 +7,8 @@ import 'package:tua/core/network/end_points.dart';
 import 'package:tua/core/network/errors/failures.dart';
 import 'package:tua/feature/common/data/models/e_card_model.dart';
 
+import '../../../quickDonation/data/models/send_e_card_response_model.dart';
+
 class ECardDataSource {
   static Future<Either<Failure, ECardsResponseModel>> fetchECards() async {
     try {
@@ -21,7 +23,7 @@ class ECardDataSource {
     }
   }
 
-  static Future<Either<Failure, Unit>> sendECard({
+  static Future<Either<Failure, SendECardResponseModel>> sendECard({
     required String amount,
     required String senderName,
     required String recipientName,
@@ -58,17 +60,19 @@ class ECardDataSource {
       );
 
       if (response.statusCode == 200) {
-        final responseData = response.data;
-        if (responseData['success'] == true) {
-          return right(unit);
+        final json = response.data;
+
+        if (json['success'] == true) {
+          final model = SendECardResponseModel.fromJson(json);
+          return Right(model);
         } else {
-          return Left(ServerFailure(responseData['message'] ?? 'Failed to send e-card'));
+          return Left(ServerFailure(json['message'] ?? 'Failed to send e-card'));
         }
       } else {
         return Left(ServerFailure('Server error: ${response.statusCode}'));
       }
     } catch (error) {
-      log('error sendECard==$error');
+      log('error sendECard == $error');
       if (error is DioException) {
         return Left(ServerFailure.fromDioException(error));
       }

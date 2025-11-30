@@ -7,6 +7,7 @@ import 'package:tua/core/network/local/cache.dart';
 
 import '../../../../core/network/dio_helper.dart';
 import '../../../../core/network/end_points.dart';
+import '../../view/managers/hyper_pay/hyper_pay_checkout_cubit.dart';
 import '../models/hyper_pay_checkout_response.dart';
 import '../models/hyper_pay_config_response.dart';
 
@@ -36,11 +37,15 @@ class HyperPayDataSource {
     }
   }
 
-  Future<Either<Failure, String>> hyperPayHandler(String checkoutId) async {
+  Future<Either<Failure, String>> hyperPayHandler(String checkoutId, PurchaseType purchaseType) async {
     try {
       final response = await DioHelper.postData(
         url: EndPoints.hyperPayHandler,
-        data: {'checkout_id': checkoutId, 'type': 'cart', 'access_token': userCacheValue?.accessToken ?? ''},
+        data: {
+          'checkout_id': checkoutId,
+          'type': purchaseType.apiValue,
+          'access_token': userCacheValue?.accessToken ?? '',
+        },
       );
 
       if (response.statusCode == 200) {
@@ -66,7 +71,10 @@ class HyperPayDataSource {
 
   Future<Either<Failure, HyperPayConfigData>> getHyperPayConfig({String? lang}) async {
     try {
-      final response = await DioHelper.getData(url: EndPoints.hyperPayConfig, query: lang != null ? {'lang': lang} : null);
+      final response = await DioHelper.getData(
+        url: EndPoints.hyperPayConfig,
+        query: lang != null ? {'lang': lang} : null,
+      );
 
       if (response.statusCode == 200) {
         final responseModel = HyperPayConfigResponse.fromJson(response.data);
@@ -86,6 +94,23 @@ class HyperPayDataSource {
         return Left(ServerFailure.fromDioException(error));
       }
       return Left(ServerFailure(error.toString()));
+    }
+  }
+}
+enum PurchaseType {
+  cart,
+  eCard,
+  giftCard,
+}
+extension PurchaseTypeMapper on PurchaseType {
+  String get apiValue {
+    switch (this) {
+      case PurchaseType.cart:
+        return 'cart';
+      case PurchaseType.eCard:
+        return 'e-card';
+      case PurchaseType.giftCard:
+        return 'gift-card';
     }
   }
 }

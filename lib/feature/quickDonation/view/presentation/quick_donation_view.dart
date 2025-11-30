@@ -20,6 +20,8 @@ import 'package:tua/feature/cart/view/managers/add_cart_item/add_cart_item_state
 import 'package:tua/feature/common/data/models/lookup_model.dart';
 import 'package:tua/feature/quickDonation/view/presentation/card_view.dart';
 
+import '../../../cart/data/data_source/hyper_pay_data_source.dart';
+import '../../../cart/view/managers/hyper_pay/hyper_pay_checkout_cubit.dart';
 import '../../../donationsDetails/view/presentation/widgets/item_option_widget.dart' show ItemOptionsWidget;
 
 class QuickDonationView extends StatefulWidget {
@@ -164,7 +166,10 @@ class _QuickDonationViewState extends State<QuickDonationView> {
               final quickDonation = _quickDonation;
               final donorId = quickDonation?.id ?? quickDonation?.donationGuid;
 
-              context.navigateToPage(CardView(amount: amount, donorId: donorId), pageTransitionType: PageTransitionType.rightToLeft);
+              context.navigateToPage(BlocProvider(
+                create: (context) => HyperPayCubit(HyperPayDataSource()),
+  child: CardView(amount: amount, donorId: donorId),
+), pageTransitionType: PageTransitionType.rightToLeft);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),

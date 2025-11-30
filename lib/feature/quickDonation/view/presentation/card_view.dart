@@ -15,13 +15,17 @@ import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/constants_models.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
 import 'package:tua/core/utils/extensions.dart';
+import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/campagin/view/presentation/widgets/select_card_widget.dart';
 import 'package:tua/feature/common/data/dataSource/e_card_data_source.dart';
 import 'package:tua/feature/sponsorship/view/presentation/widgets/date_picker_dialog.dart';
 import 'package:tua/feature/sponsorship/view/presentation/widgets/phone_field_widget.dart';
 
+import '../../../cart/data/data_source/hyper_pay_data_source.dart';
 import '../../../cart/view/managers/get_user_info/get_user_info_cubit.dart';
 import '../../../cart/view/managers/get_user_info/get_user_info_state.dart';
+import '../../../cart/view/managers/hyper_pay/hyper_pay_checkout_cubit.dart';
+import '../../../cart/view/presentation/hyper_pay_webview.dart';
 
 class CardView extends StatefulWidget {
   final String? amount;
@@ -35,11 +39,9 @@ class CardView extends StatefulWidget {
 
 class _CardViewState extends State<CardView> {
   final TextEditingController _senderNameController = TextEditingController();
-  final TextEditingController _recipientNameController =
-      TextEditingController();
+  final TextEditingController _recipientNameController = TextEditingController();
   final TextEditingController _senderEmailController = TextEditingController();
-  final TextEditingController _recipientEmailController =
-      TextEditingController();
+  final TextEditingController _recipientEmailController = TextEditingController();
   String _senderPhone = '';
   String _recipientPhone = '';
   final TextEditingController _messageController = TextEditingController();
@@ -55,8 +57,7 @@ class _CardViewState extends State<CardView> {
   void initState() {
     super.initState();
     // Get donor_id from quick donation lookup or use provided one
-    _selectedDonorId =
-        widget.donorId ?? ConstantsModels.lookupModel?.data?.quickDonation?.id;
+    _selectedDonorId = widget.donorId ?? ConstantsModels.lookupModel?.data?.quickDonation?.id;
   }
 
   @override
@@ -97,8 +98,7 @@ class _CardViewState extends State<CardView> {
     }
 
     final firstDigitAfterCountryCode = cleanedPhone[3];
-    if (firstDigitAfterCountryCode != '7' &&
-        firstDigitAfterCountryCode != '8') {
+    if (firstDigitAfterCountryCode != '7' && firstDigitAfterCountryCode != '8') {
       return false;
     }
 
@@ -110,11 +110,7 @@ class _CardViewState extends State<CardView> {
   Future<void> _sendECard() async {
     // Validation
     if (_senderNameController.text.trim().isEmpty) {
-      customShowToast(
-        context,
-        'please_enter_sender_name'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_enter_sender_name'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
     if (_recipientNameController.text.trim().isEmpty) {
@@ -127,19 +123,11 @@ class _CardViewState extends State<CardView> {
     }
     final senderEmail = _senderEmailController.text.trim();
     if (senderEmail.isEmpty) {
-      customShowToast(
-        context,
-        'please_enter_sender_email'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_enter_sender_email'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
     if (!_isValidEmail(senderEmail)) {
-      customShowToast(
-        context,
-        'please_enter_valid_email'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_enter_valid_email'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
 
@@ -153,28 +141,16 @@ class _CardViewState extends State<CardView> {
       return;
     }
     if (!_isValidEmail(recipientEmail)) {
-      customShowToast(
-        context,
-        'please_enter_valid_email'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_enter_valid_email'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
 
     if (_senderPhone.trim().isEmpty) {
-      customShowToast(
-        context,
-        'please_enter_sender_phone'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_enter_sender_phone'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
     if (!_isValidPhone(_senderPhone)) {
-      customShowToast(
-        context,
-        'please_enter_valid_phone'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_enter_valid_phone'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
 
@@ -187,27 +163,15 @@ class _CardViewState extends State<CardView> {
       return;
     }
     if (!_isValidPhone(_recipientPhone)) {
-      customShowToast(
-        context,
-        'please_enter_valid_phone'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_enter_valid_phone'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
     if (_selectedDonorId == null || _selectedDonorId!.isEmpty) {
-      customShowToast(
-        context,
-        'donor_not_selected'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'donor_not_selected'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
     if (widget.amount == null || widget.amount!.isEmpty) {
-      customShowToast(
-        context,
-        'please_select_an_amount'.tr(),
-        showToastStatus: ShowToastStatus.error,
-      );
+      customShowToast(context, 'please_select_an_amount'.tr(), showToastStatus: ShowToastStatus.error);
       return;
     }
 
@@ -227,10 +191,7 @@ class _CardViewState extends State<CardView> {
       eCardId: _selectedCardId?.toString() ?? '',
       message: _messageController.text.trim(),
       sendWhenFinished: _sendWhenFinished ? '1' : '0',
-      startDate:
-          _selectedDate != null
-              ? DateFormat('dd-MM-yyyy').format(_selectedDate!)
-              : '',
+      startDate: _selectedDate != null ? DateFormat('dd-MM-yyyy').format(_selectedDate!) : '',
     );
 
     setState(() {
@@ -239,232 +200,259 @@ class _CardViewState extends State<CardView> {
 
     result.fold(
       (failure) {
-        customShowToast(
-          context,
-          failure.errMessage,
-          showToastStatus: ShowToastStatus.error,
-        );
+        customShowToast(context, failure.errMessage, showToastStatus: ShowToastStatus.error);
       },
-      (_) {
+      (data) async {
         customShowToast(context, 'e_card_sent_successfully'.tr());
-        Navigator.of(context).pop();
+        final cubit = context.read<HyperPayCubit>();
+
+        if (cubit.config == null) {
+        await cubit.getHyperPayConfig(lang: 'ar');
+
+        // Check if config was loaded successfully
+        if (cubit.config == null) {
+          return; // Error already shown in listener
+          }
+        }
+        if (cubit.config != null) {
+          context.navigateToPage(
+            BlocProvider.value(
+              value: cubit,
+              child: HyperPayWebView(
+                checkoutData: data.data.checkout.data,
+                config: cubit.config!,
+                purchaseType: PurchaseType.eCard,
+              ),
+            ),
+          );
+        }
+
+        // Step 2: Create checkout session
+        // await cubit.hyperPayCheckout();
+        // Navigator.of(context).pop();
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(context: context, title: 'send_as_a_e_card'),
-      body:
-          _isLoading
-              ? const LoadingWidget()
-              : ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
+    return BlocConsumer<HyperPayCubit, HyperPayState>(
+      listener: (context, state) {
+        if (state is HyperPayCheckoutError) {
+          customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+        } else if (state is HyperPayConfigError) {
+          customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
+        } else if (state is HyperPayCheckoutCreated) {
+          final cubit = context.read<HyperPayCubit>();
+          final config = cubit.config;
+
+
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: customAppBar(context: context, title: 'send_as_a_e_card'),
+          body:
+              _isLoading
+                  ? const LoadingWidget()
+                  : ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'details'.tr(),
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.w500),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'details'.tr(),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${'please_fill_out_the_fields_below'.tr()}:',
+                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.cP50.withAlpha((.5 * 255).toInt()),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '${'please_fill_out_the_fields_below'.tr()}:',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.cP50.withAlpha(
-                                  (.5 * 255).toInt(),
+                            BlocBuilder<UserInfoCubit, GetUserInfoState>(
+                              builder: (context, state) {
+                                final cubit = context.read<UserInfoCubit>();
+                                return cubit.users.isNotEmpty
+                                    ? CustomPopupMenu(
+                                      nameField: 'select_donor',
+                                      selectedItem: DropDownModel(
+                                        name: cubit.users.first.name,
+                                        value: cubit.users.first.id,
+                                      ),
+                                      items:
+                                          cubit.users
+                                              .map((e) => DropDownModel(name: e.name, value: e.id))
+                                              .toList(),
+                                    )
+                                    : const SizedBox();
+                              },
+                            ),
+                            CustomTextFormField(
+                              controller: _senderNameController,
+                              hintText: 'enter_sender_name',
+                              textInputType: TextInputType.name,
+                              nameField: 'sender_name',
+                            ),
+                            CustomTextFormField(
+                              controller: _recipientNameController,
+                              hintText: 'enter_recipient_name',
+                              textInputType: TextInputType.name,
+                              nameField: 'recipient_name',
+                            ),
+                            CustomTextFormField(
+                              controller: _senderEmailController,
+                              hintText: 'enter_sender_email',
+                              textInputType: TextInputType.emailAddress,
+                              nameField: 'sender_email',
+                            ),
+                            CustomTextFormField(
+                              controller: _recipientEmailController,
+                              hintText: 'enter_recipient_email',
+                              textInputType: TextInputType.emailAddress,
+                              nameField: 'recipient_email',
+                            ),
+                            PhoneFieldWidget(
+                              nameField: 'sender_number',
+                              onChange: (value) {
+                                setState(() {
+                                  _senderPhone = value;
+                                });
+                              },
+                            ),
+                            PhoneFieldWidget(
+                              nameField: 'recipient_number',
+                              onChange: (value) {
+                                setState(() {
+                                  _recipientPhone = value;
+                                });
+                              },
+                            ),
+                            InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => Center(
+                                        child: BeautifulDatePicker(
+                                          firstDate: DateTime.now(),
+                                          onDateSelected: _onDateSelected,
+                                          lastDate: DateTime.now().add(const Duration(days: 100)),
+                                        ),
+                                      ),
+                                );
+                              },
+                              child: CustomTextFormField(
+                                enable: false,
+                                controller: _dateController,
+                                hintText: 'DD/MM/YYYY',
+                                textInputType: TextInputType.datetime,
+                                nameField: 'set_the_date',
+                                prefixIcon: Padding(
+                                  padding: EdgeInsetsGeometry.only(
+                                    top: 16,
+                                    bottom: 16,
+                                    right: context.locale.languageCode == 'ar' ? 16 : 0,
+                                    left: context.locale.languageCode == 'ar' ? 0 : 16,
+                                  ),
+                                  child: SvgPicture.asset(AppIcons.dateIc),
                                 ),
                               ),
                             ),
-                          ],
+                          ].paddingDirectional(top: 16),
                         ),
-                        BlocBuilder<UserInfoCubit, GetUserInfoState>(
-                          builder: (context, state) {
-                            final cubit = context.read<UserInfoCubit>();
-                            return cubit.users.isNotEmpty
-                                ? CustomPopupMenu(
-                              nameField: 'select_donor',
-                              selectedItem: DropDownModel(name: cubit.users.first.name, value: cubit.users.first.id),
-                              items: cubit.users.map((e) => DropDownModel(name: e.name, value: e.id)).toList(),
-                            )
-                                : const SizedBox();
-                          },
-                        ),
-                        CustomTextFormField(
-                          controller: _senderNameController,
-                          hintText: 'enter_sender_name',
-                          textInputType: TextInputType.name,
-                          nameField: 'sender_name',
-                        ),
-                        CustomTextFormField(
-                          controller: _recipientNameController,
-                          hintText: 'enter_recipient_name',
-                          textInputType: TextInputType.name,
-                          nameField: 'recipient_name',
-                        ),
-                        CustomTextFormField(
-                          controller: _senderEmailController,
-                          hintText: 'enter_sender_email',
-                          textInputType: TextInputType.emailAddress,
-                          nameField: 'sender_email',
-                        ),
-                        CustomTextFormField(
-                          controller: _recipientEmailController,
-                          hintText: 'enter_recipient_email',
-                          textInputType: TextInputType.emailAddress,
-                          nameField: 'recipient_email',
-                        ),
-                        PhoneFieldWidget(
-                          nameField: 'sender_number',
-                          onChange: (value) {
-                            setState(() {
-                              _senderPhone = value;
-                            });
-                          },
-                        ),
-                        PhoneFieldWidget(
-                          nameField: 'recipient_number',
-                          onChange: (value) {
-                            setState(() {
-                              _recipientPhone = value;
-                            });
-                          },
-                        ),
-                        InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (context) => Center(
-                                    child: BeautifulDatePicker(
-                                      firstDate: DateTime.now(),
-                                      onDateSelected: _onDateSelected,
-                                      lastDate: DateTime.now().add(
-                                        const Duration(days: 100),
-                                      ),
-                                    ),
+                      ),
+                      const SizedBox(height: 16),
+                      SelectCardWidget(
+                        onCardSelected: (cardId) {
+                          setState(() {
+                            _selectedCardId = cardId;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
+                            CustomTextFormField(
+                              controller: _messageController,
+                              hintText: 'message',
+                              textInputType: TextInputType.text,
+                              nameField: 'type_here',
+                              maxLines: 3,
+                              borderRadius: 10,
+                            ),
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(vertical: 16),
+                            //   decoration: BoxDecoration(
+                            //     border: Border(
+                            //       top: BorderSide(
+                            //         color: AppColors.cP50.withAlpha(
+                            //           (0.2 * 255).toInt(),
+                            //         ),
+                            //       ),
+                            //       bottom: BorderSide(
+                            //         color: AppColors.cP50.withAlpha(
+                            //           (0.2 * 255).toInt(),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            //   child: Row(
+                            //     children: [
+                            //       SvgPicture.asset(AppIcons.previewIc),
+                            //       const SizedBox(width: 8),
+                            //       Text(
+                            //         'preview_e_card'.tr(),
+                            //         style: Theme.of(context).textTheme.displaySmall
+                            //             ?.copyWith(color: AppColors.primaryColor),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            CustomCheckBox(
+                              checkBox: true,
+                              fillTrueValue: AppColors.cP50,
+                              borderColor: AppColors.cP50,
+                              onTap: (value) {
+                                setState(() {
+                                  _sendWhenFinished = value;
+                                });
+                              },
+                              child: Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text(
+                                    'please_send_me_a_copy_of_the_e_card_when_it_is_sent'.tr(),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
                                   ),
-                            );
-                          },
-                          child: CustomTextFormField(
-                            enable: false,
-                            controller: _dateController,
-                            hintText: 'DD/MM/YYYY',
-                            textInputType: TextInputType.datetime,
-                            nameField: 'set_the_date',
-                            prefixIcon: Padding(
-                              padding: EdgeInsetsGeometry.only(
-                                top: 16,
-                                bottom: 16,
-                                right:
-                                    context.locale.languageCode == 'ar'
-                                        ? 16
-                                        : 0,
-                                left:
-                                    context.locale.languageCode == 'ar'
-                                        ? 0
-                                        : 16,
-                              ),
-                              child: SvgPicture.asset(AppIcons.dateIc),
-                            ),
-                          ),
-                        ),
-                      ].paddingDirectional(top: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SelectCardWidget(
-                    onCardSelected: (cardId) {
-                      setState(() {
-                        _selectedCardId = cardId;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      children: [
-                        CustomTextFormField(
-                          controller: _messageController,
-                          hintText: 'message',
-                          textInputType: TextInputType.text,
-                          nameField: 'type_here',
-                          maxLines: 3,
-                          borderRadius: 10,
-                        ),
-                        // Container(
-                        //   padding: const EdgeInsets.symmetric(vertical: 16),
-                        //   decoration: BoxDecoration(
-                        //     border: Border(
-                        //       top: BorderSide(
-                        //         color: AppColors.cP50.withAlpha(
-                        //           (0.2 * 255).toInt(),
-                        //         ),
-                        //       ),
-                        //       bottom: BorderSide(
-                        //         color: AppColors.cP50.withAlpha(
-                        //           (0.2 * 255).toInt(),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   child: Row(
-                        //     children: [
-                        //       SvgPicture.asset(AppIcons.previewIc),
-                        //       const SizedBox(width: 8),
-                        //       Text(
-                        //         'preview_e_card'.tr(),
-                        //         style: Theme.of(context).textTheme.displaySmall
-                        //             ?.copyWith(color: AppColors.primaryColor),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        CustomCheckBox(
-                          checkBox: true,
-                          fillTrueValue: AppColors.cP50,
-                          borderColor: AppColors.cP50,
-                          onTap: (value) {
-                            setState(() {
-                              _sendWhenFinished = value;
-                            });
-                          },
-                          child: Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                              ),
-                              child: Text(
-                                'please_send_me_a_copy_of_the_e_card_when_it_is_sent'
-                                    .tr(),
-                                style: Theme.of(context).textTheme.displaySmall
-                                    ?.copyWith(fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ),
-                          ),
+                            CustomTextButton(onPress: _sendECard, childText: 'send_e_card'.tr()),
+                            const SizedBox(height: 16),
+                          ].paddingDirectional(top: 16),
                         ),
-                        CustomTextButton(
-                          onPress: _sendECard,
-                          childText: 'send_e_card'.tr(),
-                        ),
-                        const SizedBox(height: 16),
-                      ].paddingDirectional(top: 16),
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+        );
+      },
     );
   }
 }

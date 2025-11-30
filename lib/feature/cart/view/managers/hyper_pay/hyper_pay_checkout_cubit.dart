@@ -33,11 +33,11 @@ class HyperPayCubit extends Cubit<HyperPayState> {
     );
   }
 
-  Future<void> hyperPayHandler(BuildContext context, String checkoutId) async {
+  Future<void> hyperPayHandler(BuildContext context, String checkoutId, PurchaseType purchaseType) async {
     emit(HyperPayLoading());
-    animationDialogLoading(context);
-    final result = await _hyperPayDataSource.hyperPayHandler(checkoutId);
-    closeDialog(context);
+    // animationDialogLoading(context);
+    final result = await _hyperPayDataSource.hyperPayHandler(checkoutId,purchaseType);
+    // closeDialog(context);
     result.fold(
       (failure) {
         customShowToast(context, failure.errMessage);
@@ -45,7 +45,7 @@ class HyperPayCubit extends Cubit<HyperPayState> {
       },
       (unit) {
         customShowToast(context, unit);
-        CartCubit.of(context).fetchCartItems();
+        // CartCubit.of(context).fetchCartItems();
         emit(HyperPaySuccess());
       },
     );
@@ -65,3 +65,4 @@ class HyperPayCubit extends Cubit<HyperPayState> {
     );
   }
 }
+

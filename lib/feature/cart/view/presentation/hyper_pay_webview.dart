@@ -13,11 +13,14 @@ import 'package:tua/feature/cart/view/managers/hyper_pay/hyper_pay_checkout_cubi
 import 'package:tua/feature/navigation/view/presentation/navigation_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../data/data_source/hyper_pay_data_source.dart';
+
 class HyperPayWebView extends StatefulWidget {
   final HyperPayCheckoutInner checkoutData;
   final HyperPayConfigData config;
+  final  PurchaseType purchaseType;
 
-  const HyperPayWebView({super.key, required this.checkoutData, required this.config});
+  const HyperPayWebView({super.key, required this.checkoutData, required this.config, required this.purchaseType});
 
   @override
   State<HyperPayWebView> createState() => _HyperPayWebViewState();
@@ -26,10 +29,12 @@ class HyperPayWebView extends StatefulWidget {
 class _HyperPayWebViewState extends State<HyperPayWebView> {
   late final WebViewController _controller;
   bool _isLoading = true;
+  bool _isProcessingPayment = false;
 
   @override
   void initState() {
     super.initState();
+    log('////////////*********** ${widget.purchaseType.apiValue}');
     _initializeWebView();
   }
 
@@ -177,7 +182,9 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
 
     final isShopperResultUrl = currentHost == resultHost && (currentPath == resultPath || currentPath.startsWith(resultPath));
 
-    if (isShopperResultUrl) {
+    if (isShopperResultUrl&& !_isProcessingPayment) {
+      _isProcessingPayment = true; // Set flag
+
       log('✅ Shopper result URL detected!');
       log('Query parameters: ${uri.queryParameters}');
 
@@ -192,7 +199,7 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
       // Call backend to verify payment status (cart/hyperpay-handler)
       // Use the cubit reference we got before popping
       log('Calling cart/hyperpay-handler with checkout ID: $checkoutId');
-      await cubit.hyperPayHandler(context, checkoutId);
+      await cubit.hyperPayHandler(context, checkoutId, widget.purchaseType);
       // Close WebView immediately and navigate back to app
       Navigator.of(context).pop();
     }
@@ -206,7 +213,7 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
           // Payment verified successfully
           log('Payment verification successful');
 
-          Navigator.of(context).pop(); // Close WebView
+          // Navigator.of(context).pop(); // Close WebView
           Navigator.of(context).pop(); // Close cart view
           context.navigateToPageWithReplacement(const NavigationView());
 
