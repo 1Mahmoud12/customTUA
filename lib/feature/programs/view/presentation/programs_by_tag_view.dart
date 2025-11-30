@@ -31,8 +31,10 @@ class _ProgramsByTagViewState extends State<ProgramsByTagView> {
 
   List<DonationProgramModel> _filterPrograms(List<DonationProgramModel> programs) {
     // First filter by tag
-    final tagFiltered = programs.where((program) => program.tag.toLowerCase() == widget.tag.toLowerCase()).toList();
-
+    final tagFiltered = programs.where(
+          (program) =>
+          program.tag.trim().toLowerCase().contains(widget.tag.trim().toLowerCase()),
+    ).toList();
     // Then filter by search query if provided
     if (_searchQuery.isEmpty) {
       return tagFiltered;

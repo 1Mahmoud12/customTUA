@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:tua/core/component/custom_load_switch_widget.dart';
 import 'package:tua/core/themes/colors.dart';
@@ -16,8 +15,6 @@ import 'package:tua/feature/menu/view/presentation/widgets/selected_language_dia
 import 'package:tua/feature/myContribution/view/presentation/my_contributions_view.dart';
 import 'package:tua/feature/secondaryUser/view/presentation/secondary_user_view.dart';
 import 'package:tua/feature/sponsorship/view/presentation/sponsorship_view.dart';
-import 'package:tua/feature/staticPages/data/data_source/basic_page_data_source.dart';
-import 'package:tua/feature/staticPages/view/manager/basic_page_cubit.dart';
 import 'package:tua/feature/staticPages/view/presentation/contact_us_view.dart';
 import 'package:tua/feature/staticPages/view/presentation/terms_conditions_view.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/volunteering_programs_view.dart';

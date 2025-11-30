@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/themes/colors.dart';
@@ -17,7 +18,7 @@ class DonationHeaderSection extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         ImageDonationWidget(
-          nameTittle: detailsModel.tag ?? '',
+          nameTittle: detailsModel.tag?.tr() ?? '',
           image: detailsModel.image,
           color: AppColors.cIncidentColor,
           edgeInsetsGeometry: EdgeInsets.zero,

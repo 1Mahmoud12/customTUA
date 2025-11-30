@@ -373,5 +373,7 @@
   "enter_quantity": "Enter quantity",
   "us_dollar": "US Dollar",
   "jordanian_dinar": "Jordanian Dinar",
+  "invalid_download_url": "This is not a valid download URL",
+
   "": ""
 }
