@@ -9,10 +9,15 @@ import 'package:tua/feature/common/data/dataSource/program_tag_data_source.dart'
 import 'package:tua/feature/common/data/models/program_tag_model.dart';
 
 class FiltersWidget extends StatefulWidget {
-  final int selectedFilter;
-  final Function(int)? onTap;
+  final String? selectedTag; // null = all
+  final Function(String?)? onTapTag;
 
-  const FiltersWidget({super.key, required this.selectedFilter, this.onTap});
+
+  const FiltersWidget({
+    super.key,
+    required this.selectedTag,
+    this.onTapTag,
+  });
 
   @override
   State<FiltersWidget> createState() => _FiltersWidgetState();
@@ -89,21 +94,25 @@ class _FiltersWidgetState extends State<FiltersWidget> {
     final filters = <Widget>[
       ItemFilterWidget(
         title: 'all',
-        isSelected: widget.selectedFilter == 0,
-        onTap: () => widget.onTap?.call(0),
+        isSelected: widget.selectedTag == null,
+        onTap: () => widget.onTapTag?.call(null),
+
       ),
     ];
 
     // Add API tags starting from index 1
     for (int i = 0; i < _programTags.length; i++) {
+      final tag = _programTags[i].title;
+
       filters.add(
-        ItemFilterWidget(
-          nameImage: _programTags[i].tagIcon,
-          title: _programTags[i].title,
-          isSelected: widget.selectedFilter == i + 1,
-          isUrl: true,
-          onTap: () => widget.onTap?.call(i + 1),
-        ),
+
+      ItemFilterWidget(
+      nameImage: _programTags[i].tagIcon,
+      title: _programTags[i].title,
+      isSelected: widget.selectedTag == tag,
+      isUrl: true,
+      onTap: () => widget.onTapTag?.call(tag),
+    ),
       );
     }
 
@@ -115,32 +124,32 @@ class _FiltersWidgetState extends State<FiltersWidget> {
         children: [
           ItemFilterWidget(
             title: 'all',
-            isSelected: widget.selectedFilter == 0,
-            onTap: () => widget.onTap?.call(0),
+            isSelected: widget.selectedTag == null,
+            onTap: () => widget.onTapTag?.call(null),
           ),
           ItemFilterWidget(
             nameImage: AppIcons.feedingIc,
             title: 'feeding',
-            isSelected: widget.selectedFilter == 1,
-            onTap: () => widget.onTap?.call(1),
+            isSelected: widget.selectedTag == 'feeding',
+            onTap: () => widget.onTapTag?.call('feeding'),
           ),
           ItemFilterWidget(
             nameImage: AppIcons.incidentsIc,
             title: 'incidents',
-            isSelected: widget.selectedFilter == 2,
-            onTap: () => widget.onTap?.call(2),
+            isSelected: widget.selectedTag == 'incidents',
+            onTap: () => widget.onTapTag?.call('incidents'),
           ),
           ItemFilterWidget(
             nameImage: AppIcons.volunteeringIc,
             title: 'volunteering',
-            isSelected: widget.selectedFilter == 3,
-            onTap: () => widget.onTap?.call(3),
+            isSelected: widget.selectedTag == 'volunteering',
+            onTap: () => widget.onTapTag?.call('volunteering'),
           ),
           ItemFilterWidget(
             nameImage: AppIcons.humanitarianAidIc,
             title: 'humanitarian_aid',
-            isSelected: widget.selectedFilter == 4,
-            onTap: () => widget.onTap?.call(4),
+            isSelected: widget.selectedTag == 'humanitarian_aid',
+            onTap: () => widget.onTapTag?.call('humanitarian_aid'),
           ),
         ],
       );

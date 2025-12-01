@@ -41,5 +41,6 @@ class RegisterParams {
     'residency_id': residencyId,
     'gender': gender,
     'phone': phone,
+    'agree':'1'
   };
 }

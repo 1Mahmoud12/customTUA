@@ -15,7 +15,9 @@ class DonationsView extends StatefulWidget {
 }
 
 class _DonationsViewState extends State<DonationsView> {
-  int _selectedFilter = 0;
+  String? _selectedTag;
+  String _searchQuery = '';
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,10 @@ class _DonationsViewState extends State<DonationsView> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(border: Border.all(color: AppColors.cP50, width: 2), borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.cP50, width: 2),
+                borderRadius: BorderRadius.circular(100),
+              ),
               child: InkWell(
                 onTap: () {
                   // if (userCacheValue == null) {
@@ -37,33 +42,45 @@ class _DonationsViewState extends State<DonationsView> {
                   // }
                   context.navigateToPage(const CreateCampaignView());
                 },
-                child: Text('create_campaign'.tr(), style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500)),
+                child: Text(
+                  'create_campaign'.tr(),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w500),
+                ),
               ),
             ),
           ),
         ],
-        title: Text('donations'.tr(), style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400)),
+        title: Text(
+          'donations'.tr(),
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 16),
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 16.0), child: SearchWidget()),
+             Padding(padding: EdgeInsets.symmetric(horizontal: 16.0), child: SearchWidget(
+               onChange: (value) {
+                 setState(() {
+                   _selectedTag = null;
+                   _searchQuery = value;
+                 });
+               },
+             )),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: FiltersWidget(
-                selectedFilter: _selectedFilter,
-                onTap: (p0) {
+                selectedTag: _selectedTag,
+                onTapTag: (tag) {
                   setState(() {
-                    _selectedFilter = p0;
+                    _selectedTag = tag; // null means "all"
                   });
                 },
               ),
             ),
             const SizedBox(height: 26),
-            const DonationsProgressWidget(),
-
+            DonationsProgressWidget(filterTag: _selectedTag, searchQuery: _searchQuery),
             const SizedBox(height: 90),
           ],
         ),

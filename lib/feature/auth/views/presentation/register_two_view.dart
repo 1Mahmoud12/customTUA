@@ -77,12 +77,14 @@ class _RegisterTwoViewState extends State<RegisterTwoView> {
                       CustomDropDownMenu(
                         selectedItem: DropDownModel(name: 'select_gender', value: -1),
                         items: ConstantsModels.lookupModel?.data?.genders
-                                ?.map((e) => DropDownModel(name: e.name, value: e.name.hashCode))
+                                ?.map((e) => DropDownModel(name: e.name.tr(), value: e.name))
                                 .toList() ??
                             [],
                         onChanged: (val) {
                           if (val != null) {
-                            registerCubit.setGender(val.name);
+                            registerCubit.setGender(val.value);
+                            debugPrint("gender sent: ${val.value}");
+
                           }
                         },
                       ),
@@ -95,11 +97,12 @@ class _RegisterTwoViewState extends State<RegisterTwoView> {
                         onChanged: (val) {
                           if (val != null) {
                             registerCubit.setNationality(val.value);
+
                           }
                         },
                       ),
                       CustomDropDownMenu(
-                        selectedItem: DropDownModel(name: 'select_residence', value: -1),
+                        selectedItem: DropDownModel(name: 'select_residence'.tr(), value: -1),
                         items: ConstantsModels.lookupModel?.data?.residencies
                                 ?.map((e) => DropDownModel(name: e.name ?? '', value: e.id))
                                 .toList() ??
@@ -111,7 +114,7 @@ class _RegisterTwoViewState extends State<RegisterTwoView> {
                         },
                       ),
                       PhoneFieldWidget(
-                        hintText: 'enter_your_phone'.tr(),
+                        // hintText: 'enter_your_phone'.tr(),
                         nameField: 'phone_number'.tr(),
 
                         onChange: (p0) {

@@ -93,46 +93,46 @@ class _MenuViewState extends State<MenuView> {
               );
             },
           ),
-          ItemProfileWidget(
-            name: 'sponsorship',
-            image: AppIcons.sponsershipIc,
-            onTap: () {
-              context.navigateToPage(
-                const SponsorshipView(),
-                pageTransitionType: PageTransitionType.rightToLeft,
-              );
-            },
-          ),
-          ItemProfileWidget(
-            name: 'donation_history',
-            image: AppIcons.donationHistoryIc,
-            onTap: () {
-              context.navigateToPage(
-                const DonationHistoryView(),
-                pageTransitionType: PageTransitionType.rightToLeft,
-              );
-            },
-          ),
-          ItemProfileWidget(
-            name: 'my_contributions',
-            image: AppIcons.myContributionIc,
-            onTap: () {
-              context.navigateToPage(
-                const MyContributionsView(),
-                pageTransitionType: PageTransitionType.rightToLeft,
-              );
-            },
-          ),
-          ItemProfileWidget(
-            name: 'secondary_user',
-            image: AppIcons.secondaryUserIc,
-            onTap: () {
-              context.navigateToPage(
-                const SecondaryUserView(),
-                pageTransitionType: PageTransitionType.rightToLeft,
-              );
-            },
-          ),
+          // ItemProfileWidget(
+          //   name: 'sponsorship',
+          //   image: AppIcons.sponsershipIc,
+          //   onTap: () {
+          //     context.navigateToPage(
+          //       const SponsorshipView(),
+          //       pageTransitionType: PageTransitionType.rightToLeft,
+          //     );
+          //   },
+          // ),
+          // ItemProfileWidget(
+          //   name: 'donation_history',
+          //   image: AppIcons.donationHistoryIc,
+          //   onTap: () {
+          //     context.navigateToPage(
+          //       const DonationHistoryView(),
+          //       pageTransitionType: PageTransitionType.rightToLeft,
+          //     );
+          //   },
+          // ),
+          // ItemProfileWidget(
+          //   name: 'my_contributions',
+          //   image: AppIcons.myContributionIc,
+          //   onTap: () {
+          //     context.navigateToPage(
+          //       const MyContributionsView(),
+          //       pageTransitionType: PageTransitionType.rightToLeft,
+          //     );
+          //   },
+          // ),
+          // ItemProfileWidget(
+          //   name: 'secondary_user',
+          //   image: AppIcons.secondaryUserIc,
+          //   onTap: () {
+          //     context.navigateToPage(
+          //       const SecondaryUserView(),
+          //       pageTransitionType: PageTransitionType.rightToLeft,
+          //     );
+          //   },
+          // ),
           ItemProfileWidget(
             name: 'about_the_application',
             image: AppIcons.aboutIc,

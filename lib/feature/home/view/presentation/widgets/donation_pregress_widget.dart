@@ -12,7 +12,9 @@ import '../../../../../core/component/loadsErros/loading_widget.dart';
 import '../../../../../core/utils/custom_show_toast.dart';
 
 class DonationsProgressWidget extends StatelessWidget {
-  const DonationsProgressWidget({super.key});
+  const DonationsProgressWidget({super.key, this.filterTag, this.searchQuery});
+  final String? filterTag; // null = all
+  final String? searchQuery;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +25,37 @@ class DonationsProgressWidget extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        List<DonationProgramModel> programs = [];
+        List<DonationProgramModel> filteredPrograms = [];
+        List<DonationProgramModel> allPrograms = [];
         final List<String> types = [];
+
         if (state is DonationProgramsLoaded) {
-          programs = state.programs;
+          allPrograms = state.programs;
+
+          filteredPrograms = state.programs;
+
+          if (filterTag != null && filterTag != 'all') {
+            filteredPrograms = filteredPrograms
+                .where((e) =>
+            e.tag.toLowerCase().trim() ==
+                filterTag!.toLowerCase().trim())
+                .toList();
+          }
+
+          if (searchQuery != null && searchQuery!.isNotEmpty) {
+            final query = searchQuery!.toLowerCase().trim();
+            filteredPrograms = filteredPrograms.where((program) {
+              final name = program.title?.toLowerCase() ?? '';
+
+              final tag = program.tag.toLowerCase();
+
+              return name.contains(query) ||
+                  tag.contains(query);
+            }).toList();
+          }
+
           types.clear();
-          for (final element in programs) {
+          for (final element in allPrograms) {
             if (!types.contains(element.tag)) {
               types.add(element.tag);
             }
@@ -36,17 +63,17 @@ class DonationsProgressWidget extends StatelessWidget {
         }
 
         // ⏳ Loading
-        if (state is DonationProgramsLoading && programs.isEmpty) {
+        if (state is DonationProgramsLoading && allPrograms.isEmpty) {
           return const Padding(padding: EdgeInsets.symmetric(vertical: 200), child: LoadingWidget());
         }
 
         // ❌ Error
-        if (state is DonationProgramsError && programs.isEmpty) {
+        if (state is DonationProgramsError && allPrograms.isEmpty) {
           return Container();
         }
 
         // 💤 Empty
-        if (programs.isEmpty) {
+        if (allPrograms.isEmpty) {
           return Container();
         }
 
@@ -55,27 +82,51 @@ class DonationsProgressWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              SeeAllWidget(title: 'donation_progress'.tr(), padding: EdgeInsets.zero, showSeeAll: false),
-              const SizedBox(height: 8),
-              ListView.separated(
-                shrinkWrap: true,
+              SeeAllWidget(
+                title: 'donation_progress'.tr(),
                 padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: programs.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final program = programs[index];
-                  return ItemDonateProgressWidget(donation: program);
-                },
+                showSeeAll: false,
               ),
+              const SizedBox(height: 8),
+              if (filteredPrograms.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 40),
+                  child: Column(
+                    children: [
+                      // Icon(
+                      //   Icons.search_off,
+                      //   size: 64,
+                      //   color: Colors.grey[400],
+                      // ),
+                      // const SizedBox(height: 16),
+                      Text(
+                        'no_programs_found'.tr()
+                            ,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                ListView.separated(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredPrograms.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final program = filteredPrograms[index];
+                    return ItemDonateProgressWidget(donation: program);
+                  },
+                ),
               const SizedBox(height: 26),
               const CustomDivider(),
               const SizedBox(height: 26),
               for (final type in types) Column(
                 children: [
-                  // SizedBox(height: 25,),
                   TypedDonationProgramsWidget(type: type, title: type),
-                // SizedBox(height: 100,)
                 ],
               ),
             ],

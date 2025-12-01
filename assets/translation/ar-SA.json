@@ -376,6 +376,12 @@
   "us_dollar": "دولار أمريكي",
   "jordanian_dinar": "دينار أردني",
   "invalid_download_url": "رابط التحميل غير صحيح",
+  "search_hint": "ابحث عن برامج التبرع...",
+  "select_residence": "اختر محل الإقامة",
+  "privacy_required": "يرجى الموافقة على سياسة الخصوصية للمتابعة.",
+  "Male": "ذكر",
+  "Female": "أنثى",
+  "account_created_success": " تم إنشاء حسابك بنجاح! يمكنك تسجيل الدخول الآن.",
 
   "": ""
 }

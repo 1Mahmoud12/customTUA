@@ -146,6 +146,10 @@ class _RegisterViewState extends State<RegisterView> {
                               if (_formKey.currentState!.validate()) {
                                 if (registerCubit.passwordController.text ==
                                     registerCubit.confirmPasswordController.text) {
+                                  if (!registerCubit.isTermsConditions) {
+                                    customShowToast(context, 'privacy_required'.tr());
+                                    return;
+                                  }
                                   context.navigateToPage(
                                       RegisterTwoView(registerCubit: registerCubit));
                                 } else {

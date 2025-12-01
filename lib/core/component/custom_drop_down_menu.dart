@@ -16,7 +16,7 @@ class DropDownModel {
   final String? additionalText;
   final bool showImage;
   final bool showName;
-  final int value;
+  final dynamic value;
   final Function()? onTap;
 
   DropDownModel({required this.name, required this.value, this.showImage = false, this.showName = true, this.image, this.additionalText, this.onTap});

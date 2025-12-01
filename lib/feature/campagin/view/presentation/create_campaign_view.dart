@@ -56,7 +56,10 @@ class CreateCampaignView extends StatelessWidget {
                         ),
 
                         /// ---------------------- MOBILE ----------------------
-                        PhoneFieldWidget(nameField: 'mobile_number', onChange: (value) => cubit.mobileNumber = value),
+                        PhoneFieldWidget(
+                          nameField: 'mobile_number',
+                          onChange: (value) => cubit.mobileNumber = value,
+                        ),
 
                         /// ---------------------- EMAIL ----------------------
                         CustomTextFormField(
@@ -99,8 +102,12 @@ class CreateCampaignView extends StatelessWidget {
                           },
                         ),
                         BlocProvider(
-                          create: (context) => DonationTypesCubit(DonationTypesDataSource())..getDonationTypes(),
-                          child: DonationTypeDropdown(onChanged: (value) => cubit.donationTypeId = value.toString()),
+                          create:
+                              (context) =>
+                                  DonationTypesCubit(DonationTypesDataSource())..getDonationTypes(),
+                          child: DonationTypeDropdown(
+                            onChanged: (value) => cubit.donationTypeId = value.toString(),
+                          ),
                         ),
 
                         /// ---------------------- START DATE ----------------------
@@ -201,9 +208,9 @@ class CreateCampaignView extends StatelessWidget {
           );
         },
         listener: (context, state) {
-          // if (state is CreateCampaignSuccess) {
-          //   customShowToast(context, 'campaign_created_successfully'.tr());
-          // }
+          if (state is CreateCampaignSuccess) {
+            Navigator.pop(context);
+          }
 
           if (state is CreateCampaignFailure) {
             customShowToast(context, state.message.tr(), showToastStatus: ShowToastStatus.error);

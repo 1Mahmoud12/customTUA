@@ -18,7 +18,7 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     if (value == null || value.isEmpty) {
       return 'password_required'.tr();
     }
-    if (value.length < 8) {
+    if (value.length < 6) {
       return 'password_length'.tr();
     }
     return null;
