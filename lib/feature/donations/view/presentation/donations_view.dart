@@ -59,7 +59,7 @@ class _DonationsViewState extends State<DonationsView> {
         child: Column(
           children: [
             const SizedBox(height: 16),
-             Padding(padding: EdgeInsets.symmetric(horizontal: 16.0), child: SearchWidget(
+             Padding(padding: const EdgeInsets.symmetric(horizontal: 16.0), child: SearchWidget(
                onChange: (value) {
                  setState(() {
                    _selectedTag = null;

@@ -24,6 +24,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final HomeCubit homeCubit = HomeCubit();
+  String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -37,29 +38,37 @@ class _HomeViewState extends State<HomeView> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SearchWidget(
-                hintText: 'Search campaign, charity,etc',
-                onTap: () {
-                  context.navigateToPage(const SearchView());
+                onChange: (value) {
+                  setState(() {
+                    _searchQuery = value;
+                  });
                 },
               ),
             ),
             const SizedBox(height: 16),
-            SliderWidget(homeCubit: homeCubit),
-            const SizedBox(height: 8),
-            const OurProgramsWidget(),
-            const SizedBox(height: 16),
-            const CustomDivider(),
-            const SizedBox(height: 16),
-            const QuickDonations(),
-            const SizedBox(height: 16),
-            const CustomDivider(),
-            const SizedBox(height: 16),
-            const QuickTools(),
-            const SizedBox(height: 16),
-            const CustomDivider(),
-            const SizedBox(height: 16),
-            const DonationsProgressWidget(),
-            SizedBox(height: 60.h),
+            if (_searchQuery.isNotEmpty)
+              DonationsProgressWidget(searchQuery: _searchQuery)
+            else
+              Column(
+                children: [
+                  SliderWidget(homeCubit: homeCubit),
+                  const SizedBox(height: 8),
+                  const OurProgramsWidget(),
+                  const SizedBox(height: 16),
+                  const CustomDivider(),
+                  const SizedBox(height: 16),
+                  const QuickDonations(),
+                  const SizedBox(height: 16),
+                  const CustomDivider(),
+                  const SizedBox(height: 16),
+                  const QuickTools(),
+                  const SizedBox(height: 16),
+                  const CustomDivider(),
+                  const SizedBox(height: 16),
+                  const DonationsProgressWidget(),
+                  SizedBox(height: 60.h),
+                ],
+              ),
           ],
         ),
       ),

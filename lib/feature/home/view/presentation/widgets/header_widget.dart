@@ -76,14 +76,29 @@ class HeaderWidget extends StatelessWidget {
                 if (state is ChangeCurrencyErrorState) {
                   customShowToast(context, state.error, showToastStatus: ShowToastStatus.error);
                 }
+                if (state is ChangeCurrencySuccessState) {
+                  customShowToast(
+                    context,
+                    'currency_changed_successfully'.tr(
+                      namedArgs: {'currency': state.data.data.currency},
+                    ),
+                  );
+                }
               },
-              child: IconButton(
-                onPressed: () {
-                  showCurrencyDialog(context);
+              child: PopupMenuButton<String>(
+                color: Colors.white,
+                onSelected: (value) {
+                  context.read<MainCubit>().changeCurrency(value);
                 },
-                icon: Image.asset(AppImages.changeCurrency, height: 30),
+                itemBuilder:
+                    (context) => [
+                      const PopupMenuItem(value: 'JOD', child: Text('JOD')),
+                      const PopupMenuItem(value: 'USD', child: Text('USD')),
+                    ],
+                child: Image.asset(AppImages.changeCurrency, height: 30),
               ),
             ),
+            const SizedBox(width: 5),
             InkWell(
               onTap: () {
                 context.navigateToPage(const NotificationsView());

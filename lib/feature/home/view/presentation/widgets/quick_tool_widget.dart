@@ -91,15 +91,12 @@ class ItemQuickDonationWidget extends StatelessWidget {
           children: [
             Image.asset(nameImage, width: 60, height: 60, fit: BoxFit.fill),
             const SizedBox(height: 10),
-            SizedBox(
-              width: 70.w,
-              child: Text(
-                title.tr(),
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w500),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Text(
+              title.tr(),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w500),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
