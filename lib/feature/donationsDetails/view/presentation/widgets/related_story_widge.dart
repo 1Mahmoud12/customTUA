@@ -196,15 +196,15 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                       }
                     },
                     builder: (context, state) {
-                      return Row(
+                      return state is AddCartItemLoading
+                          ? const LoadingWidget(color: AppColors.cRed900)
+                          : Row(
                         children: [
                           Expanded(
                             flex: 3,
                             child:
-                                state is AddCartItemLoading
-                                    ? const LoadingWidget(color: AppColors.cRed900)
-                                    : CustomTextButton(
-                                      onPress: () {
+                                 CustomTextButton(
+                                      onPress: () async{
                                         if (selectedItemId == null) {
                                           customShowToast(
                                             context,
@@ -216,7 +216,7 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                                         final selectedItem = widget.program.items!.firstWhere(
                                           (e) => e.id == selectedItemId,
                                         );
-                                        context.read<AddCartItemCubit>().addCartItems([
+                                        final bool success = await context.read<AddCartItemCubit>().addCartItems([
                                           AddCartItemParms(
                                             programId: widget.program.id.toString(),
                                             id: selectedItem.id.toString(),
@@ -228,6 +228,9 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                                             amount: selectedItem.amountJod ?? 2,
                                           ),
                                         ]);
+                                        if (success && context.mounted) {
+                                          context.navigateToPage(const NavigationView(customIndex: 2));
+                                        }
                                       },
                                       borderColor: AppColors.cRed900,
                                       borderWidth: 2,
@@ -249,7 +252,7 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                               final selectedItem = widget.program.items!.firstWhere(
                                 (e) => e.id == selectedItemId,
                               );
-                              final bool success = await context.read<AddCartItemCubit>().addCartItems([
+                               await context.read<AddCartItemCubit>().addCartItems([
                                 AddCartItemParms(
                                   programId: widget.program.id.toString(),
                                   id: selectedItem.id.toString(),
@@ -261,9 +264,7 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                                   amount: selectedItem.amountJod ?? 2,
                                 ),
                               ]);
-                              if (success && context.mounted) {
-                                context.navigateToPage(const NavigationView(customIndex: 2));
-                              }
+
                             },
                             child: Container(
                               padding: const EdgeInsets.all(10),

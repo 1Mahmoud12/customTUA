@@ -93,11 +93,13 @@ class DonationBottomPanel extends StatelessWidget {
                           customShowToast(context, 'enter_donation_amount'.tr());
                           return;
                         }
+                        FocusScope.of(context).unfocus();
 
                        final bool success =await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
 
-                        if (success) {
-                          context.read<ChangeCurrencyCubit>().resetItemCounts();
+                        if (success&& context.mounted) {
+                          context.navigateToPage(const NavigationView(customIndex: 2,));
+
                         }
                       },
                       cartAction: () async {
@@ -109,7 +111,7 @@ class DonationBottomPanel extends StatelessWidget {
 
                         final bool success = await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
                         if (success && context.mounted) {
-                          context.navigateToPage(const NavigationView(customIndex: 2,));
+                          context.read<ChangeCurrencyCubit>().resetItemCounts();
                         }
                       },
                     );
