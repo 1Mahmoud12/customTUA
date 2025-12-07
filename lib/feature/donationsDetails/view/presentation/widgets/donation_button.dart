@@ -8,8 +8,10 @@ import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/navigation/view/presentation/navigation_view.dart';
 
 class DonationButton extends StatelessWidget {
-  const DonationButton({super.key, required this.onTap});
+  const DonationButton({super.key, required this.onTap, required this.cartAction});
   final void Function() onTap;
+  final void Function() cartAction;
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,7 @@ class DonationButton extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         InkWell(
-          onTap: () {
-            context.navigateToPage(const NavigationView(customIndex: 2));
-          },
+          onTap: cartAction,
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 1.5, color: AppColors.cP50)),

@@ -42,6 +42,16 @@ class ChangeCurrencyCubit extends Cubit<ChangeCurrencyState> {
     }
     emit(DonationLoaded(items: details.items ?? [], currency: selectedCurrency, counts: itemCounts, total: _calculateTotal()));
   }
+  void resetItemCounts() {
+    itemCounts.updateAll((key, value) => 0);
+
+    emit(DonationLoaded(
+      items: details.items ?? [],
+      currency: selectedCurrency,
+      counts: itemCounts,
+      total: _calculateTotal(),
+    ));
+  }
 
   double _calculateTotal() {
     double total = 0;

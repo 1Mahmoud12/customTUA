@@ -171,7 +171,8 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
 
                           return RadioButtonModel(
                             id: item.id,
-                            name: '${amount?.toStringAsFixed(0) ?? 0.0} ${ConstantsModels.currency.tr()}',
+                            name:
+                                '${amount?.toStringAsFixed(0) ?? 0.0} ${ConstantsModels.currency.tr()}',
                             subtitle: item.title,
                           );
                         }).toList(),
@@ -236,8 +237,33 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                           ),
                           const SizedBox(width: 10),
                           InkWell(
-                            onTap: () {
-                              context.navigateToPage(const NavigationView(customIndex: 2));
+                            onTap: () async {
+                              if (selectedItemId == null) {
+                                customShowToast(
+                                  context,
+                                  'no_items_selected'.tr(),
+                                  showToastStatus: ShowToastStatus.error,
+                                );
+                                return;
+                              }
+                              final selectedItem = widget.program.items!.firstWhere(
+                                (e) => e.id == selectedItemId,
+                              );
+                              final bool success = await context.read<AddCartItemCubit>().addCartItems([
+                                AddCartItemParms(
+                                  programId: widget.program.id.toString(),
+                                  id: selectedItem.id.toString(),
+                                  donation: selectedItem.donationTypeGuid ?? '',
+                                  recurrence: 'once',
+                                  campaign: selectedItem.campaignGuid ?? '',
+                                  type: selectedItem.donationTypeId ?? 0,
+                                  quantity: 1,
+                                  amount: selectedItem.amountJod ?? 2,
+                                ),
+                              ]);
+                              if (success && context.mounted) {
+                                context.navigateToPage(const NavigationView(customIndex: 2));
+                              }
                             },
                             child: Container(
                               padding: const EdgeInsets.all(10),

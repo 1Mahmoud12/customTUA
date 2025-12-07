@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
+import 'package:tua/core/utils/navigate.dart';
 import 'package:tua/feature/donationsDetails/view/presentation/widgets/amount_text_field.dart';
+import 'package:tua/feature/navigation/view/presentation/navigation_view.dart';
 
 import '../../../../../core/component/loadsErros/loading_widget.dart';
 import '../../../../../core/themes/colors.dart';
@@ -32,6 +34,7 @@ class DonationBottomPanel extends StatelessWidget {
     required this.detailsModel,
     required this.selectedCurrency,
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,13 +88,29 @@ class DonationBottomPanel extends StatelessWidget {
                 return state is AddCartItemLoading
                     ? const LoadingWidget(color: AppColors.cRed900)
                     : DonationButton(
-                      onTap: () {
-                        if (detailsModel.type == 1 && (selectedAmount == null || selectedAmount == 0)) {
-                          customShowToast(context, 'please_select_an_amount'.tr());
+                      onTap: () async{
+                        if (detailsModel.type == 1 && amountController.text.isEmpty) {
+                          customShowToast(context, 'enter_donation_amount'.tr());
                           return;
                         }
 
-                        context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
+                       final bool success =await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
+
+                        if (success) {
+                          context.read<ChangeCurrencyCubit>().resetItemCounts();
+                        }
+                      },
+                      cartAction: () async {
+                        if (detailsModel.type == 1 && amountController.text.isEmpty) {
+                          customShowToast(context, 'enter_donation_amount'.tr());
+                          return;
+                        }
+                        FocusScope.of(context).unfocus();
+
+                        final bool success = await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
+                        if (success && context.mounted) {
+                          context.navigateToPage(const NavigationView(customIndex: 2,));
+                        }
                       },
                     );
               },

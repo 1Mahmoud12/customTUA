@@ -11,20 +11,30 @@ class AddCartItemCubit extends Cubit<AddCartItemState> {
 
   AddCartItemCubit(this._cartDataSource) : super(AddCartItemInitial());
 
-  Future<void> addCartItems(List<AddCartItemParms> params) async {
+  Future<bool> addCartItems(List<AddCartItemParms> params) async {
     if (params.isEmpty) {
       emit(const AddCartItemFailure('no_items_selected'));
-      return;
+      return false;
     }
 
     emit(AddCartItemLoading());
 
+    bool isSuccess = false;
+
     final result = await _cartDataSource.addCartItems(params: params);
 
     result.fold(
-          (failure) => emit(AddCartItemFailure(_mapFailureToMessage(failure))),
-          (_) => emit(AddCartItemSuccess()),
+          (failure) {
+        emit(AddCartItemFailure(_mapFailureToMessage(failure)));
+        isSuccess = false;
+      },
+          (_) {
+        emit(AddCartItemSuccess());
+        isSuccess = true;
+      },
     );
+
+    return isSuccess;
   }
 
   String _mapFailureToMessage(Failure failure) {

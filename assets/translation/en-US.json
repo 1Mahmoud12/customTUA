@@ -381,6 +381,7 @@
   "privacy_required": "Please agree to the privacy policy to continue.",
   "account_created_success": " Your account has been created successfully! You can log in now.",
   "currency_changed_successfully": "Currency has been successfully changed to {currency}",
+  "enter_donation_amount": "Please enter the amount you wish to donate",
 
   "": ""
 }

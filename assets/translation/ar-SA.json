@@ -383,6 +383,7 @@
   "Female": "أنثى",
   "account_created_success": " تم إنشاء حسابك بنجاح! يمكنك تسجيل الدخول الآن.",
   "currency_changed_successfully": "تم تغيير العملة بنجاح إلى {currency}",
+  "enter_donation_amount": "يرجى إدخال المبلغ الذي ترغب بالتبرع به",
 
   "": ""
 }
