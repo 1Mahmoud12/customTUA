@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../../core/utils/constants_models.dart';
 import '../../../../donations/data/models/donation_program_details_model.dart';
 
 part 'change_currency_state.dart';
@@ -24,7 +25,7 @@ class ChangeCurrencyCubit extends Cubit<ChangeCurrencyState> {
     emit(DonationLoaded(items: details.items ?? [], currency: selectedCurrency, counts: itemCounts, total: _calculateTotal()));
   }
 
-  String get selectedCurrency => selectedCurrencyIndex == 0 ? 'JOD' : 'USD';
+  String get selectedCurrency => ConstantsModels.currency;
 
   void changeCurrency(int index) {
     selectedCurrencyIndex = index;
@@ -59,7 +60,7 @@ class ChangeCurrencyCubit extends Cubit<ChangeCurrencyState> {
     for (final item in details.items ?? []) {
       final int count = itemCounts[item.id] ?? 0;
 
-      if (selectedCurrency == 'JOD') {
+      if (selectedCurrency.toLowerCase() == 'jod') {
         total += count * (item.amountJod ?? 0);
       } else {
         total += count * (item.amountUsd ?? 0);

@@ -87,6 +87,10 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
       return AppColors.cP50;
     }
   }
+  Color hexToColor(String hex) {
+    hex = hex.replaceAll('#', '');
+    return Color(int.parse('0xff$hex'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +139,9 @@ class _OurProgramsWidgetState extends State<OurProgramsWidget> {
                         child: ItemProgramWidget(
                           nameItem: tag.title.trim().tr(),
                           nameImage: tag.tagIcon,
-                          colorItem: _parseColor(
+                          colorItem: hexToColor(
                             tag.color,
-                          ).withAlpha((.1 * 255).toInt()),
+                          ),
                           isUrl: true,
                           onTap: () => _navigateToProgram(tag.title, tag.title),
                         ),

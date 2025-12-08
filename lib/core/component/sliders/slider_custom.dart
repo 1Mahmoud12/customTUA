@@ -2,51 +2,72 @@ import 'package:flutter/material.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/extensions.dart';
 
-class SliderCustom extends StatefulWidget {
+class SliderCustom extends StatelessWidget {
   final double valueSlider;
   final Color? activeTrackColor;
   final Color? inactiveTrackColor;
 
-  const SliderCustom({super.key, required this.valueSlider, this.activeTrackColor, this.inactiveTrackColor});
+  const SliderCustom({
+    super.key,
+    required this.valueSlider,
+    this.activeTrackColor,
+    this.inactiveTrackColor,
+  });
 
-  @override
-  State<SliderCustom> createState() => _SliderCustomState();
-}
-
-class _SliderCustomState extends State<SliderCustom> {
   @override
   Widget build(BuildContext context) {
-    final double valueSlider = widget.valueSlider;
-    final double activeTrackWidth = (valueSlider / 100) * context.screenWidth;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
 
-    return Stack(
-      alignment: Alignment.centerLeft,
-      children: [
-        Container(
-          height: 10,
-          width: context.screenWidth,
-          decoration: BoxDecoration(color: AppColors.greyG800, borderRadius: BorderRadius.circular(10)),
-        ),
-        Row(
+        const badgeWidth = 55;
+        final trackWidth = maxWidth - badgeWidth;
+
+        final activeTrackWidth = (valueSlider / 100) * trackWidth;
+
+        return Stack(
+          alignment: Alignment.centerLeft,
           children: [
+            // Base track
             Container(
               height: 10,
-              width: activeTrackWidth, // This should be the absolute width in pixels
-              decoration: BoxDecoration(color: widget.activeTrackColor ?? AppColors.cRed900, borderRadius: BorderRadius.circular(10)),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: widget.activeTrackColor ?? AppColors.cRed900, borderRadius: BorderRadius.circular(8)),
-              child: Center(
-                child: Text(
-                  '${valueSlider.toInt()} %',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.scaffoldBackGround, fontWeight: FontWeight.w500),
-                ),
+              width: maxWidth,
+              decoration: BoxDecoration(
+                color: inactiveTrackColor ?? AppColors.greyG800,
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
+            Row(
+              children: [
+                Container(
+                  height: 10,
+                  width: activeTrackWidth, // This should be the absolute width in pixels
+                  decoration: BoxDecoration(
+                    color: activeTrackColor ?? AppColors.cRed900,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: activeTrackColor ?? AppColors.cRed900,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${valueSlider.toInt()} %',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: AppColors.scaffoldBackGround,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

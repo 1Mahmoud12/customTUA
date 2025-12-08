@@ -94,6 +94,7 @@ class AppIcons {
   static const deleteDobbzIc = '$baseUrl/deleteDobbzIc.svg';
   static const editDobbzIc = '$baseUrl/editDobbzIc.svg';
   static const filleDelete = '$baseUrl/filleDelete.svg';
+  static const currencyIc='$baseUrl/cerrency.svg';
 
   //contacts
 

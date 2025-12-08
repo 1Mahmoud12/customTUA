@@ -19,7 +19,7 @@ class DonationCurrencySection extends StatelessWidget {
       children: [
         CurrencyWidget(details: detailsModel, onChange: (v) => onChange(v)),
         const CustomDividerWidget(height: 20),
-        const SelectCurrencyWidget(),
+        SelectCurrencyWidget(detailsModel: detailsModel),
         const CustomDividerWidget(height: 20),
 
       ],

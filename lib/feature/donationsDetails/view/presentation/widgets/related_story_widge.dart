@@ -264,7 +264,6 @@ class _ItemRelatedStoryWidgetState extends State<ItemRelatedStoryWidget> {
                                   amount: selectedItem.amountJod ?? 2,
                                 ),
                               ]);
-
                             },
                             child: Container(
                               padding: const EdgeInsets.all(10),

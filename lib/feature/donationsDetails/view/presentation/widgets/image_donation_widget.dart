@@ -24,7 +24,7 @@ class ImageDonationWidget extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-              decoration: BoxDecoration(color: AppColors.cRed900, borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color:color, borderRadius: BorderRadius.circular(8)),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

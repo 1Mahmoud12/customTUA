@@ -8,7 +8,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
 import 'package:tua/feature/donations/data/models/donation_program_details_model.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../../core/themes/colors.dart';
 import '../../../../../core/utils/app_icons.dart';
 
@@ -29,9 +28,10 @@ class DonationTabsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (tabs == null) return const SizedBox();
+    if (tabs == null || tabs!.isEmpty) return const SizedBox();
 
     return Column(
+      mainAxisSize: MainAxisSize.min, // Important: prevents unbounded height
       children: [
         TabBar(
           labelStyle: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
@@ -42,14 +42,18 @@ class DonationTabsSection extends StatelessWidget {
           ).textTheme.titleLarge?.copyWith(color: AppColors.cP50.withOpacity(.5)),
           tabs: tabs!.map((e) => Tab(text: e.title)).toList(),
         ),
-        SizedBox(
-          height: 200,
+        // Use ConstrainedBox with maxHeight instead of Flexible
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            // minHeight: 50,
+            maxHeight: 300, // Adjust this value based on your needs
+          ),
           child: TabBarView(
             children:
                 tabs!.map((tab) {
                   if (tab.labelUrl != null && tab.labelUrl!.isNotEmpty) {
-                    return Align(
-                      alignment: AlignmentDirectional.centerStart,
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -65,7 +69,6 @@ class DonationTabsSection extends StatelessWidget {
                           InkWell(
                             onTap: () async {
                               final url = tab.labelUrl?.trim() ?? '';
-
                               if (!isValidUrl(url)) {
                                 customShowToast(
                                   context,
@@ -122,8 +125,8 @@ class DonationTabsSection extends StatelessWidget {
                     );
                   }
 
-                  // Otherwise, show the tab description text
-                  return Padding(
+                  // For text content - make it scrollable with SingleChildScrollView
+                  return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
                       stripHtml(tab.brief ?? ''),
@@ -146,18 +149,16 @@ class DonationTabsSection extends StatelessWidget {
 
       // Download the file
       await dio.download(url, filePath);
-
       Navigator.of(context).pop(); // Close loading dialog
 
       // Try to open the downloaded file
       final result = await OpenFile.open(filePath);
-
       if (result.type != ResultType.done) {
         customShowToast(context, 'Could not open file: ${result.message}');
       }
     } catch (e) {
       Navigator.of(context).pop(); // Close loading dialog
-      customShowToast(context, 'Failed to download file: $e');
+      customShowToast(context, 'Failed to download file: $e');
     }
   }
 }

@@ -62,8 +62,8 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
                     ],
                   ),
                 ),
-                if (widget.detailsModel.relatedDonationPrograms != null)
-                  RelatedStoryWidget(relatedPrograms: widget.detailsModel.relatedDonationPrograms!),
+                // if (widget.detailsModel.relatedDonationPrograms != null)
+                //   RelatedStoryWidget(relatedPrograms: widget.detailsModel.relatedDonationPrograms!),
                 SizedBox(height: 190.h),
               ],
             ),

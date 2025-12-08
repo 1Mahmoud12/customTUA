@@ -82,8 +82,8 @@ class _ProgramsByTagViewState extends State<ProgramsByTagView> {
                         },
                       ),
                       if (filteredPrograms.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 50.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 50.0),
                           child: EmptyWidget(data: 'no_programs_found',),
                         )
                       else

@@ -1,23 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:tua/core/component/custom_load_switch_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/core/utils/bottomSheet/log_out_dialog.dart';
+import 'package:tua/core/utils/constants_models.dart';
 import 'package:tua/core/utils/navigate.dart';
-import 'package:tua/feature/donationHistory/view/presentation/donation_history_view.dart';
 import 'package:tua/feature/menu/view/presentation/widgets/data_profile_widget.dart'
     show DataProfileWidget;
 import 'package:tua/feature/menu/view/presentation/widgets/item_profile_widget.dart'
     show ItemProfileWidget;
 import 'package:tua/feature/menu/view/presentation/widgets/selected_language_dialog.dart';
-import 'package:tua/feature/myContribution/view/presentation/my_contributions_view.dart';
-import 'package:tua/feature/secondaryUser/view/presentation/secondary_user_view.dart';
-import 'package:tua/feature/sponsorship/view/presentation/sponsorship_view.dart';
 import 'package:tua/feature/staticPages/view/presentation/contact_us_view.dart';
 import 'package:tua/feature/staticPages/view/presentation/terms_conditions_view.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/volunteering_programs_view.dart';
+
+import '../../../home/view/presentation/widgets/change_currency_dialog.dart';
+import '../../../navigation/view/manager/homeBloc/cubit.dart';
+import '../../../navigation/view/manager/homeBloc/state.dart';
 
 class MenuView extends StatefulWidget {
   const MenuView({super.key});
@@ -91,6 +93,24 @@ class _MenuViewState extends State<MenuView> {
                   );
                 },
               );
+            },
+          ),
+          ItemProfileWidget(
+            name: 'currency',
+            image: AppIcons.currencyIc,
+            widget:           BlocBuilder<MainCubit, MainState>(
+
+            builder: (context, state) {
+    return Text(
+              ConstantsModels.currency,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(color: AppColors.greyG500, fontWeight: FontWeight.w400),
+            );
+  },
+),
+            onTap: () {
+              showCurrencyDialog(context);
             },
           ),
           // ItemProfileWidget(
