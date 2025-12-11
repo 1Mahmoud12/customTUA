@@ -35,10 +35,8 @@ class DonationBottomPanel extends StatelessWidget {
     required this.selectedCurrency,
   });
 
-
   @override
   Widget build(BuildContext context) {
-    // final quickItems = ConstantsModels.lookupModel?.data?.quickDonation?.items ?? [];
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: const BoxDecoration(
@@ -53,24 +51,6 @@ class DonationBottomPanel extends StatelessWidget {
         spacing: 5,
         children: [
           if (detailsModel.type == 1) ...[
-            // Wrap(
-            //   spacing: 8,
-            //   runSpacing: 8,
-            //   children:
-            //       quickItems.isNotEmpty
-            //           ? quickItems.map((item) {
-            //             return ItemOptionsWidget(
-            //               option: item.value,
-            //               onTap: (selected) {
-            //                 onAmountSelected(selected);
-            //               },
-            //               isSelected: selectedAmount == item.value,
-            //             );
-            //           }).toList()
-            //           : [50, 100, 200, 500, 1000].map((amount) {
-            //             return ItemOptionsWidget(option: amount, isSelected: selectedAmount == amount, onTap: (_) => onAmountSelected(amount));
-            //           }).toList(),
-            // ),
             AmountTextField(amountController: amountController, onAmountChanged: onAmountChanged),
           ],
           BlocProvider(
@@ -88,33 +68,52 @@ class DonationBottomPanel extends StatelessWidget {
                 return state is AddCartItemLoading
                     ? const LoadingWidget(color: AppColors.cRed900)
                     : DonationButton(
-                      onTap: () async{
-                        if (detailsModel.type == 1 && amountController.text.isEmpty) {
-                          customShowToast(context, 'enter_donation_amount'.tr());
-                          return;
-                        }
-                        FocusScope.of(context).unfocus();
+                  onTap: () async {
+                    if (detailsModel.type == 1 && amountController.text.isEmpty) {
+                      customShowToast(context, 'enter_donation_amount'.tr());
+                      return;
+                    }
 
-                       final bool success =await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
+                    // Validate that at least one item is selected for type 2
+                    if (detailsModel.type == 2) {
+                      final params = _buildParamsList(context);
+                      if (params.isEmpty) {
+                        customShowToast(context, 'please_select_items'.tr());
+                        return;
+                      }
+                    }
 
-                        if (success&& context.mounted) {
-                          context.navigateToPage(const NavigationView(customIndex: 2,));
+                    FocusScope.of(context).unfocus();
 
-                        }
-                      },
-                      cartAction: () async {
-                        if (detailsModel.type == 1 && amountController.text.isEmpty) {
-                          customShowToast(context, 'enter_donation_amount'.tr());
-                          return;
-                        }
-                        FocusScope.of(context).unfocus();
+                    final bool success = await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
 
-                        final bool success = await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
-                        if (success && context.mounted) {
-                          context.read<ChangeCurrencyCubit>().resetItemCounts();
-                        }
-                      },
-                    );
+                    if (success && context.mounted) {
+                      context.navigateToPage(const NavigationView(customIndex: 2));
+                    }
+                  },
+                  cartAction: () async {
+                    if (detailsModel.type == 1 && amountController.text.isEmpty) {
+                      customShowToast(context, 'enter_donation_amount'.tr());
+                      return;
+                    }
+
+                    // Validate that at least one item is selected for type 2
+                    if (detailsModel.type == 2) {
+                      final params = _buildParamsList(context);
+                      if (params.isEmpty) {
+                        customShowToast(context, 'no_items_selected'.tr());
+                        return;
+                      }
+                    }
+
+                    FocusScope.of(context).unfocus();
+
+                    final bool success = await context.read<AddCartItemCubit>().addCartItems(_buildParamsList(context));
+                    if (success && context.mounted) {
+                      context.read<ChangeCurrencyCubit>().resetItemCounts();
+                    }
+                  },
+                );
               },
             ),
           ),
@@ -129,9 +128,9 @@ class DonationBottomPanel extends StatelessWidget {
       return [
         AddCartItemParms(
           programId: detailsModel.id.toString(),
-          id: detailsModel.items!.first.id.toString(),
-          donation: detailsModel.items!.first.donationTypeGuid ?? '',
-          campaign: detailsModel.items!.first.campaignGuid ?? '',
+          id: detailsModel.items!.parents!.first.items!.first.id.toString(),
+          donation: detailsModel.items!.parents!.first.items!.first.donationTypeGuid ?? '',
+          campaign: detailsModel.items!.parents!.first.items!.first.campaignGuid ?? '',
           recurrence: 'once',
           type: detailsModel.type!,
           quantity: 1,
@@ -140,16 +139,28 @@ class DonationBottomPanel extends StatelessWidget {
       ];
     }
 
-    // Type 2: Multiple items
+    // Type 2: Multiple items from SELECTED parent only
     final cubit = context.read<ChangeCurrencyCubit>();
-
     final List<AddCartItemParms> list = [];
 
-    detailsModel.items?.forEach((item) {
-      final count = cubit.itemCounts[item.id] ?? 0;
-      if (count == 0) return; // Skip items not selected
+    // Get only the selected parent
+    final parents = detailsModel.items?.parents ?? [];
+    if (parents.isEmpty || cubit.selectedParentIndex >= parents.length) {
+      return list;
+    }
 
-      final unitAmount = cubit.selectedCurrency == 'JOD' ? (item.amountJod ?? 0) : (item.amountUsd ?? 0);
+    final selectedParent = parents[cubit.selectedParentIndex];
+
+    // Iterate through items in the selected parent only
+    for (final item in selectedParent.items ?? []) {
+      final count = cubit.itemCounts[item.id] ?? 0;
+
+      // Skip items with count = 0
+      if (count == 0) continue;
+
+      final unitAmount = cubit.selectedCurrency == 'JOD'
+          ? (item.amountJod ?? 0)
+          : (item.amountUsd ?? 0);
 
       list.add(
         AddCartItemParms(
@@ -163,7 +174,7 @@ class DonationBottomPanel extends StatelessWidget {
           amount: unitAmount, // amount per item
         ),
       );
-    });
+    }
 
     return list;
   }

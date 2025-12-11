@@ -19,7 +19,7 @@ class DonationProgramDetailsModel {
   final String? fatwaFile;
   final String? campaignReport;
   final List<DonationTabModel>? tabs;
-  final List<DonationItemModel>? items;
+  final DonationItemsContainer? items;
   final Map<String, String>? recurringTypes;
   final List<RelatedDonationProgramModel>? relatedDonationPrograms;
 
@@ -54,7 +54,6 @@ class DonationProgramDetailsModel {
     if (value == null) return null;
     if (value is num) return value.toDouble();
     if (value is String) {
-      // Remove currency text and commas, then parse
       final cleaned = value.replaceAll(RegExp(r'[^\d.]'), '');
       return double.tryParse(cleaned);
     }
@@ -85,15 +84,70 @@ class DonationProgramDetailsModel {
       tabs: (json['tabs'] as List?)
           ?.map((e) => DonationTabModel.fromJson(e))
           .toList(),
-      items: (json['items'] as List?)
-          ?.map((e) => DonationItemModel.fromJson(e))
-          .toList(),
+      items: json['items'] != null
+          ? DonationItemsContainer.fromJson(json['items'])
+          : null,
       recurringTypes: (json['recurring_types'] as Map?)?.map(
             (key, value) => MapEntry(key.toString(), value.toString()),
       ),
       relatedDonationPrograms: (json['related_donation_programs'] as List?)
           ?.map((e) => RelatedDonationProgramModel.fromJson(e))
           .toList(),
+    );
+  }
+}
+
+class DonationItemsContainer {
+  final List<DonationParentGroup>? parents;
+
+  DonationItemsContainer({this.parents});
+
+  factory DonationItemsContainer.fromJson(Map<String, dynamic> json) {
+    return DonationItemsContainer(
+      parents: (json['parents'] as List?)
+          ?.map((e) => DonationParentGroup.fromJson(e))
+          .toList(),
+    );
+  }
+
+  /// Helper method to get all items from all parent groups
+  // List<DonationItemModel> getAllItems() {
+  //   if (parents == null) return [];
+  //   return parents!
+  //       .expand((parent) => parent.items ?? [])
+  //       .toList();
+  // }
+}
+
+class DonationParentGroup {
+  final ParentInfo? info;
+  final List<DonationItemModel>? items;
+
+  DonationParentGroup({this.info, this.items});
+
+  factory DonationParentGroup.fromJson(Map<String, dynamic> json) {
+    return DonationParentGroup(
+      info: json['info'] != null ? ParentInfo.fromJson(json['info']) : null,
+      items: (json['items'] as List?)
+          ?.map((e) => DonationItemModel.fromJson(e))
+          .toList(),
+    );
+  }
+}
+
+class ParentInfo {
+  final int id;
+  final String title;
+
+  ParentInfo({
+    required this.id,
+    required this.title,
+  });
+
+  factory ParentInfo.fromJson(Map<String, dynamic> json) {
+    return ParentInfo(
+      id: json['id'],
+      title: json['title'] ?? '',
     );
   }
 }

@@ -29,23 +29,25 @@ class SelectCurrencyWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Text(
-            //   'select_currency'.tr(),
-            //   style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
-            // ),
-            //
-            // const SizedBox(height: 12),
-            //
-            // // currency switch
+            // Currency switch
             // CustomSwitchButton(
             //   expandValue: false,
-            //   items: [SwitchButtonModel(title: 'JOD', id: 0), SwitchButtonModel(title: 'USD', id: 1)],
+            //   items: [
+            //     SwitchButtonModel(title: 'JOD', id: 0),
+            //     SwitchButtonModel(title: 'USD', id: 1)
+            //   ],
             //   onChange: cubit.changeCurrency,
             //   initialIndex: cubit.selectedCurrencyIndex,
             // ),
             const SizedBox(height: 12),
 
-            // list of items (same your UI)
+            // Parent tabs (if multiple parents exist and have titles)
+            if (_shouldShowParentTabs(state.parents)) ...[
+              _buildParentTabs(context, state, cubit),
+              const SizedBox(height: 16),
+            ],
+
+            // Items list for current parent
             Column(
               children: [
                 ...state.items.map((item) {
@@ -54,10 +56,9 @@ class SelectCurrencyWidget extends StatelessWidget {
                   return ItemValueTrackerCurrencyWidget(
                     detailsModel: detailsModel,
                     name: item.title,
-                    value:
-                        ConstantsModels.currency.toLowerCase() == 'jod'
-                            ? item.amountJod ?? 0
-                            : item.amountUsd ?? 0,
+                    value: ConstantsModels.currency.toLowerCase() == 'jod'
+                        ? item.amountJod ?? 0
+                        : item.amountUsd ?? 0,
                     currency: ConstantsModels.currency,
                     count: count,
                     onIncrease: () => cubit.increase(item.id),
@@ -65,7 +66,7 @@ class SelectCurrencyWidget extends StatelessWidget {
                   );
                 }).toList(),
 
-                // total UI same as yours
+                // Total UI
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.cHumanitarianAidColor.withAlpha((.06 * 255).toInt()),
@@ -75,10 +76,9 @@ class SelectCurrencyWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     decoration: DottedDecoration(
                       borderRadius: BorderRadius.circular(100),
-                      color:
-                          detailsModel.color != null
-                              ? hexToColor(detailsModel.color!).withAlpha((.5 * 255).toInt())
-                              : AppColors.cHumanitarianAidColor.withAlpha((.5 * 255).toInt()),
+                      color: detailsModel.color != null
+                          ? hexToColor(detailsModel.color!).withAlpha((.5 * 255).toInt())
+                          : AppColors.cHumanitarianAidColor.withAlpha((.5 * 255).toInt()),
                       strokeWidth: 2,
                       dash: const [8, 4],
                       shape: Shape.box,
@@ -90,20 +90,18 @@ class SelectCurrencyWidget extends StatelessWidget {
                           'total'.tr(),
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w400,
-                            color:
-                                detailsModel.color != null
-                                    ? hexToColor(detailsModel.color!)
-                                    : AppColors.cHumanitarianAidColor,
+                            color: detailsModel.color != null
+                                ? hexToColor(detailsModel.color!)
+                                : AppColors.cHumanitarianAidColor,
                           ),
                         ),
                         Text(
                           '${state.total.toStringAsFixed(2)} ${ConstantsModels.currency}',
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w400,
-                            color:
-                                detailsModel.color != null
-                                    ? hexToColor(detailsModel.color!)
-                                    : AppColors.cHumanitarianAidColor,
+                            color: detailsModel.color != null
+                                ? hexToColor(detailsModel.color!)
+                                : AppColors.cHumanitarianAidColor,
                           ),
                         ),
                       ],
@@ -115,6 +113,40 @@ class SelectCurrencyWidget extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildParentTabs(
+      BuildContext context,
+      DonationLoaded state,
+      ChangeCurrencyCubit cubit,
+      ) {
+    // Convert parents to switch button items
+    final parentItems = state.parents
+        .asMap()
+        .entries
+        .map((entry) => SwitchButtonModel(
+      title: entry.value.info?.title ?? 'Parent ${entry.key + 1}',
+      id: entry.key,
+    ))
+        .toList();
+
+    return CustomSwitchButton(
+      expandValue: true,
+      items: parentItems,
+      onChange: cubit.changeParent,
+      initialIndex: state.selectedParentIndex,
+    );
+  }
+
+  /// Check if parent tabs should be shown
+  /// Returns true only if there are multiple parents AND at least one has a non-empty title
+  bool _shouldShowParentTabs(List<DonationParentGroup> parents) {
+    if (parents.length <= 1) return false;
+
+    // Check if any parent has a non-empty title
+    return parents.any((parent) =>
+    parent.info?.title != null && parent.info!.title.trim().isNotEmpty
     );
   }
 }
