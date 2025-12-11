@@ -1,12 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/component/custom_app_bar.dart';
 import 'package:tua/core/component/custom_drop_down_menu.dart';
 import 'package:tua/core/component/drop_menu.dart' show CustomPopupMenu;
 import 'package:tua/core/themes/colors.dart';
+import 'package:tua/core/utils/errorLoadingWidgets/empty_widget.dart';
+import 'package:tua/feature/donationHistory/data/data_source/get_donations_history_data_source.dart';
+import 'package:tua/feature/donationHistory/view/manager/donations_history_cubit.dart';
 import 'package:tua/feature/sponsorship/view/presentation/widgets/date_picker_dialog.dart';
 
+import '../../../../core/component/fields/custom_text_form_field.dart';
+import '../../../../core/utils/custom_show_toast.dart';
+import '../../../cart/view/managers/get_user_info/get_user_info_cubit.dart';
+import '../../../cart/view/managers/get_user_info/get_user_info_state.dart';
+import '../../data/models/donations_history_response.dart';
+import '../manager/donations_history_state.dart';
 import 'widgets/item_donation_history_widget.dart';
 
 class DonationHistoryView extends StatelessWidget {
@@ -16,73 +26,153 @@ class DonationHistoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(context: context, title: 'donation_history'),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          const SizedBox(height: 24),
-          CustomPopupMenu(selectedItem: DropDownModel(name: 'select_donor', value: -1), items: const [], nameField: 'donor_name'),
-          const SizedBox(height: 22.5),
-          Row(
-            children: [
-              Expanded(
-                child: CustomPopupMenu(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => Center(
-                            child: BeautifulDatePicker(
-                              firstDate: DateTime.now(),
-                              onDateSelected: (dateSelected) {
-                                print('dateSelected');
-                                print(dateSelected);
-                              },
-                              lastDate: DateTime.now().add(const Duration(days: 100)),
-                            ),
-                          ),
-                    );
-                  },
-                  nameField: 'from',
-                  selectedItem: DropDownModel(name: 'DD/MM/YYYY', value: -1),
-                  items: const [],
-                  showDropDownIcon: false,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: CustomPopupMenu(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => Center(
-                            child: BeautifulDatePicker(
-                              firstDate: DateTime.now(),
-                              onDateSelected: (dateSelected) {},
-                              lastDate: DateTime.now().add(const Duration(days: 100)),
-                            ),
-                          ),
-                    );
-                  },
-                  nameField: 'to',
-                  selectedItem: DropDownModel(name: 'DD/MM/YYYY', value: -1),
-                  items: const [],
-                  showDropDownIcon: false,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 30),
+      body: BlocProvider(
+        create: (context) => DonationsHistoryCubit(DonationsHistoryDataSource())..loadHistory(),
+        child: BlocConsumer<DonationsHistoryCubit, DonationsHistoryState>(
+          listener: (context, state) {
+            if (state is DonationsHistoryError) {
+              customShowToast(context, state.message.tr(), showToastStatus: ShowToastStatus.error);
+            }
+          },
+          builder: (context, state) {
+            final cubit = context.read<DonationsHistoryCubit>();
+            List<DonationItem> donations = [];
+            if (state is DonationsHistoryLoaded) {
+              donations = state.response.data.donations;
+            } else {
+              donations = cubit.cached?.data.donations ?? [];
+            }
 
-          const Column(children: [ItemDonationHistoryWidget(), ItemDonationHistoryWidget()]),
-        ],
+            return RefreshIndicator(
+              onRefresh: () => context.read<DonationsHistoryCubit>().refresh(),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  const SizedBox(height: 24),
+                  BlocBuilder<UserInfoCubit, GetUserInfoState>(
+                    builder: (context, state) {
+                      final cubit = context.read<UserInfoCubit>();
+                      return cubit.users.isNotEmpty
+                          ? CustomPopupMenu(
+                            onTap: () {},
+                            nameField: 'select_donor',
+                            selectedItem: DropDownModel(
+                              name: cubit.users.first.name,
+                              value: cubit.users.first.id,
+                            ),
+                            items:
+                                cubit.users
+                                    .map((e) => DropDownModel(name: e.name, value: e.id))
+                                    .toList(),
+                          )
+                          : const SizedBox();
+                    },
+                  ),
+                  const SizedBox(height: 22.5),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (_) => Center(
+                                    child: BeautifulDatePicker(
+                                      firstDate: DateTime.now().subtract(const Duration(days: 365 * 2)),
+                                      initialDate: DateTime.now(),
+                                      onDateSelected: cubit.onStartDateSelected,
+                                    ),
+                                  ),
+                            );
+                          },
+                          child: CustomTextFormField(
+                            enable: false,
+                            controller: cubit.startDateController,
+                            hintText: 'DD/MM/YYYY',
+                            nameField: 'start_date',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'please_select_start_date'.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      /// ---------------------- END DATE ----------------------
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (_) => Center(
+                                    child: BeautifulDatePicker(
+                                      firstDate: DateTime.now(),
+                                      initialDate: DateTime.now(),
+                                      onDateSelected: cubit.onEndDateSelected,
+                                    ),
+                                  ),
+                            );
+                          },
+                          child: CustomTextFormField(
+                            enable: false,
+                            controller: cubit.endDateController,
+                            hintText: 'DD/MM/YYYY',
+                            nameField: 'end_date',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'please_select_end_date'.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  if (state is DonationsHistoryLoading)
+                    const CircularProgressIndicator()
+                  else if (donations.isNotEmpty)
+                    Column(
+                      children: donations.map((e) => ItemDonationHistoryWidget(donation: e)).toList(),
+                    )
+                  else
+                    Column(
+                      children: [
+                        EmptyWidget(emptyImage: EmptyImages.noDonationsHistoryIc),
+                        SizedBox(height: 30,),
+                        CustomTextButton(
+                          onPress: () {
+                            cubit.loadHistory();
+                          },
+                          childText: 'retry'.tr(),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
       persistentFooterButtons: [
         Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             color: AppColors.white,
-            boxShadow: [BoxShadow(color: AppColors.cShadowColor.withAlpha((.25 * 255).toInt()), blurRadius: 15, offset: const Offset(0, -10))],
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.cShadowColor.withAlpha((.25 * 255).toInt()),
+                blurRadius: 15,
+                offset: const Offset(0, -10),
+              ),
+            ],
           ),
           child: CustomTextButton(onPress: () {}, childText: 'download_as_pdf'.tr()),
         ),

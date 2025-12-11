@@ -171,4 +171,9 @@ class EndPoints {
   static const getVolunteeringPrograms = 'utilities/volunteering-programs';
   static const getVolunteeringProgramById = 'utilities/volunteering-program-by-id';
   static const createDonationCampaign = 'utilities/donation-campaign';
+  // donations history
+  static const getDonationsHistory = 'user/donations-history';
+
+
+
 }

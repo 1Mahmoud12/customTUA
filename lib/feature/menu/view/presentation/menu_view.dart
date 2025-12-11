@@ -17,6 +17,7 @@ import 'package:tua/feature/staticPages/view/presentation/contact_us_view.dart';
 import 'package:tua/feature/staticPages/view/presentation/terms_conditions_view.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/volunteering_programs_view.dart';
 
+import '../../../donationHistory/view/presentation/donation_history_view.dart';
 import '../../../home/view/presentation/widgets/change_currency_dialog.dart';
 import '../../../navigation/view/manager/homeBloc/cubit.dart';
 import '../../../navigation/view/manager/homeBloc/state.dart';
@@ -123,16 +124,16 @@ class _MenuViewState extends State<MenuView> {
           //     );
           //   },
           // ),
-          // ItemProfileWidget(
-          //   name: 'donation_history',
-          //   image: AppIcons.donationHistoryIc,
-          //   onTap: () {
-          //     context.navigateToPage(
-          //       const DonationHistoryView(),
-          //       pageTransitionType: PageTransitionType.rightToLeft,
-          //     );
-          //   },
-          // ),
+          ItemProfileWidget(
+            name: 'donation_history',
+            image: AppIcons.donationHistoryIc,
+            onTap: () {
+              context.navigateToPage(
+                const DonationHistoryView(),
+                pageTransitionType: PageTransitionType.rightToLeft,
+              );
+            },
+          ),
           // ItemProfileWidget(
           //   name: 'my_contributions',
           //   image: AppIcons.myContributionIc,

@@ -5,8 +5,12 @@ import 'package:tua/core/component/cache_image.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/feature/donationHistory/view/presentation/widgets/show_details_donation_dialog.dart';
 
+import '../../../data/models/donations_history_response.dart';
+
 class ItemDonationHistoryWidget extends StatelessWidget {
-  const ItemDonationHistoryWidget({super.key});
+  const ItemDonationHistoryWidget({super.key, required this.donation});
+  final DonationItem donation;
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +25,14 @@ class ItemDonationHistoryWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CacheImage(urlImage: '', width: 70, height: 70, fit: BoxFit.fill, borderRadius: 16),
+            CacheImage(urlImage: donation.image, width: 70, height: 70, fit: BoxFit.fill, borderRadius: 16),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'To our children in Jordan & Gaza',
+                    donation.title,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -35,11 +40,12 @@ class ItemDonationHistoryWidget extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text('30 ${'JOD'.tr()}', style: Theme.of(context).textTheme.displayMedium),
+                      Text('${donation.amount} ${'JOD'.tr()}', style: Theme.of(context).textTheme.displayMedium),
                       const Spacer(),
                       //2024-05-24   |   16:19
                       Text(
-                        DateFormat('yyyy-MM-dd | HH:mm').format(DateTime.now()),
+                          DateFormat('yyyy-MM-dd | HH:mm')
+                              .format(DateTime.parse(donation.donationDate)),
                         style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.cP50.withAlpha((.50 * 255).toInt())),
                       ),
                     ],
