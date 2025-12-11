@@ -31,8 +31,10 @@ class TypedDonationProgramsWidget extends StatelessWidget {
           allPrograms = state.programs;
         }
 
-        // Filter programs by type/tag
-        final filteredPrograms = allPrograms.where((program) => program.tag.toLowerCase() == type.toLowerCase()).toList();
+        // ✅ Filter programs by type/tag with trim() to handle extra spaces
+        final filteredPrograms = allPrograms.where((program) =>
+        program.tag.trim().toLowerCase() == type.trim().toLowerCase()
+        ).toList();
 
         // Don't show widget if no programs match the type
         if (filteredPrograms.isEmpty && state is! DonationProgramsLoading) {
@@ -41,16 +43,21 @@ class TypedDonationProgramsWidget extends StatelessWidget {
 
         return Column(
           children: [
-            const SizedBox(height: 16,),
-
-            SeeAllWidget(title: title,showSeeAll: filteredPrograms.length>3,onTap: (){
-              context.navigateToPage(ProgramsByTagView(tag: type, title: title));
-
-            },),
+            const SizedBox(height: 16),
+            SeeAllWidget(
+              title: title,
+              showSeeAll: filteredPrograms.length > 3,
+              onTap: () {
+                context.navigateToPage(ProgramsByTagView(tag: type, title: title));
+              },
+            ),
             const SizedBox(height: 16),
             // ⏳ Loading
             if (state is DonationProgramsLoading && allPrograms.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 50), child: LoadingWidget())
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 50),
+                child: LoadingWidget(),
+              )
             // ✅ Loaded — show filtered donation programs
             else if (filteredPrograms.isNotEmpty)
               SingleChildScrollView(
@@ -65,7 +72,6 @@ class TypedDonationProgramsWidget extends StatelessWidget {
                   ],
                 ),
               )
-
           ],
         );
       },

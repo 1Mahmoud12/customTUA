@@ -98,19 +98,19 @@ class _MenuViewState extends State<MenuView> {
           ItemProfileWidget(
             name: 'currency',
             image: AppIcons.currencyIc,
-            widget:           BlocBuilder<MainCubit, MainState>(
-
-            builder: (context, state) {
-    return Text(
-              ConstantsModels.currency,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(color: AppColors.greyG500, fontWeight: FontWeight.w400),
-            );
-  },
-),
+            widget: BlocBuilder<MainCubit, MainState>(
+              builder: (context, state) {
+                return Text(
+                  ConstantsModels.currency,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppColors.greyG500,
+                    fontWeight: FontWeight.w400,
+                  ),
+                );
+              },
+            ),
             onTap: () {
-              showCurrencyDialog(context);
+              showCurrencyDialog(context,currentCurrency: ConstantsModels.currency);
             },
           ),
           // ItemProfileWidget(

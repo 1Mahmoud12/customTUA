@@ -35,7 +35,10 @@ class ItemProfileWidget extends StatelessWidget {
                 // height: 30,
                 // width: 30,
                 fit: BoxFit.cover,
-                colorFilter: const ColorFilter.mode(Color(0xff5BC2E7), BlendMode.srcIn),
+                colorFilter:
+                    name == 'logout'
+                        ? ColorFilter.mode(AppColors.cError300, BlendMode.srcIn)
+                        : const ColorFilter.mode(Color(0xff5BC2E7), BlendMode.srcIn),
               ),
             ),
             const SizedBox(width: 16),

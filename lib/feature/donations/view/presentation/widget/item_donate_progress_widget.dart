@@ -38,6 +38,7 @@ class ItemDonateProgressWidget extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     donation.title,

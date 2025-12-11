@@ -197,6 +197,7 @@ class ItemProgramWidget extends StatelessWidget {
                       width: 40,
                       height: 40,
                       fit: BoxFit.contain,
+                      svgColor: AppColors.white,
                     )
                     : SvgPicture.asset(nameImage),
           ),

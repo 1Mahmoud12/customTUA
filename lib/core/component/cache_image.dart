@@ -19,6 +19,7 @@ class CacheImage extends StatelessWidget {
   final Color? errorColor;
   final BoxFit? fit;
   final File? fileImage;
+  final Color? svgColor; // إضافة لون للـ SVG
 
   const CacheImage({
     super.key,
@@ -31,6 +32,7 @@ class CacheImage extends StatelessWidget {
     this.circle = false,
     this.fit,
     this.fileImage,
+    this.svgColor, // اللون المطلوب للـ SVG
   });
 
   @override
@@ -55,7 +57,10 @@ class CacheImage extends StatelessWidget {
                                 ? Container(
                                   width: width,
                                   height: height,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(borderRadius ?? 8), color: errorColor),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(borderRadius ?? 8),
+                                    color: errorColor,
+                                  ),
                                 )
                                 : profileImage!
                                 ? Image.asset(AppImages.defaultProfile)
@@ -77,7 +82,10 @@ class CacheImage extends StatelessWidget {
                                 ? Container(
                                   width: width,
                                   height: height,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(borderRadius ?? 8), color: errorColor),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(borderRadius ?? 8),
+                                    color: errorColor,
+                                  ),
                                 )
                                 : profileImage!
                                 ? Image.asset(AppImages.defaultProfile)
@@ -88,7 +96,10 @@ class CacheImage extends StatelessWidget {
                                         padding: const EdgeInsets.all(12),
                                         decoration: const BoxDecoration(color: AppColors.cP50),
                                         alignment: AlignmentDirectional.center,
-                                        child: SvgPicture.asset(AppIcons.logoAppIc, fit: fit ?? BoxFit.cover),
+                                        child: SvgPicture.asset(
+                                          AppIcons.logoAppIc,
+                                          fit: fit ?? BoxFit.cover,
+                                        ),
                                       ),
                                       Container(
                                         padding: const EdgeInsets.all(12),
@@ -107,8 +118,23 @@ class CacheImage extends StatelessWidget {
                 )
                 : SvgPictureNetwork(
                   url: urlImage ?? '',
-                  errorBuilder: (p0) => SizedBox(width: width ?? 30, height: height ?? 30, child: const Icon(Icons.error, color: Colors.grey)),
-                  placeholderBuilder: (p0) => SizedBox(width: width ?? 30, height: height ?? 30, child: const Icon(Icons.error, color: Colors.grey)),
+                  color: svgColor,
+                  // تمرير اللون للـ SVG
+                  width: width,
+                  height: height,
+                  fit: fit,
+                  errorBuilder:
+                      (p0) => SizedBox(
+                        width: width ?? 30,
+                        height: height ?? 30,
+                        child: const Icon(Icons.error, color: Colors.grey),
+                      ),
+                  placeholderBuilder:
+                      (p0) => SizedBox(
+                        width: width ?? 30,
+                        height: height ?? 30,
+                        child: const Icon(Icons.error, color: Colors.grey),
+                      ),
                 ),
       ),
     );
@@ -116,11 +142,24 @@ class CacheImage extends StatelessWidget {
 }
 
 class SvgPictureNetwork extends StatefulWidget {
-  const SvgPictureNetwork({super.key, required this.url, this.placeholderBuilder, this.errorBuilder});
+  const SvgPictureNetwork({
+    super.key,
+    required this.url,
+    this.placeholderBuilder,
+    this.errorBuilder,
+    this.color,
+    this.width,
+    this.height,
+    this.fit,
+  });
 
   final String url;
   final Widget Function(BuildContext)? placeholderBuilder;
   final Widget Function(BuildContext)? errorBuilder;
+  final Color? color;
+  final double? width;
+  final double? height;
+  final BoxFit? fit;
 
   @override
   State<SvgPictureNetwork> createState() => _SvgPictureNetworkState();
@@ -164,6 +203,12 @@ class _SvgPictureNetworkState extends State<SvgPictureNetwork> {
       return widget.placeholderBuilder?.call(context) ?? const SizedBox();
     }
 
-    return SvgPicture.memory(_svgFile!);
+    return SvgPicture.memory(
+      _svgFile!,
+      width: widget.width,
+      height: widget.height,
+      fit: widget.fit ?? BoxFit.contain,
+      colorFilter: widget.color != null ? ColorFilter.mode(widget.color!, BlendMode.srcIn) : null,
+    );
   }
 }

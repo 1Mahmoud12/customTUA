@@ -37,35 +37,45 @@ class DonationsProgressWidget extends StatelessWidget {
           filteredPrograms = state.programs;
 
           if (filterTag != null && filterTag != 'all') {
-            filteredPrograms =
-                filteredPrograms
-                    .where((e) => e.tag.toLowerCase().trim() == filterTag!.toLowerCase().trim())
-                    .toList();
+            filteredPrograms = filteredPrograms
+                .where((e) => e.tag.toLowerCase().trim() == filterTag!.toLowerCase().trim())
+                .toList();
           }
 
           if (searchQuery != null && searchQuery!.isNotEmpty) {
             final query = searchQuery!.toLowerCase().trim();
-            filteredPrograms =
-                filteredPrograms.where((program) {
-                  final name = program.title?.toLowerCase() ?? '';
+            filteredPrograms = filteredPrograms.where((program) {
+              final name = program.title.toLowerCase();
+              final tag = program.tag.toLowerCase();
+              return name.contains(query) || tag.contains(query);
+            }).toList();
+          }
 
-                  final tag = program.tag.toLowerCase();
+          // ✅ Fix: استخدم Set لإزالة التكرارات تلقائياً
+          // وقارن الـ tags بعد trim و toLowerCase
+          final Set<String> uniqueTags = {};
 
-                  return name.contains(query) || tag.contains(query);
-                }).toList();
+          for (final element in allPrograms) {
+            final cleanTag = element.tag.trim();
+            // استخدم lowercase للمقارنة لكن احفظ النسخة الأصلية
+            final lowerTag = cleanTag.toLowerCase();
+
+            // لو الـ tag مش موجود، ضيفه
+            if (!uniqueTags.any((tag) => tag.toLowerCase() == lowerTag)) {
+              uniqueTags.add(cleanTag);
+            }
           }
 
           types.clear();
-          for (final element in allPrograms) {
-            if (!types.contains(element.tag)) {
-              types.add(element.tag);
-            }
-          }
+          types.addAll(uniqueTags);
         }
 
         // ⏳ Loading
         if (state is DonationProgramsLoading && allPrograms.isEmpty) {
-          return const Padding(padding: EdgeInsets.symmetric(vertical: 200), child: LoadingWidget());
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 200),
+            child: LoadingWidget(),
+          );
         }
 
         // ❌ Error
@@ -82,11 +92,19 @@ class DonationsProgressWidget extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SeeAllWidget(title: 'donation_progress'.tr(), padding: EdgeInsets.zero, showSeeAll: false),
+              SeeAllWidget(
+                title: 'donation_progress'.tr(),
+                padding: EdgeInsets.zero,
+                showSeeAll: false,
+              ),
               const SizedBox(height: 8),
               if (filteredPrograms.isEmpty)
-                EmptyWidget(emptyImage: EmptyImages.noDonationsHistoryIc, data: 'no_programs_found'.tr())
+                EmptyWidget(
+                  emptyImage: EmptyImages.noDonationsHistoryIc,
+                  data: 'no_programs_found'.tr(),
+                )
               else
                 ListView.separated(
                   shrinkWrap: true,
@@ -103,7 +121,11 @@ class DonationsProgressWidget extends StatelessWidget {
               const CustomDivider(),
               const SizedBox(height: 26),
               for (final type in types)
-                Column(children: [TypedDonationProgramsWidget(type: type, title: type)]),
+                Column(
+                  children: [
+                    TypedDonationProgramsWidget(type: type, title: type),
+                  ],
+                ),
             ],
           ),
         );
