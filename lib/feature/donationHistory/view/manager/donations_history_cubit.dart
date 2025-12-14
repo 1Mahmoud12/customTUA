@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/network/local/hive_data_base.dart';
 
+import '../../../cart/view/managers/get_user_info/get_user_info_cubit.dart';
 import '../../data/data_source/get_donations_history_data_source.dart';
 import '../../data/models/donation_history_filter_params.dart';
 import '../../data/models/donations_history_response.dart';
@@ -49,10 +50,10 @@ class DonationsHistoryCubit extends Cubit<DonationsHistoryState> {
   }
 
   /// Load with optional filters
-  Future<void> loadHistory() async {
+  Future<void> loadHistory(BuildContext context) async {
     await _loadCachedData();
 
-    await _fetchDataFromApi();
+    await _fetchDataFromApi( context);
   }
 
   /// Load cached history
@@ -76,12 +77,17 @@ class DonationsHistoryCubit extends Cubit<DonationsHistoryState> {
       emit(DonationsHistoryLoading());
     }
   }
+  String userID='';
 
   /// Fetch fresh history from API
-  Future<void> _fetchDataFromApi() async {
+  ///
+  Future<void> _fetchDataFromApi(BuildContext context) async {
+    emit(DonationsHistoryLoading());
+
     final parms = DonationHistoryFilterParams(
       startDate: startDateController.text.trim(),
       endDate: endDateController.text.trim(),
+      name:'${context.read<UserInfoCubit>().selectedUser?.guid}|S|${context.read<UserInfoCubit>().selectedUser?.name}'
     );
 
     final result = await _dataSource.getDonationsHistory(params: parms);
@@ -124,8 +130,8 @@ class DonationsHistoryCubit extends Cubit<DonationsHistoryState> {
   }
 
   /// Force refresh
-  Future<void> refresh() async {
-    await loadHistory();
+  Future<void> refresh(BuildContext context) async {
+    await loadHistory(context);
   }
 
   @override

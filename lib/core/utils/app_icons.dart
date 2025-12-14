@@ -158,4 +158,5 @@ class AppIcons {
   static const currentNisabValueIc = '$baseUrl/currentNisabValueIc.svg';
   static const giftIc = '$baseUrl/giftIc.svg';
   static const previewIc = '$baseUrl/previewIc.svg';
+  static const cardSettingIc='$baseUrl/cardSettingIc.svg';
 }

@@ -383,6 +383,9 @@
   "currency_changed_successfully": "Currency has been successfully changed to {currency}",
   "enter_donation_amount": "Please enter the amount you wish to donate",
   "currency": "Currency",
-
+  "card_settings": "Card Settings",
+  "see_more": "See More",
+  "see_less": "See Less",
+  "complete_payment": "Complete Payment",
   "": ""
 }

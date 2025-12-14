@@ -5,6 +5,7 @@ import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/component/custom_app_bar.dart';
 import 'package:tua/core/component/custom_drop_down_menu.dart';
 import 'package:tua/core/component/drop_menu.dart' show CustomPopupMenu;
+import 'package:tua/core/component/loadsErros/loading_widget.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/errorLoadingWidgets/empty_widget.dart';
 import 'package:tua/feature/donationHistory/data/data_source/get_donations_history_data_source.dart';
@@ -27,7 +28,7 @@ class DonationHistoryView extends StatelessWidget {
     return Scaffold(
       appBar: customAppBar(context: context, title: 'donation_history'),
       body: BlocProvider(
-        create: (context) => DonationsHistoryCubit(DonationsHistoryDataSource())..loadHistory(),
+        create: (context) => DonationsHistoryCubit(DonationsHistoryDataSource())..loadHistory(context),
         child: BlocConsumer<DonationsHistoryCubit, DonationsHistoryState>(
           listener: (context, state) {
             if (state is DonationsHistoryError) {
@@ -44,7 +45,7 @@ class DonationHistoryView extends StatelessWidget {
             }
 
             return RefreshIndicator(
-              onRefresh: () => context.read<DonationsHistoryCubit>().refresh(),
+              onRefresh: () => context.read<DonationsHistoryCubit>().refresh(context),
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
@@ -52,19 +53,33 @@ class DonationHistoryView extends StatelessWidget {
                   BlocBuilder<UserInfoCubit, GetUserInfoState>(
                     builder: (context, state) {
                       final cubit = context.read<UserInfoCubit>();
+
                       return cubit.users.isNotEmpty
                           ? CustomPopupMenu(
-                            onTap: () {},
-                            nameField: 'select_donor',
-                            selectedItem: DropDownModel(
-                              name: cubit.users.first.name,
-                              value: cubit.users.first.id,
-                            ),
-                            items:
-                                cubit.users
-                                    .map((e) => DropDownModel(name: e.name, value: e.id))
-                                    .toList(),
-                          )
+                        onChanged: (DropDownModel? selectedItem) {
+                          if (selectedItem != null) {
+                            cubit.selectUser(selectedItem.value as int);
+                          }
+                          context.read<DonationsHistoryCubit>().userID='${cubit.selectedUser?.guid}|S|${cubit.selectedUser?.name}';
+
+                          // print('Selected user: ${cubit.selectedUser?.name}');
+                          // print('Selected user ID: ${cubit.selectedUser?.id}');
+                          // print('Selected user GUID: ${cubit.selectedUser?.guid}');
+                        },
+                        nameField: 'select_donor',
+                        selectedItem: cubit.selectedUser != null
+                            ? DropDownModel(
+                          name: cubit.selectedUser!.name,
+                          value: cubit.selectedUser!.id,
+                        )
+                            : DropDownModel(
+                          name: cubit.users.first.name,
+                          value: cubit.users.first.id,
+                        ),
+                        items: cubit.users
+                            .map((e) => DropDownModel(name: e.name, value: e.id))
+                            .toList(),
+                      )
                           : const SizedBox();
                     },
                   ),
@@ -80,7 +95,7 @@ class DonationHistoryView extends StatelessWidget {
                                   (_) => Center(
                                     child: BeautifulDatePicker(
                                       firstDate: DateTime.now().subtract(const Duration(days: 365 * 2)),
-                                      initialDate: DateTime.now(),
+                                      initialDate: DateTime.now().subtract(const Duration(days: 90)),
                                       onDateSelected: cubit.onStartDateSelected,
                                     ),
                                   ),
@@ -112,8 +127,9 @@ class DonationHistoryView extends StatelessWidget {
                               builder:
                                   (_) => Center(
                                     child: BeautifulDatePicker(
-                                      firstDate: DateTime.now(),
-                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.now().subtract(const Duration(days: 365 * 2)),
+                                      initialDate: DateTime.now().subtract(const Duration(days: 90)),
+                                      lastDate: DateTime.now(),
                                       onDateSelected: cubit.onEndDateSelected,
                                     ),
                                   ),
@@ -137,7 +153,10 @@ class DonationHistoryView extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   if (state is DonationsHistoryLoading)
-                    const CircularProgressIndicator()
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 100.0),
+                      child: LoadingWidget(),
+                    )
                   else if (donations.isNotEmpty)
                     Column(
                       children: donations.map((e) => ItemDonationHistoryWidget(donation: e)).toList(),
@@ -145,11 +164,11 @@ class DonationHistoryView extends StatelessWidget {
                   else
                     Column(
                       children: [
-                        EmptyWidget(emptyImage: EmptyImages.noDonationsHistoryIc),
-                        SizedBox(height: 30,),
+                        const EmptyWidget(emptyImage: EmptyImages.noDonationsHistoryIc),
+                        const SizedBox(height: 30,),
                         CustomTextButton(
                           onPress: () {
-                            cubit.loadHistory();
+                            cubit.loadHistory(context);
                           },
                           childText: 'retry'.tr(),
                         ),

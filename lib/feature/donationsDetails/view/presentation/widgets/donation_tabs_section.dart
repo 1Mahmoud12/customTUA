@@ -22,6 +22,7 @@ class DonationTabsSection extends StatefulWidget {
 
 class _DonationTabsSectionState extends State<DonationTabsSection> {
   final Map<int, bool> _expandedStates = {};
+  final Map<int, bool> _needsExpansion = {}; // 👈 جديد: لتتبع النصوص الطويلة
   int _currentTabIndex = 0;
 
   String stripHtml(String htmlString) {
@@ -34,10 +35,6 @@ class _DonationTabsSectionState extends State<DonationTabsSection> {
     return uri != null &&
         uri.hasAbsolutePath &&
         (uri.isScheme('http') || uri.isScheme('https'));
-  }
-
-  bool _isTextLong(String text) {
-    return text.length > 150; // Adjust this threshold as needed
   }
 
   @override
@@ -110,8 +107,7 @@ class _DonationTabsSectionState extends State<DonationTabsSection> {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (_) =>
-                const Center(child: CircularProgressIndicator()),
+                builder: (_) => const Center(child: CircularProgressIndicator()),
               );
 
               if (await canLaunchUrl(Uri.parse(fullUrl))) {
@@ -154,26 +150,55 @@ class _DonationTabsSectionState extends State<DonationTabsSection> {
     // For text content with see more/less
     final text = stripHtml(tab.brief ?? '');
     final isExpanded = _expandedStates[index] ?? false;
-    final isLongText = _isTextLong(text);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        AnimatedSize(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          child: Text(
-            text,
-            style: Theme.of(context)
-                .textTheme
-                .displayMedium
-                ?.copyWith(color: AppColors.cP50),
-            maxLines: isExpanded ? null : 3,
-            overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            // 👉 قياس النص لمعرفة إذا كان يتجاوز 5 أسطر
+            final textPainter = TextPainter(
+              text: TextSpan(
+                text: text,
+                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium
+                    ?.copyWith(color: AppColors.cP50),
+              ),
+              maxLines: 5,
+              textDirection:   Directionality.of(context),
+            )..layout(maxWidth: constraints.maxWidth);
+
+            final exceedsMaxLines = textPainter.didExceedMaxLines;
+
+            // 👉 تخزين النتيجة
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_needsExpansion[index] != exceedsMaxLines) {
+                setState(() {
+                  _needsExpansion[index] = exceedsMaxLines;
+                });
+              }
+            });
+
+            return AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: Text(
+                text,
+                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium
+                    ?.copyWith(color: AppColors.cP50),
+                maxLines: isExpanded ? null : 5,
+                overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+              ),
+            );
+          },
         ),
-        if (isLongText) ...[
+
+        // 👉 اعرض الزر فقط إذا كان النص فعلياً أطول من 5 أسطر
+        if (_needsExpansion[index] == true) ...[
           const SizedBox(height: 8),
           InkWell(
             onTap: () {

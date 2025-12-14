@@ -1,8 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/network/local/hive_data_base.dart';
-import 'package:tua/feature/cart/data/models/user_info_response_model.dart';
 import 'package:tua/feature/cart/data/data_source/get_user_info_data_source.dart';
+import 'package:tua/feature/cart/data/models/user_info_response_model.dart';
 
 import 'get_user_info_state.dart';
 
@@ -12,16 +13,25 @@ class UserInfoCubit extends Cubit<GetUserInfoState> {
 
   UserInfoCubit(this._dataSource) : super(GetUserInfoInitial());
 
-  /// 👉 Public variable as requested
   List<SecondaryUserModel> users = [];
 
-  /// Public method to load user info
+  /// 👉 Selected user - initially null or first user
+  SecondaryUserModel? selectedUser;
+
   Future<void> fetchUserInfo() async {
     await _loadCachedUsers();
     await _fetchUserInfoFromApi();
   }
 
-  /// Load cached users from Hive first
+  /// Method to select a user
+  void selectUser(int userId) {
+    selectedUser = users.firstWhere(
+          (user) => user.id == userId,
+      orElse: () => users.first,
+    );
+    emit(GetUserInfoLoaded(users, fromCache: false));
+  }
+
   Future<void> _loadCachedUsers() async {
     emit(GetUserInfoLoading());
 
@@ -33,6 +43,11 @@ class UserInfoCubit extends Cubit<GetUserInfoState> {
         final decoded = jsonDecode(cachedJson) as List<dynamic>;
         users = decoded.map((e) => SecondaryUserModel.fromJson(e)).toList();
 
+        // 👉 Set first user as default selected
+        if (users.isNotEmpty) {
+          selectedUser = users.first;
+        }
+
         emit(GetUserInfoLoaded(users, fromCache: true));
         return;
       } catch (e) {
@@ -43,7 +58,6 @@ class UserInfoCubit extends Cubit<GetUserInfoState> {
     }
   }
 
-  /// Fetch fresh data from API
   Future<void> _fetchUserInfoFromApi() async {
     final result = await _dataSource.getUserInfo();
 
@@ -57,6 +71,11 @@ class UserInfoCubit extends Cubit<GetUserInfoState> {
       },
           (freshUsers) async {
         users = freshUsers;
+
+        // 👉 Set first user as default selected
+        if (users.isNotEmpty) {
+          selectedUser = users.first;
+        }
 
         final box = await openHiveBox('userInfoBox');
         final jsonList = users.map((u) => u.toJson()).toList();

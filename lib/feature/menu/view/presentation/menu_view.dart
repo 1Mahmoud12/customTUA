@@ -125,6 +125,16 @@ class _MenuViewState extends State<MenuView> {
           //   },
           // ),
           ItemProfileWidget(
+            name: 'card_settings',
+            image: AppIcons.cardSettingIc,
+            onTap: () {
+              // context.navigateToPage(
+              //   const DonationHistoryView(),
+              //   pageTransitionType: PageTransitionType.rightToLeft,
+              // );
+            },
+          ),
+          ItemProfileWidget(
             name: 'donation_history',
             image: AppIcons.donationHistoryIc,
             onTap: () {
