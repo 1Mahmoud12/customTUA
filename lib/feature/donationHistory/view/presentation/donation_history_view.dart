@@ -56,30 +56,24 @@ class DonationHistoryView extends StatelessWidget {
 
                       return cubit.users.isNotEmpty
                           ? CustomPopupMenu(
-                        onChanged: (DropDownModel? selectedItem) {
-                          if (selectedItem != null) {
-                            cubit.selectUser(selectedItem.value as int);
-                          }
-                          context.read<DonationsHistoryCubit>().userID='${cubit.selectedUser?.guid}|S|${cubit.selectedUser?.name}';
+                            onChanged: (DropDownModel? selectedItem) {
+                              if (selectedItem != null) {
+                                cubit.selectUser(selectedItem.value as int);
+                              }
+                              context.read<DonationsHistoryCubit>().userID = '${cubit.selectedUser?.guid}|S|${cubit.selectedUser?.name}';
+                              context.read<DonationsHistoryCubit>().loadHistory(context);
 
-                          // print('Selected user: ${cubit.selectedUser?.name}');
-                          // print('Selected user ID: ${cubit.selectedUser?.id}');
-                          // print('Selected user GUID: ${cubit.selectedUser?.guid}');
-                        },
-                        nameField: 'select_donor',
-                        selectedItem: cubit.selectedUser != null
-                            ? DropDownModel(
-                          name: cubit.selectedUser!.name,
-                          value: cubit.selectedUser!.id,
-                        )
-                            : DropDownModel(
-                          name: cubit.users.first.name,
-                          value: cubit.users.first.id,
-                        ),
-                        items: cubit.users
-                            .map((e) => DropDownModel(name: e.name, value: e.id))
-                            .toList(),
-                      )
+                              // print('Selected user: ${cubit.selectedUser?.name}');
+                              // print('Selected user ID: ${cubit.selectedUser?.id}');
+                              // print('Selected user GUID: ${cubit.selectedUser?.guid}');
+                            },
+                            nameField: 'select_donor',
+                            selectedItem:
+                                cubit.selectedUser != null
+                                    ? DropDownModel(name: 'select_donor', value: -1)
+                                    : DropDownModel(name: cubit.users.first.name, value: cubit.users.first.id),
+                            items: cubit.users.map((e) => DropDownModel(name: e.name, value: e.id)).toList(),
+                          )
                           : const SizedBox();
                     },
                   ),
@@ -155,19 +149,14 @@ class DonationHistoryView extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   if (state is DonationsHistoryLoading)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 100.0),
-                      child: LoadingWidget(),
-                    )
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 100.0), child: LoadingWidget())
                   else if (donations.isNotEmpty)
-                    Column(
-                      children: donations.map((e) => ItemDonationHistoryWidget(donation: e)).toList(),
-                    )
+                    Column(children: donations.map((e) => ItemDonationHistoryWidget(donation: e)).toList())
                   else
                     Column(
                       children: [
                         const EmptyWidget(emptyImage: EmptyImages.noDonationsHistoryIc),
-                        const SizedBox(height: 30,),
+                        const SizedBox(height: 30),
                         CustomTextButton(
                           onPress: () {
                             cubit.loadHistory(context);
@@ -187,13 +176,7 @@ class DonationHistoryView extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.cShadowColor.withAlpha((.25 * 255).toInt()),
-                blurRadius: 15,
-                offset: const Offset(0, -10),
-              ),
-            ],
+            boxShadow: [BoxShadow(color: AppColors.cShadowColor.withAlpha((.25 * 255).toInt()), blurRadius: 15, offset: const Offset(0, -10))],
           ),
           child: CustomTextButton(onPress: () {}, childText: 'download_as_pdf'.tr()),
         ),

@@ -28,6 +28,18 @@ flutter run --release
 
 ```shell
 flutter clean  
+flutter pub get
+cd ios
+rm podfile.lock
+rm -rf pods
+rm -rf .symlinks
+pod install
+open .
+cd ..
+```
+
+```shell
+flutter clean  
 cd ios
 rm podfile.lock
 rm -rf pods

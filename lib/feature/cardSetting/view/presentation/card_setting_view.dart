@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/component/buttons/custom_text_button.dart';
 import 'package:tua/core/component/custom_app_bar.dart';
 import 'package:tua/core/component/loadsErros/loading_widget.dart';
-import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/errorLoadingWidgets/empty_widget.dart';
 import 'package:tua/core/utils/navigate.dart';
 
@@ -25,22 +24,17 @@ class CardSettingView extends StatelessWidget {
     return Scaffold(
       appBar: customAppBar(context: context, title: 'card_settings'.tr()),
       body: BlocProvider(
-        create: (context) =>
-        CardSettingsCubit(CardSettingsDataSource(), HyperPayDataSource())
-          ..getCards(),
+        create: (context) => CardSettingsCubit(CardSettingsDataSource(), HyperPayDataSource())..getCards(),
         child: BlocConsumer<CardSettingsCubit, CardSettingsState>(
           listener: (context, state) {
             if (state is SaveCardError) {
-              customShowToast(context, state.message,
-                  showToastStatus: ShowToastStatus.error);
+              customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
             }
             if (state is HyperPayConfigError) {
-              customShowToast(context, state.message,
-                  showToastStatus: ShowToastStatus.error);
+              customShowToast(context, state.message, showToastStatus: ShowToastStatus.error);
             }
             if (state is GetCardsError) {
-              customShowToast(context, state.message.tr(),
-                  showToastStatus: ShowToastStatus.error);
+              customShowToast(context, state.message.tr(), showToastStatus: ShowToastStatus.error);
             }
             if (state is SaveCardSuccess) {
               context.navigateToPage(
@@ -76,58 +70,55 @@ class CardSettingView extends StatelessWidget {
 
                   // Loading State
                   if (state is GetCardsLoading && cards.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 100.0),
-                      child: LoadingWidget(),
-                    )
-
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 100.0), child: LoadingWidget())
                   // Cards List
                   else if (cards.isNotEmpty)
                     Column(
-                      children: cards
-                          .map((card) => Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: CreditCardDisplay(card: card),
-                      ))
-                          .toList(),
+                      children:
+                          cards.map((card) => Padding(padding: const EdgeInsets.only(bottom: 16), child: CreditCardDisplay(card: card))).toList(),
                     )
-
                   // Empty State
                   else
-                    Column(
-                      children: [
-                        const EmptyWidget(
-                          emptyImage: EmptyImages.noDonationsHistoryIc, // استخدم الأيقونة المناسبة
-                        ),
-                        const SizedBox(height: 30),
-                        CustomTextButton(
-                          onPress: () {
-                            cubit.getCards();
-                          },
-                          childText: 'retry'.tr(),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        children: [
+                          const EmptyWidget(
+                            emptyImage: EmptyImages.noDonationsHistoryIc, // استخدم الأيقونة المناسبة
+                          ),
+                          const SizedBox(height: 30),
+                          CustomTextButton(
+                            onPress: () {
+                              cubit.getCards();
+                            },
+                            childText: 'retry'.tr(),
+                          ),
+                        ],
+                      ),
                     ),
-                  SizedBox(height: 50,),
-                  CustomTextButton(
-                    childText: 'add_another_card'.tr(),
-                    onPress: () async {
-                      final cubit = context.read<CardSettingsCubit>();
+                  const SizedBox(height: 50),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: CustomTextButton(
+                      childText: 'add_another_card'.tr(),
+                      onPress: () async {
+                        final cubit = context.read<CardSettingsCubit>();
 
-                      // Step 1: Fetch config first
-                      if (cubit.config == null) {
-                        await cubit.getHyperPayConfig(lang: 'ar');
-
-                        // Check if config was loaded successfully
+                        // Step 1: Fetch config first
                         if (cubit.config == null) {
-                          return; // Error already shown in listener
-                        }
-                      }
+                          await cubit.getHyperPayConfig(lang: 'ar');
 
-                      // Step 2: Create checkout session
-                      await cubit.saveCard();
-                    },
-                  )
+                          // Check if config was loaded successfully
+                          if (cubit.config == null) {
+                            return; // Error already shown in listener
+                          }
+                        }
+
+                        // Step 2: Create checkout session
+                        await cubit.saveCard();
+                      },
+                    ),
+                  ),
                 ],
               ),
             );
@@ -136,7 +127,6 @@ class CardSettingView extends StatelessWidget {
       ),
 
       // Add Card Button at Bottom
-
     );
   }
 }

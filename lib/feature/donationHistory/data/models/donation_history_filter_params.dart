@@ -7,9 +7,9 @@ class DonationHistoryFilterParams {
 
   Map<String, dynamic> toJson() {
     return {
-      'DonationHistoryFilterForm[start_date]': startDate??'',
-      'DonationHistoryFilterForm[end_date]': endDate??'',
-      'DonationHistoryFilterForm[name]': name??'',
+      if (startDate != null && startDate != '') 'DonationHistoryFilterForm[start_date]': startDate ?? '',
+      if (endDate != null && endDate != '') 'DonationHistoryFilterForm[end_date]': endDate ?? '',
+      if (name != null && name != '') 'DonationHistoryFilterForm[name]': name ?? '',
     };
   }
 }

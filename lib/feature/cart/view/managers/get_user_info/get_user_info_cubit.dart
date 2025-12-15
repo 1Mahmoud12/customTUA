@@ -7,7 +7,6 @@ import 'package:tua/feature/cart/data/models/user_info_response_model.dart';
 
 import 'get_user_info_state.dart';
 
-
 class UserInfoCubit extends Cubit<GetUserInfoState> {
   final GetUserInfoDataSource _dataSource;
 
@@ -25,10 +24,7 @@ class UserInfoCubit extends Cubit<GetUserInfoState> {
 
   /// Method to select a user
   void selectUser(int userId) {
-    selectedUser = users.firstWhere(
-          (user) => user.id == userId,
-      orElse: () => users.first,
-    );
+    selectedUser = users.firstWhere((user) => user.id == userId, orElse: () => users.first);
     emit(GetUserInfoLoaded(users, fromCache: false));
   }
 
@@ -62,14 +58,14 @@ class UserInfoCubit extends Cubit<GetUserInfoState> {
     final result = await _dataSource.getUserInfo();
 
     result.fold(
-          (failure) {
+      (failure) {
         if (users.isNotEmpty) {
           emit(GetUserInfoLoaded(users, fromCache: true));
         } else {
           emit(GetUserInfoError(failure.errMessage));
         }
       },
-          (freshUsers) async {
+      (freshUsers) async {
         users = freshUsers;
 
         // 👉 Set first user as default selected

@@ -53,7 +53,7 @@ class DonationsHistoryCubit extends Cubit<DonationsHistoryState> {
   Future<void> loadHistory(BuildContext context) async {
     await _loadCachedData();
 
-    await _fetchDataFromApi( context);
+    await _fetchDataFromApi(context);
   }
 
   /// Load cached history
@@ -77,7 +77,8 @@ class DonationsHistoryCubit extends Cubit<DonationsHistoryState> {
       emit(DonationsHistoryLoading());
     }
   }
-  String userID='';
+
+  String userID = '';
 
   /// Fetch fresh history from API
   ///
@@ -87,7 +88,10 @@ class DonationsHistoryCubit extends Cubit<DonationsHistoryState> {
     final parms = DonationHistoryFilterParams(
       startDate: startDateController.text.trim(),
       endDate: endDateController.text.trim(),
-      name:'${context.read<UserInfoCubit>().selectedUser?.guid}|S|${context.read<UserInfoCubit>().selectedUser?.name}'
+      name:
+          context.read<UserInfoCubit>().selectedUser != null
+              ? '${context.read<UserInfoCubit>().selectedUser?.guid}|S|${context.read<UserInfoCubit>().selectedUser?.name}'
+              : null,
     );
 
     final result = await _dataSource.getDonationsHistory(params: parms);
