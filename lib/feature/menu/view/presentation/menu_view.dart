@@ -17,6 +17,7 @@ import 'package:tua/feature/staticPages/view/presentation/contact_us_view.dart';
 import 'package:tua/feature/staticPages/view/presentation/terms_conditions_view.dart';
 import 'package:tua/feature/volunteeringPrograms/view/presentation/volunteering_programs_view.dart';
 
+import '../../../cardSetting/view/presentation/card_setting_view.dart';
 import '../../../donationHistory/view/presentation/donation_history_view.dart';
 import '../../../home/view/presentation/widgets/change_currency_dialog.dart';
 import '../../../navigation/view/manager/homeBloc/cubit.dart';
@@ -128,10 +129,10 @@ class _MenuViewState extends State<MenuView> {
             name: 'card_settings',
             image: AppIcons.cardSettingIc,
             onTap: () {
-              // context.navigateToPage(
-              //   const DonationHistoryView(),
-              //   pageTransitionType: PageTransitionType.rightToLeft,
-              // );
+              context.navigateToPage(
+                const CardSettingView(),
+                pageTransitionType: PageTransitionType.rightToLeft,
+              );
             },
           ),
           ItemProfileWidget(

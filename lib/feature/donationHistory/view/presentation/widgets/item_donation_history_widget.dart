@@ -5,6 +5,7 @@ import 'package:tua/core/component/cache_image.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/feature/donationHistory/view/presentation/widgets/show_details_donation_dialog.dart';
 
+import '../../../../../core/utils/constants_models.dart';
 import '../../../data/models/donations_history_response.dart';
 
 class ItemDonationHistoryWidget extends StatelessWidget {
@@ -40,7 +41,7 @@ class ItemDonationHistoryWidget extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text('${donation.amount} ${'JOD'.tr()}', style: Theme.of(context).textTheme.displayMedium),
+                      Text('${donation.amount*donation.quantity} ${ConstantsModels.currency.tr()}', style: Theme.of(context).textTheme.displayMedium),
                       const Spacer(),
                       //2024-05-24   |   16:19
                       Text(

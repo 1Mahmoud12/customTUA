@@ -50,6 +50,22 @@ class HyperPayCubit extends Cubit<HyperPayState> {
       },
     );
   }
+  Future<void> saveCardPaymentHandler(BuildContext context, String checkoutId) async {
+    emit(HyperPayLoading());
+    final result = await _hyperPayDataSource.saveCardPaymentHandler(checkoutId);
+    result.fold(
+          (failure) {
+        customShowToast(context, failure.errMessage);
+        emit(HyperPayCheckoutError(failure.errMessage));
+      },
+          (unit) {
+        customShowToast(context, unit);
+        // CartCubit.of(context).fetchCartItems();
+        emit(HyperPaySuccess());
+      },
+    );
+  }
+
 
   Future<void> getHyperPayConfig({String? lang}) async {
     emit(HyperPayConfigLoading());

@@ -174,6 +174,9 @@ class EndPoints {
   // donations history
   static const getDonationsHistory = 'user/donations-history';
 
-
+  // card settings
+  static const saveCard = 'user/save-card';
+  static const getCards = 'user/get-cards';
+  static const saveCardPaymentHandler ='user/save-card-payment-handler';
 
 }

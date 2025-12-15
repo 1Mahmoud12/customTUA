@@ -129,7 +129,7 @@ class _CartViewState extends State<CartView> {
                                             BlocProvider.value(
                                               value: cubit,
                                               child: HyperPayWebView(
-                                                checkoutData: state.checkoutData,
+                                                checkoutId: state.checkoutData.id,
                                                 config: config,
                                                 purchaseType: PurchaseType.cart,
                                               ),

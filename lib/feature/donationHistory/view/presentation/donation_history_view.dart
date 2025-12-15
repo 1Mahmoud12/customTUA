@@ -86,6 +86,7 @@ class DonationHistoryView extends StatelessWidget {
                   const SizedBox(height: 22.5),
                   Row(
                     children: [
+                      // -----------------------------start date----------------------
                       Expanded(
                         child: InkWell(
                           onTap: () {
@@ -95,7 +96,8 @@ class DonationHistoryView extends StatelessWidget {
                                   (_) => Center(
                                     child: BeautifulDatePicker(
                                       firstDate: DateTime.now().subtract(const Duration(days: 365 * 2)),
-                                      initialDate: DateTime.now().subtract(const Duration(days: 90)),
+                                      initialDate: DateTime.now(),
+                                      lastDate: DateTime.now(),
                                       onDateSelected: cubit.onStartDateSelected,
                                     ),
                                   ),
@@ -128,7 +130,7 @@ class DonationHistoryView extends StatelessWidget {
                                   (_) => Center(
                                     child: BeautifulDatePicker(
                                       firstDate: DateTime.now().subtract(const Duration(days: 365 * 2)),
-                                      initialDate: DateTime.now().subtract(const Duration(days: 90)),
+                                      initialDate: DateTime.now(),
                                       lastDate: DateTime.now(),
                                       onDateSelected: cubit.onEndDateSelected,
                                     ),

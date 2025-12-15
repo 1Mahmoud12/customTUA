@@ -68,6 +68,38 @@ class HyperPayDataSource {
       return Left(ServerFailure(error.toString()));
     }
   }
+  Future<Either<Failure, String>> saveCardPaymentHandler(String checkoutId,) async {
+    try {
+      final response = await DioHelper.postData(
+        url: EndPoints.saveCardPaymentHandler,
+        data: {
+          'access_token': userCacheValue?.accessToken ?? '',
+        },
+        query: {
+          'checkout_id': checkoutId,
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+
+        if (data['success'] == true) {
+          return right(data['message']);
+        } else {
+          return Left(ServerFailure(data['message'] ?? 'Failed to saveCardPaymentHandler'));
+        }
+      } else {
+        return Left(ServerFailure('Server error: ${response.statusCode}'));
+      }
+    } catch (error) {
+      log('error save card == $error');
+
+      if (error is DioException) {
+        return Left(ServerFailure.fromDioException(error));
+      }
+      return Left(ServerFailure(error.toString()));
+    }
+  }
 
   Future<Either<Failure, HyperPayConfigData>> getHyperPayConfig({String? lang}) async {
     try {

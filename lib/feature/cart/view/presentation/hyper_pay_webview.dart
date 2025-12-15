@@ -16,11 +16,12 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../data/data_source/hyper_pay_data_source.dart';
 
 class HyperPayWebView extends StatefulWidget {
-  final HyperPayCheckoutInner checkoutData;
+  final String checkoutId;
   final HyperPayConfigData config;
   final  PurchaseType purchaseType;
+  final bool isPayment;
 
-  const HyperPayWebView({super.key, required this.checkoutData, required this.config, required this.purchaseType});
+  const HyperPayWebView({super.key, required this.checkoutId, required this.config, required this.purchaseType,this.isPayment=true});
 
   @override
   State<HyperPayWebView> createState() => _HyperPayWebViewState();
@@ -40,7 +41,7 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
 
   void _initializeWebView() {
     log('Initializing HyperPay WebView');
-    log('Checkout ID: ${widget.checkoutData.id}');
+    log('Checkout ID: ${widget.checkoutId}');
 
     // Ensure base URL ends with /
     String baseUrl = widget.config.hyperPayPaymentUrl;
@@ -49,7 +50,7 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
     }
 
     // Construct HyperPay payment widget URL
-    final widgetUrl = '$baseUrl/paymentWidgets.js?checkoutId=${widget.checkoutData.id}';
+    final widgetUrl = '$baseUrl/paymentWidgets.js?checkoutId=${widget.checkoutId}';
 
     log('Payment Widget URL: $widgetUrl');
 
@@ -189,7 +190,7 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
       log('Query parameters: ${uri.queryParameters}');
 
       // Extract checkout ID from URL or use the one we have
-      final checkoutId = uri.queryParameters['id'] ?? widget.checkoutData.id;
+      final checkoutId = uri.queryParameters['id'] ?? widget.checkoutId;
 
       log('Verifying payment with checkout ID: $checkoutId');
 
@@ -199,7 +200,11 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
       // Call backend to verify payment status (cart/hyperpay-handler)
       // Use the cubit reference we got before popping
       log('Calling cart/hyperpay-handler with checkout ID: $checkoutId');
-      await cubit.hyperPayHandler(context, checkoutId, widget.purchaseType);
+      if (widget.isPayment) {
+        await cubit.hyperPayHandler(context, checkoutId, widget.purchaseType);
+      } else {
+        await cubit.saveCardPaymentHandler(context, checkoutId);
+      }
       // Close WebView immediately and navigate back to app
       Navigator.of(context).pop();
     }
@@ -234,7 +239,7 @@ class _HyperPayWebViewState extends State<HyperPayWebView> {
           }
         },
         child: Scaffold(
-          appBar: customAppBar(context: context, title: 'complete_payment'.tr()),
+          appBar: customAppBar(context: context, title: widget.isPayment?'complete_payment'.tr():'add_card_title'.tr()),
           body: Stack(
             children: [
               WebViewWidget(controller: _controller),
