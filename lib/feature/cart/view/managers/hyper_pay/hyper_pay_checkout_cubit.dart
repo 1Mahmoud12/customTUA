@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
@@ -44,8 +45,8 @@ class HyperPayCubit extends Cubit<HyperPayState> {
         emit(HyperPayCheckoutError(failure.errMessage));
       },
       (unit) {
-        customShowToast(context, unit);
-        // CartCubit.of(context).fetchCartItems();
+        customShowToast(context, 'payment_success_title'.tr());
+        CartCubit.of(context).fetchCartItems();
         emit(HyperPaySuccess());
       },
     );
@@ -59,8 +60,7 @@ class HyperPayCubit extends Cubit<HyperPayState> {
         emit(HyperPayCheckoutError(failure.errMessage));
       },
           (unit) {
-        customShowToast(context, unit);
-        // CartCubit.of(context).fetchCartItems();
+        customShowToast(context, 'card_added_success_title'.tr());
         emit(HyperPaySuccess());
       },
     );

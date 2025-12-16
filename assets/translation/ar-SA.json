@@ -392,5 +392,14 @@
   "add_another_card": "إضافة بطاقة أخرى",
   "add_card_title": "إضافة بطاقة",
   "no_Data,_sorry": "لا توجد بينات",
+  "cash": "نقداً",
+  "gold": "ذهب",
+  "zakat_description": "تُحتسب زكاة المال بنسبة 2.5% من المبلغ، بشرط أن يكون قد مرّ عليه عامٌ كامل دون إنفاقه.",
+  "total_zakat_amount": "إجمالي قيمة الزكاة",
+  "add_amount": "إضافة مبلغ",
+  "sorry_inserted_amount": "عذرًا، المبلغ المُدخل أقل من النصاب",
+  "confirm": "تأكيد",
+  "card_added_success_title": "تمت إضافة البطاقة بنجاح ",
+  "payment_success_title": "تمت عملية الدفع بنجاح ",
   "": ""
 }

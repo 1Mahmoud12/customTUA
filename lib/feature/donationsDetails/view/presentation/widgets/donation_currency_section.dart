@@ -42,7 +42,6 @@ class _DonationCurrencySectionState extends State<DonationCurrencySection> {
 
     return Column(
       children: [
-        // 👉 اعرض CurrencyWidget فقط إذا كان عدد العناصر أكثر من واحد
         if (recurringTypes.length > 1) ...[
           CurrencyWidget(
               details: widget.detailsModel,

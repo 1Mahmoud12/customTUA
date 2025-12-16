@@ -11,9 +11,9 @@ import 'package:tua/core/component/drop_menu.dart';
 import 'package:tua/core/themes/colors.dart';
 import 'package:tua/core/utils/app_icons.dart';
 import 'package:tua/feature/zakatCalculator/view/presentation/widgets/current_nisab_value_widget.dart';
-import 'package:tua/feature/zakatCalculator/view/presentation/widgets/detailed_calculate_widget.dart';
+import 'package:tua/feature/zakatCalculator/view/presentation/widgets/gold_calculate_widget.dart';
 import 'package:tua/feature/zakatCalculator/view/presentation/widgets/form_money_widget.dart';
-import 'package:tua/feature/zakatCalculator/view/presentation/widgets/quick_calculate_widget.dart';
+import 'package:tua/feature/zakatCalculator/view/presentation/widgets/cash_calculate_widget.dart';
 
 import '../../../../core/utils/constants_models.dart';
 
@@ -45,27 +45,26 @@ class _ZakatCalculatorViewState extends State<ZakatCalculatorView> {
                 },
                 initialIndex: _selectedIndex,
                 items: [
-                  SwitchButtonModel(title: 'quick_calculator'.tr(), id: 1),
-                  SwitchButtonModel(title: 'detailed_calculator'.tr(), id: 2),
+                  SwitchButtonModel(title: 'cash'.tr(), id: 1),
+                  SwitchButtonModel(title: 'gold'.tr(), id: 2),
                 ],
               ),
               const SizedBox(height: 16),
 
-              CustomPopupMenu(
-                nameField: 'choose_year'.tr(),
-                selectedItem: DropDownModel(name: 'selected_year'.tr(), value: -1),
-                items: [
-                  DropDownModel(name: 'islamic_year'.tr(), value: 1),
-                  DropDownModel(name: 'gregorian_year'.tr(), value: 2),
-                ],
-              ),
+              // CustomPopupMenu(
+              //   nameField: 'choose_year'.tr(),
+              //   selectedItem: DropDownModel(name: 'selected_year'.tr(), value: -1),
+              //   items: [
+              //     DropDownModel(name: 'islamic_year'.tr(), value: 1),
+              //     DropDownModel(name: 'gregorian_year'.tr(), value: 2),
+              //   ],
+              // ),
               const SizedBox(height: 24),
-              Text('zakat_percentage_note'.tr(), style: Theme.of(context).textTheme.displayMedium),
+              Text('zakat_description'.tr(), style: Theme.of(context).textTheme.displayMedium),
               const SizedBox(height: 24),
-              if (_selectedIndex == 1) ...[const QuickCalculateWidget()],
-              if (_selectedIndex == 2) ...[const DetailedCalculateWidget()],
+              if (_selectedIndex == 1) ...[const CashCalculateWidget()],
+              if (_selectedIndex == 2) ...[const GoldCalculateWidget()],
               const SizedBox(height: 24),
-              CustomTextButton(onPress: () {}, childText: 'calculate'),
               const SizedBox(height: 24),
               const CustomDividerWidget(),
               const SizedBox(height: 24),
@@ -75,63 +74,63 @@ class _ZakatCalculatorViewState extends State<ZakatCalculatorView> {
               SizedBox(height: 100.h),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(15),
-            decoration: const BoxDecoration(
-              color: AppColors.white,
-              border: Border(top: BorderSide(color: Color(0xFFE3E3E3) /* Neutrals-Neutrals100 */)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${'total'.tr()}: ',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
-                    ),
-                    Text(
-                      '1000 ${ConstantsModels.currency.tr()}',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                CustomTextButton(
-                  onPress: () {
-                    // if (userCacheValue==null ) {
-                    //   loginRequiredDialog(context);
-                    //   return;
-                    // }
-                  },
-                  backgroundColor: AppColors.cRed900,
-                  borderColor: AppColors.transparent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        AppIcons.unSelectedDonationIc,
-                        colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'donate_now'.tr(),
-                        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.all(15),
+          //   decoration: const BoxDecoration(
+          //     color: AppColors.white,
+          //     border: Border(top: BorderSide(color: Color(0xFFE3E3E3) /* Neutrals-Neutrals100 */)),
+          //   ),
+          //   child: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //         children: [
+          //           Text(
+          //             '${'total'.tr()}: ',
+          //             style: Theme.of(
+          //               context,
+          //             ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
+          //           ),
+          //           Text(
+          //             '1000 ${ConstantsModels.currency.tr()}',
+          //             style: Theme.of(
+          //               context,
+          //             ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w400),
+          //           ),
+          //         ],
+          //       ),
+          //       const SizedBox(height: 24),
+          //       CustomTextButton(
+          //         onPress: () {
+          //           // if (userCacheValue==null ) {
+          //           //   loginRequiredDialog(context);
+          //           //   return;
+          //           // }
+          //         },
+          //         backgroundColor: AppColors.cRed900,
+          //         borderColor: AppColors.transparent,
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
+          //             SvgPicture.asset(
+          //               AppIcons.unSelectedDonationIc,
+          //               colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn),
+          //             ),
+          //             const SizedBox(width: 8),
+          //             Text(
+          //               'donate_now'.tr(),
+          //               style: Theme.of(context).textTheme.displaySmall?.copyWith(
+          //                 color: Colors.white,
+          //                 fontWeight: FontWeight.w400,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

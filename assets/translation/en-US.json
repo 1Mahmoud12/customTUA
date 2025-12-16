@@ -391,5 +391,14 @@
   "add_card_title": "Add Card",
   "no_Data,_sorry": "No Data, Sorry",
   "add_card": "Add Card",
+  "cash": "Cash",
+  "gold": "Gold",
+  "zakat_description": "Zakat is calculated as 2.5% of the amount, provided that a full year has passed without spending it.",
+  "total_zakat_amount": "Total Zakat Amount",
+  "add_amount": "Add Amount",
+  "sorry_inserted_amount": "Sorry, the inserted amount is less than Al-Nisab",
+  "confirm": "Confirm",
+  "card_added_success_title": "Card added successfully",
+  "payment_success_title": "Payment completed successfully",
   "": ""
 }

@@ -118,7 +118,7 @@ class _SelectLanguageDialogState extends State<SelectLanguageDialog> {
                   const SizedBox(height: 30),
 
                   CustomTextButton(
-                    childText: 'Confirm'.tr(),
+                    childText: 'confirm'.tr(),
                     onPress: () async{
                       setState(() {
                         if (selectedValue == 0) {

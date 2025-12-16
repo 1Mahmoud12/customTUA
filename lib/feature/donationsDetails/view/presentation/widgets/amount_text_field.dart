@@ -29,38 +29,38 @@ class AmountTextField extends StatelessWidget {
           onChange: (_) => onAmountChanged(),
           hintText: 'enter_amount'.tr(),
           textInputType: TextInputType.number,
-          suffixIcon: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: PopupMenuButton<String>(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      ConstantsModels.currency,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: AppColors.cP50,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Icon(Icons.arrow_drop_down, color: AppColors.cP50, size: 20),
-                  ],
-                ),
-              ),
-              itemBuilder:
-                  (BuildContext context) => [
-                    const PopupMenuItem(value: 'JOD', child: Text('JOD')),
-                    const PopupMenuItem(value: 'USD', child: Text('USD')),
-                  ],
-              onSelected: (String value) {
-                MainCubit.of(context).changeCurrency(value);
-                onAmountChanged();
-              },
-            ),
-          ),
+          // suffixIcon: Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8),
+          //   child: PopupMenuButton<String>(
+          //     color: Colors.white,
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(8),
+          //       child: Row(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           Text(
+          //             ConstantsModels.currency,
+          //             style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          //               color: AppColors.cP50,
+          //               fontWeight: FontWeight.w400,
+          //             ),
+          //           ),
+          //           const SizedBox(width: 4),
+          //           const Icon(Icons.arrow_drop_down, color: AppColors.cP50, size: 20),
+          //         ],
+          //       ),
+          //     ),
+          //     itemBuilder:
+          //         (BuildContext context) => [
+          //           const PopupMenuItem(value: 'JOD', child: Text('JOD')),
+          //           const PopupMenuItem(value: 'USD', child: Text('USD')),
+          //         ],
+          //     onSelected: (String value) {
+          //       MainCubit.of(context).changeCurrency(value);
+          //       onAmountChanged();
+          //     },
+          //   ),
+          // ),
         );
       },
     );

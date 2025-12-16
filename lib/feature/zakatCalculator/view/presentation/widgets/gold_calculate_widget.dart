@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:tua/core/component/fields/custom_text_form_field.dart';
 import 'package:tua/core/utils/constants_models.dart';
 
-class DetailedCalculateWidget extends StatelessWidget {
-  const DetailedCalculateWidget({super.key});
+class GoldCalculateWidget extends StatelessWidget {
+  const GoldCalculateWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

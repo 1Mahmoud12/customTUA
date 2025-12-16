@@ -29,7 +29,7 @@ class CurrentNisabValueWidget extends StatelessWidget {
               Text('current_nisab_value'.tr(), style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400)),
               const SizedBox(height: 4),
               Text(
-                '25708.25 ${ConstantsModels.currency.tr()}',
+                '${ConstantsModels.lookupModel?.data?.zakatCalculation?.nisab??''}',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.primaryColor),
               ),
             ],

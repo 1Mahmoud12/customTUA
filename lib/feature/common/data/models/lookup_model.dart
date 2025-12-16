@@ -6,10 +6,18 @@ class LookupModel {
   final LookupData? data;
 
   factory LookupModel.fromJson(Map<String, dynamic> json) {
-    return LookupModel(success: json['success'], message: json['message'], data: json['data'] == null ? null : LookupData.fromJson(json['data']));
+    return LookupModel(
+      success: json['success'],
+      message: json['message'],
+      data: json['data'] == null ? null : LookupData.fromJson(json['data']),
+    );
   }
 
-  Map<String, dynamic> toJson() => {'success': success, 'message': message, 'data': data?.toJson()};
+  Map<String, dynamic> toJson() => {
+    'success': success,
+    'message': message,
+    'data': data?.toJson(),
+  };
 }
 
 class LookupData {
@@ -20,6 +28,8 @@ class LookupData {
     required this.genders,
     required this.bmsCategories,
     this.quickDonation,
+    this.zakatCalculation,  // ADDED
+    this.basicPagesSlug,    // ADDED
   });
 
   final String? currentCurrency;
@@ -28,6 +38,8 @@ class LookupData {
   final List<GenderItem>? genders;
   final Map<String, String>? bmsCategories;
   final QuickDonationLookup? quickDonation;
+  final ZakatCalculation? zakatCalculation;  // ADDED
+  final List<String>? basicPagesSlug;        // ADDED
 
   factory LookupData.fromJson(Map<String, dynamic> json) {
     final quickDonationRaw = json['quick_donation'];
@@ -45,6 +57,8 @@ class LookupData {
       genders: (json['genders'] as List?)?.map((e) => GenderItem.fromJson(e as Map<String, dynamic>)).toList(),
       bmsCategories: (json['bms_categories'] as Map?)?.map((key, value) => MapEntry(key.toString(), value.toString())),
       quickDonation: quickDonation,
+      zakatCalculation: json['zakat_calculation'] == null ? null : ZakatCalculation.fromJson(json['zakat_calculation']),  // ADDED
+      basicPagesSlug: (json['basic_pages_slug'] as List?)?.map((e) => e.toString()).toList(),  // ADDED
     );
   }
 
@@ -55,13 +69,15 @@ class LookupData {
     'genders': genders?.map((e) => e.toMap()).toList(),
     'bms_categories': bmsCategories,
     'quick_donation': quickDonation?.toJson(),
+    'zakat_calculation': zakatCalculation?.toJson(),  // ADDED
+    'basic_pages_slug': basicPagesSlug,               // ADDED
   };
 }
 
 class LookupItem {
   LookupItem({required this.id, required this.name});
 
-  final int id; // can be int or string per API (e.g., genders use string id)
+  final int id;
   final String? name;
 
   factory LookupItem.fromJson(Map<String, dynamic> json) {
@@ -141,6 +157,7 @@ class QuickDonationLookup {
     };
   }
 }
+
 class QuickDonationItem {
   final String key;
   final int value;
@@ -159,5 +176,32 @@ class QuickDonationItem {
 
   Map<String, dynamic> toJson() => {
     key: value,
+  };
+}
+
+// ADDED: New class for zakat_calculation
+class ZakatCalculation {
+  final double? nisab;
+  final double? zakatPercentage;
+  final double? usdToJod;
+
+  const ZakatCalculation({
+    this.nisab,
+    this.zakatPercentage,
+    this.usdToJod,
+  });
+
+  factory ZakatCalculation.fromJson(Map<String, dynamic> json) {
+    return ZakatCalculation(
+      nisab: json['nisab']?.toDouble(),
+      zakatPercentage: json['zakat_percentage']?.toDouble(),
+      usdToJod: json['usd_to_jod']?.toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'nisab': nisab,
+    'zakat_percentage': zakatPercentage,
+    'usd_to_jod': usdToJod,
   };
 }

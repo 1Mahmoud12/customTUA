@@ -125,7 +125,7 @@ class _SelectCurrencyDialogState extends State<SelectCurrencyDialog> {
 
                   // Confirm Button
                   CustomTextButton(
-                    childText: 'Confirm'.tr(),
+                    childText: 'confirm'.tr(),
                     onPress: () {
                       if (selectedValue != null) {
                         context.read<MainCubit>().changeCurrency(selectedValue!);
