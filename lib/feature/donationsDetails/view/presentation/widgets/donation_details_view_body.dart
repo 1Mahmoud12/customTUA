@@ -55,7 +55,6 @@ class _DonationDetailsViewBodyState extends State<DonationDetailsViewBody> {
                       DonationHeaderSection(detailsModel: widget.detailsModel),
                       DonationTabsSection(tabs: widget.detailsModel.tabs),
                       const CustomDividerWidget(height: 24),
-
                       if (widget.detailsModel.type == 2)
                         DonationCurrencySection(
                           detailsModel: widget.detailsModel,

@@ -44,13 +44,13 @@ class ItemValueTrackerCurrencyWidget extends StatelessWidget {
                 Text(
                   name,
                   style: Theme.of(context).textTheme.titleSmall,
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${value.toStringAsFixed(2)} $currency',
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
                     color:
                         detailsModel.color != null
                             ? hexToColor(detailsModel.color!)

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tua/core/themes/styles.dart';
 import 'package:tua/core/utils/custom_show_toast.dart';
 import 'package:tua/feature/donations/data/models/donation_program_details_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,16 +52,10 @@ class _DonationTabsSectionState extends State<DonationTabsSection> {
               _currentTabIndex = index;
             });
           },
-          labelStyle: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w500),
+          labelStyle: Styles.style15400.copyWith(fontWeight: FontWeight.w700,color: AppColors.black),
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorColor: AppColors.cP50,
-          unselectedLabelStyle: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(color: AppColors.cP50.withOpacity(.5)),
+          unselectedLabelStyle: Styles.style14400.copyWith(color: AppColors.cP50.withOpacity(.5)),
           tabs: widget.tabs!.map((e) => Tab(text: e.title)).toList(),
         ),
         const SizedBox(height: 16),
